@@ -211,6 +211,7 @@ import {
   UserCircleIcon,
   ChevronDownIcon,
   HorizontalDots,
+  BuildingIcon
 } from "../../icons"
 import { useSidebar } from "@/composables/useSidebar"
 import { usePermissions } from "@/composables/usePermissions"
@@ -274,6 +275,27 @@ const menuGroups = computed(() =>
               path: '/',
               permission: 'dashboard.view',
             },
+          ],
+        },
+        {
+          icon: BuildingIcon,
+          name: t('menu.locations'),
+          subItems: [
+            {
+              name: t('menu.governorates'),
+              path: route('admin.governorates.index'),
+              permission: 'governorates.view',
+            },
+            {
+              name: t('menu.districts'),
+              path: route('admin.districts.index'),
+              permission: 'districts.view',
+            },
+            {
+              name: t('menu.areas'),
+              path: route('admin.areas.index'),
+              permission: 'areas.view',
+            }
           ],
         },
         {

@@ -38,7 +38,6 @@ class AuthService
             'whatsapp_number' => $user->whatsapp_number,
             'type' => $user->type,
             'is_active' => $user->is_active,
-            'medical_facility_id' => $user->medical_facility_id,
             'created_by' => $user->created_by,
             'updated_by' => $user->updated_by,
             'created_at' => $user->created_at,

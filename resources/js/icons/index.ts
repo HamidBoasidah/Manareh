@@ -45,10 +45,12 @@ import LayoutDashboardIcon from "./LayoutDashboardIcon.vue";
 import UserGroupIcon from "./UserGroupIcon.vue";
 import BellIcon from "./BellIcon.vue";
 import BarChartIcon from "./BarChartIcon.vue";
+import BuildingIcon from "./BuildingIcon.vue";
 
 export {
   BellIcon,
   BarChartIcon,
+  BuildingIcon,
   LayoutDashboardIcon,
   UserGroupIcon,
   FolderIcon,

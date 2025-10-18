@@ -31,26 +31,18 @@ return [
     |--------------------------------------------------------------------------
     | المفتاح = اسم المورد (kebab-case مفضل)
     | القيمة = مصفوفة الأفعال المسموحة لهذا المورد
-    |
-    | ملاحظة: dashboard و profile "عرض فقط" كما هو مطلوب.
     */
     'resources' => [
-        'dashboard'                    => ['view'],
-        'medical-facilities'           => ['view', 'create', 'update', 'delete'],
-        'medical-services'             => ['view', 'create', 'update', 'delete'],
-        'working-periods'              => ['view', 'create', 'update', 'delete'],
-        'medical-facility-categories'  => ['view', 'create', 'update', 'delete'],
-        'facility-ownerships'          => ['view', 'create', 'update', 'delete'],
-        'areas'                        => ['view', 'create', 'update', 'delete'],
-        'districts'                    => ['view', 'create', 'update', 'delete'], // قد تفضّل "المديريات"
-        'governorates'                 => ['view', 'create', 'update', 'delete'],
-    'specialties'                  => ['view', 'create', 'update', 'delete'],
-        'content-blocks'               => ['view', 'create', 'update', 'delete'],
-        'users'                        => ['view', 'create', 'update', 'delete'],
+        'dashboard'    => ['view'],
+        'areas'        => ['view', 'create', 'update', 'delete'],
+        'districts'    => ['view', 'create', 'update', 'delete'],
+        'governorates' => ['view', 'create', 'update', 'delete'],
+
         // backend management resources
-        'roles'                        => ['view', 'create', 'update', 'delete'],
-        'permissions'                  => ['view'],
-        'profile'                      => ['view'],
+        'users'        => ['view', 'create', 'update', 'delete'],
+        'roles'        => ['view', 'create', 'update', 'delete'],
+        'permissions'  => ['view'],
+        'profile'      => ['view'],
     ],
 
     /*
@@ -60,21 +52,16 @@ return [
     | ترجمة أسماء الموارد للعرض فقط (لا تُخزن في DB).
     */
     'resource_labels' => [
-        'dashboard'                    => ['en' => 'Dashboard',          'ar' => 'لوحة التحكم'],
-        'medical-facilities'           => ['en' => 'Medical Facilities', 'ar' => 'المنشآت الطبية'],
-        'medical-services'             => ['en' => 'Medical Services',   'ar' => 'الخدمات الطبية'],
-        'working-periods'              => ['en' => 'Working Periods',    'ar' => 'فترات العمل'],
-        'medical-facility-categories'  => ['en' => 'Facility Categories','ar' => 'تصنيفات المنشآت الطبية'], // كانت: تصنيفات المنشآت
-        'facility-ownerships'          => ['en' => 'Facility Ownerships','ar' => 'ملكية المنشآت'],
-        'areas'                        => ['en' => 'Areas',              'ar' => 'المناطق'],
-        'districts'                    => ['en' => 'Districts',          'ar' => 'المديريات'], // كانت: الأحياء
-        'governorates'                 => ['en' => 'Governorates',       'ar' => 'المحافظات'],
-        'specialties'                  => ['en' => 'Specialties',        'ar' => 'التخصصات'],
-        'content-blocks'               => ['en' => 'Content Blocks',     'ar' => 'مكوّنات المحتوى'], // كانت: كتل المحتوى
-        'users'                        => ['en' => 'Users',              'ar' => 'المستخدمون'],
-        'roles'                        => ['en' => 'Roles',              'ar' => 'الأدوار'],
-        'permissions'                  => ['en' => 'Permissions',        'ar' => 'الصلاحيات'],
-        'profile'                      => ['en' => 'Profile',            'ar' => 'الملف الشخصي'],
+        'dashboard'    => ['en' => 'Dashboard',          'ar' => 'لوحة التحكم'],
+        'areas'        => ['en' => 'Areas',         'ar' => 'المناطق'],
+        'districts'    => ['en' => 'Districts',     'ar' => 'المديريات'],
+        'governorates' => ['en' => 'Governorates',  'ar' => 'المحافظات'],
+
+        'users'        => ['en' => 'Users',         'ar' => 'المستخدمون'],
+        'roles'        => ['en' => 'Roles',         'ar' => 'الأدوار'],
+        'permissions'  => ['en' => 'Permissions',   'ar' => 'الصلاحيات'],
+        'profile'      => ['en' => 'Profile',            'ar' => 'الملف الشخصي'],
+
     ],
 
     /*
@@ -89,6 +76,5 @@ return [
         'update' => ['en' => 'Update', 'ar' => 'تعديل'],
         'delete' => ['en' => 'Delete', 'ar' => 'حذف'],
     ],
-    
 
 ];

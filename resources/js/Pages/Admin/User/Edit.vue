@@ -3,7 +3,6 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <EditUserForm
-    :medical-facilities="medicalFacilities"
     :user="user"
     :roles="roles"
     />
@@ -24,7 +23,6 @@ const currentPageTitle = computed(() => t('users.editUser'))
 
 // استلام البيانات من Inertia
 const user = computed(() => usePage().props.user)
-const medicalFacilities = computed(() => usePage().props.medicalFacilities)
 const roles = computed(() => usePage().props.roles)
 
 

@@ -393,7 +393,6 @@ const { success, error } = useNotifications()
 
 
 const props = defineProps({
-  medicalFacilities: Array,
   roles: Array
 })
 
@@ -406,7 +405,6 @@ const form = useForm({
   is_active: true,
   password: '',
   attachment: null,
-  medical_facility_id: '',
   role_id: ''
 
 })

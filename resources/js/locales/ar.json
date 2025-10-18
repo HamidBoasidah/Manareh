@@ -28,7 +28,11 @@
     "auth": "المصادقة",
     "signin": "تسجيل الدخول",
     "signup": "إنشاء حساب",
-    "roles": "الأدوار"
+    "roles": "الأدوار",
+    "locations": "المواقع",
+    "areas": "المناطق",
+    "governorates": "المحافظات",
+    "districts": "المديريات"
   },
   "pages": {
     "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",

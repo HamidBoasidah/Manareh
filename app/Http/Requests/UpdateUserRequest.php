@@ -30,7 +30,6 @@ class UpdateUserRequest extends FormRequest
             'whatsapp_number' => ['nullable', 'regex:/^\d{9}$/'],
             'is_active' => 'boolean',
             'password' => 'nullable|string|min:8',
-            'medical_facility_id' => 'nullable|exists:medical_facilities,id',
             'role_id' => 'sometimes|exists:roles,id',
             'created_by' => 'nullable|exists:users,id',
             'updated_by' => 'nullable|exists:users,id',

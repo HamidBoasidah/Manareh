@@ -22,6 +22,8 @@ class RolesPermissionsSeeder extends Seeder
 
         DB::transaction(function () {
             $guard          = config('acl.guard', 'web');
+
+            // الموارد الموافِقة للتعديلات الأخيرة فقط
             $resources      = config('acl.resources', []);
             $resourceLabels = config('acl.resource_labels', []);
             $actionLabels   = config('acl.action_labels', [
@@ -31,7 +33,7 @@ class RolesPermissionsSeeder extends Seeder
                 'delete' => ['en' => 'Delete', 'ar' => 'حذف'],
             ]);
 
-            // 1) أنشئ فقط الأذونات المفردة resource.action (بدون wildcard، وبدون سطر المورد)
+            // 1) توليد الأذونات المفردة resource.action فقط
             foreach ($resources as $resource => $actions) {
                 $resourceEn = $resourceLabels[$resource]['en']
                     ?? (string) Str::of($resource)->replace('-', ' ')->headline();
@@ -51,7 +53,7 @@ class RolesPermissionsSeeder extends Seeder
                 }
             }
 
-            // مجموعات مساعدة لأسماء الأذونات
+            // مُساعد لتجميع أسماء الأذونات
             $permNames = function (array $resList, array $actionsWanted) use ($resources) {
                 return collect($resList)->flatMap(function ($res) use ($resources, $actionsWanted) {
                     $allowed = $resources[$res] ?? [];
@@ -75,7 +77,12 @@ class RolesPermissionsSeeder extends Seeder
                 ->reject(fn ($name) => Str::endsWith($name, '.delete'))
                 ->values();
 
+            // مجموعات منطقية للموارد الحالية
+            $geoResources   = ['areas', 'districts', 'governorates'];
+            $adminEntities  = ['users', 'roles', 'permissions'];
+
             // 2) الأدوار الافتراضية (6 أدوار) — منح أذونات صريحة فقط
+
             // (أ) Super Admin: كل شيء
             $super = Role::updateOrCreate(
                 ['name' => 'super-admin', 'guard_name' => $guard],
@@ -90,40 +97,32 @@ class RolesPermissionsSeeder extends Seeder
             );
             $admin->syncPermissions($allNonDeletePerms->all());
 
-            // (ج) Manager: (view+create+update) لأغلب الموارد، و"users" مشاهدة فقط
+            // (ج) Manager: (view+create+update) للموارد الجغرافية، و(users/roles/permissions) مشاهدة فقط
             $manager = Role::updateOrCreate(
                 ['name' => 'manager', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Manager', 'ar' => 'مدير']]
             );
-            $managerManagedResources = array_values(array_diff(array_keys($resources), ['users']));
             $managerPerms = collect()
-                ->merge($permNames($managerManagedResources, ['view', 'create', 'update']))
-                ->merge($permNames(['users'], ['view']))
+                ->merge($permNames($geoResources, ['view', 'create', 'update']))
+                ->merge($permNames($adminEntities, ['view']))
                 ->unique()
                 ->values();
             $manager->syncPermissions($managerPerms->all());
 
-            // (د) Editor: محتوى/إعلانات/محادثات (view+create+update) + مشاهدة dashboard/profile
+            // (د) Editor: (view+update) للموارد الجغرافية
             $editor = Role::updateOrCreate(
                 ['name' => 'editor', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Editor', 'ar' => 'محرر']]
             );
+            $editorPerms = $permNames($geoResources, ['view', 'update']);
+            $editor->syncPermissions($editorPerms->all());
 
-            // (هـ) Data Entry: إدخال بيانات (view+create) لموارد تشغيلية + مشاهدة dashboard/profile
+            // (هـ) Data Entry: (view+create) للموارد الجغرافية
             $dataEntry = Role::updateOrCreate(
                 ['name' => 'data-entry', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Data Entry', 'ar' => 'مدخل بيانات']]
             );
-            $dataEntryResources = [
-                'medical-facilities', 'medical-services', 'working-periods',
-                'medical-facility-categories', 'facility-ownerships',
-                'areas', 'districts', 'governorates', 'specialties',
-            ];
-            $dataEntryPerms = collect()
-                ->merge($permNames($dataEntryResources, ['view', 'create']))
-                ->merge($permNames(['dashboard', 'profile'], ['view']))
-                ->unique()
-                ->values();
+            $dataEntryPerms = $permNames($geoResources, ['view', 'create']);
             $dataEntry->syncPermissions($dataEntryPerms->all());
 
             // (و) Viewer: مشاهدة فقط لكل الموارد التي تدعم "view"

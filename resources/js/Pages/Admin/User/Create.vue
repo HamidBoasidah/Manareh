@@ -3,7 +3,6 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
 
     <AddUserForm 
-      :medical-facilities="medicalFacilities" 
       :roles="roles" />
   </admin-layout>
 </template>
@@ -22,7 +21,6 @@ const currentPageTitle = computed(() => t('users.addUser'))
 
 // استلام البيانات من Inertia
 
-const medicalFacilities = computed(() => usePage().props.medicalFacilities)
 const roles = computed(() => usePage().props.roles)
 
 </script>

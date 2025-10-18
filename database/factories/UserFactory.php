@@ -26,7 +26,6 @@ class UserFactory extends Factory
             'whatsapp_number' => fake()->numerify('7########'),
             'is_active' => true,
             'password' => static::$password ??= Hash::make('password'),
-            'medical_facility_id' => null, // تبقى فارغة أثناء الإنشاء
             'created_by' => null,
             'updated_by' => null,
             'remember_token' => Str::random(10),

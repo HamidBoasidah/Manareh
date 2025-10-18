@@ -2,64 +2,89 @@
 
 namespace App\Http\Controllers\Admin;
 
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreGovernorateRequest;
+use App\Http\Requests\UpdateGovernorateRequest;
+use App\Services\GovernorateService;
+use App\DTOs\GovernorateDTO;
+use App\Models\Governorate;
+use Inertia\Inertia;
 
 class GovernorateController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+
+    public function __construct()
     {
-        //
+        $this->middleware('permission:governorates.view')->only(['index', 'show']);
+        $this->middleware('permission:governorates.create')->only(['create', 'store']);
+        $this->middleware('permission:governorates.update')->only(['edit', 'update']);
+        $this->middleware('permission:governorates.delete')->only(['destroy']);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function index(Request $request, GovernorateService $governorateService)
+    {
+        $perPage = $request->input('per_page', 10);
+        $governorates = $governorateService->paginate($perPage);
+        $governorates->getCollection()->transform(function ($gov) {
+            return GovernorateDTO::fromModel($gov)->toIndexArray();
+        });
+        return Inertia::render('Admin/Governorate/Index', [
+            'governorates' => $governorates
+        ]);
+    }
+
     public function create()
     {
-        //
+        return Inertia::render('Admin/Governorate/Create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(StoreGovernorateRequest $request, GovernorateService $governorateService)
     {
-        //
+        $data = $request->validated();
+        $governorateService->create($data);
+        return redirect()->route('admin.governorates.index');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(Governorate $governorate)
     {
-        //
+        $govDTO = GovernorateDTO::fromModel($governorate)->toArray();
+        return Inertia::render('Admin/Governorate/Show', [
+            'governorate' => $govDTO,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function edit(Governorate $governorate)
     {
-        //
+        $govDTO = GovernorateDTO::fromModel($governorate)->toArray();
+        return Inertia::render('Admin/Governorate/Edit', [
+            'governorate' => $govDTO,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function update(UpdateGovernorateRequest $request, GovernorateService $governorateService, Governorate $governorate)
     {
-        //
+        $data = $request->validated();
+        $governorateService->update($governorate->id, $data);
+        return redirect()->route('admin.governorates.index');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(GovernorateService $governorateService, Governorate $governorate)
     {
-        //
+        $governorateService->delete($governorate->id);
+        return redirect()->route('admin.governorates.index');
+    }
+
+    public function activate(GovernorateService $governorateService, $id)
+    {
+        $governorateService->activate($id);
+        return back()->with('success', 'Governorate activated successfully');
+    }
+
+    public function deactivate(GovernorateService $governorateService, $id)
+    {
+        $governorateService->deactivate($id);
+        return back()->with('success', 'Governorate deactivated successfully');
     }
 }

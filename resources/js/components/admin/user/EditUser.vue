@@ -394,7 +394,6 @@ const { success, error } = useNotifications()
 
 const props = defineProps({
   user: Object,
-  medicalFacilities: Array,
   roles : Array
 });
 
@@ -407,7 +406,6 @@ const form = useForm({
   address: props.user.address,
   role_id: props.user.role_id,
   is_active: props.user.is_active,
-  medical_facility_id: props.user.medical_facility_id,
   password: '', // اتركه فارغًا لعدم تغيير كلمة المرور
   attachment: null, // سيمثل الملف الجديد المرفوع
 });
