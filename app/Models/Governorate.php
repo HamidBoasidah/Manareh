@@ -2,22 +2,17 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Governorate extends Model
+class Governorate extends BaseModel
 {
     use HasFactory;
     protected $fillable = [
         'name_ar',
         'name_en',
-        'is_active',
-        'created_by',
-        'updated_by',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
+    // لا توجد خصائص تحويل إضافية مطلوبة هنا
 
     public function districts()
     {
@@ -29,8 +24,4 @@ class Governorate extends Model
         return $this->hasManyThrough(Area::class, District::class);
     }
 
-    public function medicalFacilities()
-    {
-        return $this->hasMany(MedicalFacility::class);
-    }
 }

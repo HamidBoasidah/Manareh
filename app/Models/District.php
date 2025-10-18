@@ -2,23 +2,18 @@
 
 namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class District extends Model
+class District extends BaseModel
 {
     use HasFactory;
     protected $fillable = [
         'name_ar',
         'name_en',
-        'is_active',
         'governorate_id',
-        'created_by',
-        'updated_by',
     ];
 
-    protected $casts = [
-        'is_active' => 'boolean',
-    ];
+    // لا توجد خصائص تحويل إضافية مطلوبة هنا
 
     public function governorate()
     {
@@ -30,8 +25,4 @@ class District extends Model
         return $this->hasMany(Area::class);
     }
 
-    public function medicalFacilities()
-    {
-        return $this->hasMany(MedicalFacility::class);
-    }
 }

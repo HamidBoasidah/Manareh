@@ -21,15 +21,9 @@ class User extends Authenticatable
         'is_active',
         'password',
         'attachment',
-        'medical_facility_id',
         'created_by',
         'updated_by',
     ];
-
-    public function medicalFacility()
-    {
-        return $this->belongsTo(MedicalFacility::class);
-    }
 
     public function createdUsers()
     {

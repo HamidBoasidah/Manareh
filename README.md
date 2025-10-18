@@ -1,61 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## وصف المشروع
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+هذا المشروع هو قالب مبني على Laravel مهيأ لتطبيقات الويب الإدارية. يحتوي على نماذج Eloquent مرتبة وفق نمط Repository/Service، واجهة أمامية مبنية بـ Vite، وتصدير مسارات باستخدام Ziggy.
 
-## About Laravel
+الملفات والميزات الهامة:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- `app/Models/BaseModel.php`: نموذج أساسي (BaseModel) ترث منه النماذج الأخرى ويحتوي على حقول مشتركة مثل `created_by`, `updated_by`, و`is_active`.
+- هيكل `app/Repositories` و`app/Services` لتنظيم منطق الوصول إلى البيانات وخدمات التطبيق.
+- واجهة أمامية في `resources/js` تستخدم Vite وZiggy.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## المتطلبات
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP >= 8.x
+- Composer
+- Node.js >= 16 و npm
+- قاعدة بيانات (MySQL/Postgres/SQLite) — بعض أوامر Artisan قد تتطلب إعداد قاعدة بيانات صحيحة (ملاحظة حول `cache:clear`).
 
-## Learning Laravel
+## إعداد المشروع (محلي)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1. انسخ المستودع وقم بالدخول للمجلد:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+git clone <your-repo-url> .
+cd /path/to/hamid_templetev2
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2. تثبيت تبعيات PHP:
 
-## Laravel Sponsors
+```bash
+composer install --no-interaction --prefer-dist
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+3. نسخ ملف البيئة وضبط المتغيرات:
 
-### Premium Partners
+```bash
+cp .env.example .env
+# ثم افتح .env وعدل إعدادات DB وAPP_URL وCACHE_DRIVER و
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+4. إنشاء مفتاح التطبيق:
 
-## Contributing
+```bash
+php artisan key:generate
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+5. (اختياري) إذا لم تكن تستخدم قاعدة بيانات، ضبط `CACHE_DRIVER=file` في `.env` لتجنب أخطاء عند تشغيل بعض أوامر Artisan.
 
-## Code of Conduct
+6. تثبيت تبعيات الواجهة وبناء الأصول:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+npm ci --no-audit --no-fund
+npm run build
+```
 
-## Security Vulnerabilities
+7. توليد ملفات التوزيع (إذا رغبت):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan route:clear
+php artisan config:clear
+# ملاحظة: php artisan cache:clear قد يفشل إذا كانت إعدادات DB غير صحيحة
+```
 
-## License
+## أوامر شائعة
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- تشغيل الخادم المحلي (تطوير):
+
+```bash
+php artisan serve
+```
+
+- تشغيل اختبارات PHPUnit:
+
+```bash
+./vendor/bin/phpunit
+```
+
+- تحديث أو إعادة توليد autoload:
+
+```bash
+composer dump-autoload -o
+```
+
+- إعادة توليد Ziggy (export routes):
+
+```bash
+php artisan ziggy:generate resources/js/ziggy.js
+```
+
+- بناء الواجهة (Vite):
+
+```bash
+npm run build
+```
+
+## ملاحظات وملاحظات خاصة بالمشروع
+
+- تم إنشاء `BaseModel` في `app/Models/BaseModel.php` لتقليل التكرار في النماذج.
+- تم حذف مجال Advertisement كاملًا من المشروع (موديل، ريبو، سيرفس، الكنترولات، المايجريشن، الفاكتوري، والسييدر).
+
+## القضايا المعروفة والحلول المؤقتة
+
+- أثناء توليد autoload قد تظهر تحذيرات PSR-4 لبعض الملفات (مثال: Requests) بسبب عدم توافق الاسماء/المسارات. يفضل فتح التحذيرات وتصحيح الـ namespace أو اسم الملف المطابق لمسار PSR-4.
+- أمر `php artisan cache:clear` قد يفشل إذا لم تكن إعدادات قاعدة البيانات في `.env` صحيحة لأن بعض إعدادات الكاش قد تعتمد على DB. حل سريع: عيّن `CACHE_DRIVER=file` مؤقتًا في `.env` ثم شغّل الأمر.
+
+## كيف أساهم أو أعدل
+
+- لطفًا افتح فرعًا جديدًا، أجرِ تعديلاتك، ثم اصدر Pull Request. التزامات (Commits) واضحة مع رسائل وصفية ستكون مفيدة.
+
+## ملاحظات أخيرة
+
+هذا الملف مُحدَّث ليعكس حالة المشروع الحالية. إذا رغبت أن أعدل محتوى README بإضافة أقسام مخصصة (مثال: وثائق APIs، توضيح بنية المجلدات، أو تعليمات تشغيل محددة لخادم الإنتاج)، أخبرني ما الذي تريد إضافته وسأحدّث الملف.
+
+---
+
+آخر تحديث: 17 أكتوبر 2025

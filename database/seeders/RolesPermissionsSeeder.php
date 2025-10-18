@@ -108,13 +108,6 @@ class RolesPermissionsSeeder extends Seeder
                 ['name' => 'editor', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Editor', 'ar' => 'محرر']]
             );
-            $editorResources = ['advertisements', 'content-blocks', 'conversations'];
-            $editorPerms = collect()
-                ->merge($permNames($editorResources, ['view', 'create', 'update']))
-                ->merge($permNames(['dashboard', 'profile'], ['view']))
-                ->unique()
-                ->values();
-            $editor->syncPermissions($editorPerms->all());
 
             // (هـ) Data Entry: إدخال بيانات (view+create) لموارد تشغيلية + مشاهدة dashboard/profile
             $dataEntry = Role::updateOrCreate(

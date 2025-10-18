@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
 use Inertia\Inertia;
 use App\Services\UserService;
-use App\Models\MedicalFacility;
 use App\Models\User;
 use App\Models\Role;
 use App\DTOs\UserDTO;
@@ -40,12 +39,9 @@ class UserController extends Controller
 
     public function create()
     {
-        // جلب جميع المرافق الطبية
-        $medicalFacilities = MedicalFacility::all(['id', 'name_ar' , 'name_en']);
         $roles = Role::all();
 
         return Inertia::render('Admin/User/Create', [
-            'medicalFacilities' => $medicalFacilities,
             'roles' => $roles,
         ]);
     }
@@ -74,14 +70,12 @@ class UserController extends Controller
 
     public function edit(User $user)
     {
-        $medicalFacilities = MedicalFacility::all(['id', 'name_ar', 'name_en']);
         $roles = Role::all();
 
         $userDTO = UserDTO::fromModel($user)->toArray();
 
         return Inertia::render('Admin/User/Edit', [
             'user' => $userDTO,
-            'medicalFacilities' => $medicalFacilities,
             'roles' => $roles,
         ]);
     }

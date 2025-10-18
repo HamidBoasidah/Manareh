@@ -32,13 +32,6 @@
             <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">{{ t('common.whatsappNumber') }}</label>
             <p class="text-base text-gray-800 dark:text-white/90">{{ user.whatsapp_number || 'N/A' }}</p>
           </div>
-
-          <!-- Medical Facility -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">{{ t('users.medicalFacility') }}</label>
-            <p class="text-base text-gray-800 dark:text-white/90">{{ user.medical_facility ? facilityDisplayName(user.medical_facility) : 'N/A' }}</p>
-          </div>
-
           <!-- User Role -->
           <div>
             <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">{{ t('roles.roleInformation') }}</label>

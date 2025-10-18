@@ -44,10 +44,8 @@ return [
         'areas'                        => ['view', 'create', 'update', 'delete'],
         'districts'                    => ['view', 'create', 'update', 'delete'], // قد تفضّل "المديريات"
         'governorates'                 => ['view', 'create', 'update', 'delete'],
-        'specialties'                  => ['view', 'create', 'update', 'delete'],
-        'advertisements'               => ['view', 'create', 'update', 'delete'],
+    'specialties'                  => ['view', 'create', 'update', 'delete'],
         'content-blocks'               => ['view', 'create', 'update', 'delete'],
-        'conversations'                => ['view', 'create', 'update', 'delete'],
         'users'                        => ['view', 'create', 'update', 'delete'],
         // backend management resources
         'roles'                        => ['view', 'create', 'update', 'delete'],
@@ -72,9 +70,7 @@ return [
         'districts'                    => ['en' => 'Districts',          'ar' => 'المديريات'], // كانت: الأحياء
         'governorates'                 => ['en' => 'Governorates',       'ar' => 'المحافظات'],
         'specialties'                  => ['en' => 'Specialties',        'ar' => 'التخصصات'],
-        'advertisements'               => ['en' => 'Advertisements',     'ar' => 'الإعلانات'],
         'content-blocks'               => ['en' => 'Content Blocks',     'ar' => 'مكوّنات المحتوى'], // كانت: كتل المحتوى
-        'conversations'                => ['en' => 'Conversations',      'ar' => 'المحادثات'],
         'users'                        => ['en' => 'Users',              'ar' => 'المستخدمون'],
         'roles'                        => ['en' => 'Roles',              'ar' => 'الأدوار'],
         'permissions'                  => ['en' => 'Permissions',        'ar' => 'الصلاحيات'],

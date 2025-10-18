@@ -2,18 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\MedicalFacilityController;
-use App\Http\Controllers\Admin\MedicalServiceController;
-use App\Http\Controllers\Admin\WorkingPeriodController;
-use App\Http\Controllers\Admin\MedicalFacilityCategoryController;
-use App\Http\Controllers\Admin\FacilityOwnershipController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\GovernorateController;
-use App\Http\Controllers\Admin\SpecialtyController;
-use App\Http\Controllers\Admin\AdvertisementController;
-use App\Http\Controllers\Admin\ContentBlockController;
-use App\Http\Controllers\Admin\ConversationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -21,77 +12,79 @@ use App\Support\RoutePermissions;
 
 
 Route::middleware(['auth'])->group(function () {
-    Route::resource('medical-facilities', MedicalFacilityController::class)
-        ->names('admin.medical-facilities')
-        ->middleware(RoutePermissions::resource('medical-facilities'));
+    // Dashboard
+    Route::get('/', fn () => Inertia('Dashboard'))
+        ->name('dashboard')
+        ->middleware(RoutePermissions::can('dashboard.view'));
 
-    Route::resource('medical-services', MedicalServiceController::class)
-        ->names('admin.medical-services')
-        ->middleware(RoutePermissions::resource('medical-services'));
+    // Profile
+    Route::get('/profile', fn () => Inertia('Others/UserProfile'))
+        ->name('admin.profile')
+        ->middleware(RoutePermissions::can('profile.view'));
 
-    Route::resource('working-periods', WorkingPeriodController::class)
-        ->names('admin.working-periods')
-        ->middleware(RoutePermissions::resource('working-periods'));
-
-    Route::resource('medical-facility-categories', MedicalFacilityCategoryController::class)
-        ->names('admin.medical-facility-categories')
-        ->middleware(RoutePermissions::resource('medical-facility-categories'));
-
-    Route::resource('facility-ownerships', FacilityOwnershipController::class)
-        ->names('admin.facility-ownerships')
-        ->middleware(RoutePermissions::resource('facility-ownerships'));
-
-    Route::resource('areas', AreaController::class)
-        ->names('admin.areas')
-        ->middleware(RoutePermissions::resource('areas'));
-
-    Route::resource('districts', DistrictController::class)
-        ->names('admin.districts')
-        ->middleware(RoutePermissions::resource('districts'));
-
+    // Governorates
     Route::resource('governorates', GovernorateController::class)
-        ->names('admin.governorates')
-        ->middleware(RoutePermissions::resource('governorates'));
+        ->names('admin.governorates');
 
-    Route::resource('specialties', SpecialtyController::class)
-        ->names('admin.specialties')
-        ->middleware(RoutePermissions::resource('specialties'));
+    Route::patch('governorates/{id}/activate', [GovernorateController::class, 'activate'])
+        ->name('admin.governorates.activate')
+        ->middleware(RoutePermissions::can('governorates.update'));
 
-    Route::resource('advertisements', AdvertisementController::class)
-        ->names('admin.advertisements')
-        ->middleware(RoutePermissions::resource('advertisements'));
+    Route::patch('governorates/{id}/deactivate', [GovernorateController::class, 'deactivate'])
+        ->name('admin.governorates.deactivate')
+        ->middleware(RoutePermissions::can('governorates.update'));
 
-    Route::resource('content-blocks', ContentBlockController::class)
-        ->names('admin.content-blocks')
-        ->middleware(RoutePermissions::resource('content-blocks'));
+    // Districts
+    Route::resource('districts', DistrictController::class)
+        ->names('admin.districts');
 
-    Route::resource('conversations', ConversationController::class)
-        ->names('admin.conversations')
-        ->middleware(RoutePermissions::resource('conversations'));
+    Route::patch('districts/{id}/activate', [DistrictController::class, 'activate'])
+        ->name('admin.districts.activate')
+        ->middleware(RoutePermissions::can('districts.update'));
 
+    Route::patch('districts/{id}/deactivate', [DistrictController::class, 'deactivate'])
+        ->name('admin.districts.deactivate')
+        ->middleware(RoutePermissions::can('districts.update'));
+
+    // Areas
+    Route::resource('areas', AreaController::class)
+        ->names('admin.areas');
+
+    Route::patch('areas/{id}/activate', [AreaController::class, 'activate'])
+        ->name('admin.areas.activate')
+        ->middleware(RoutePermissions::can('areas.update'));
+
+    Route::patch('areas/{id}/deactivate', [AreaController::class, 'deactivate'])
+        ->name('admin.areas.deactivate')
+        ->middleware(RoutePermissions::can('areas.update'));
+
+    // Users
     Route::resource('users', UserController::class)
         ->names('admin.users');
 
     Route::patch('users/{id}/activate', [UserController::class, 'activate'])
         ->name('admin.users.activate')
-        ->middleware(RoutePermissions::can('users.edit'));
+        ->middleware(RoutePermissions::can('users.update'));
 
     Route::patch('users/{id}/deactivate', [UserController::class, 'deactivate'])
         ->name('admin.users.deactivate')
-        ->middleware(RoutePermissions::can('users.edit'));
+        ->middleware(RoutePermissions::can('users.update'));
 
+    // Roles
     Route::resource('roles', RoleController::class)
         ->names('admin.roles');
 
+    Route::patch('roles/{id}/activate', [RoleController::class, 'activate'])
+        ->name('admin.roles.activate')
+        ->middleware(RoutePermissions::can('roles.update'));
+
+    Route::patch('roles/{id}/deactivate', [RoleController::class, 'deactivate'])
+        ->name('admin.roles.deactivate')
+        ->middleware(RoutePermissions::can('roles.update'));
+
+    // Permissions
     Route::get('permissions', [PermissionController::class, 'index'])
         ->name('admin.permissions.index');
-
-    Route::get('/profile', fn () => Inertia('Others/UserProfile'))
-        ->middleware(RoutePermissions::can('profile.view'));
-
-    Route::get('/', fn () => Inertia('Dashboard'))
-        ->name('dashboard')
-        ->middleware(RoutePermissions::can('dashboard.view'));
 });
 
 // روابط مصادقة لوحة التحكم (بدون حماية)

@@ -1,25 +1,20 @@
 <template>
-  <admin-layout>
+  <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <ShowUserForm :user="user"/>
-  </admin-layout>
+    <EditArea :area="area" />
+  </AdminLayout>
 </template>
 
 <script setup>
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
-import ShowUserForm from '@/components/admin/user/ShowUser.vue'
+import EditArea from '@/components/admin/area/EditArea.vue'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { usePage } from '@inertiajs/vue3'
 
-
-
 const { t } = useI18n()
-const currentPageTitle = computed(() => t('users.showUser'))
+const currentPageTitle = computed(() => t('areas.editArea'))
 
-// استلام البيانات من Inertia
-
-const user = computed(() => usePage().props.user)
-
+const area = computed(() => usePage().props.area)
 </script>

@@ -19,15 +19,6 @@ class DatabaseSeeder extends Seeder
             GovernorateSeeder::class,
             DistrictSeeder::class,
             AreaSeeder::class,
-            FacilityOwnershipSeeder::class,
-            MedicalFacilityCategorySeeder::class,
-            SpecialtySeeder::class,
-            MedicalFacilitySeeder::class,
-            MedicalServiceSeeder::class,
-            WorkingPeriodSeeder::class,
-            ContentBlockSeeder::class,
-            AdvertisementSeeder::class,
-            ConversationSeeder::class,
         ]);
     }
 }
