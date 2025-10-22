@@ -39,18 +39,7 @@
           />
         </div>
 
-        <!-- لا يوجد Create في السجلات؛ نُبقي الزر معطلًا للحفاظ على النمط -->
-        <Tooltip :text="t('messages.notAuthorized')" :show="!canCreate">
-          <button
-            :disabled="true"
-            class="bg-brand-500 shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg px-4 py-[11px] text-sm font-medium text-white transition sm:w-auto disabled:bg-brand-300 disabled:text-white/70"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none">
-              <path d="M5 10.0002H15.0006M10.0002 5V15.0006" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-            {{ t('activitylogs.add') }}
-          </button>
-        </Tooltip>
+        <!-- زر الإضافة محذوف — لا يوجد إنشاء لسجلات النشاط -->
       </div>
     </div>
 
@@ -196,17 +185,7 @@
                   </button>
                 </Tooltip>
 
-                <Tooltip :text="t('messages.notAuthorized')" :show="!canDelete">
-                  <button
-                    :disabled="!canDelete"
-                    @click="handleDeleteClick(log.id)"
-                    class="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500 disabled:text-gray-400 disabled:dark:text-gray-500"
-                  >
-                    <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.8335 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" />
-                    </svg>
-                  </button>
-                </Tooltip>
+                <!-- حذف زر الحذف لأن النظام لا يدعم حذف سجلات النشاط -->
               </div>
             </td>
           </tr>
@@ -246,13 +225,7 @@
     </div>
   </div>
 
-  <DangerAlert
-    :isOpen="isDeleteModalOpen"
-    :title="t('messages.areYouSure')"
-    :message="t('messages.deleteActivityLogConfirmation')"
-    @close="closeDeleteModal"
-    @confirm="confirmDelete"
-  />
+  <!-- DangerAlert removed because deletion is not supported for activity logs -->
 </template>
 
 <script setup>
@@ -261,17 +234,15 @@ import { router } from '@inertiajs/vue3'
 import { route } from '@/route'
 import { useI18n } from 'vue-i18n'
 import Tooltip from '@/components/ui/Tooltip.vue'
-import DangerAlert from '@/components/modals/DangerAlert.vue'
 import { usePermissions } from '@/composables/usePermissions'
 import { useNotifications } from '@/composables/useNotifications'
 
 const { hasAnyPermission } = usePermissions()
 
 // permissions for activity logs
-const canCreate = computed(() => hasAnyPermission(['activitylogs.create', 'activitylogs.store', 'activitylogs.add']))
+// create permission removed — creation of activity logs is not supported
 const canView   = computed(() => hasAnyPermission(['activitylogs.view', 'activitylogs.show', 'activitylogs.read']))
-const canEdit   = computed(() => hasAnyPermission(['activitylogs.update', 'activitylogs.edit']))
-const canDelete = computed(() => hasAnyPermission(['activitylogs.delete', 'activitylogs.destroy']))
+// deletion of activity logs is not supported in this UI
 
 const { t } = useI18n()
 const { success, error } = useNotifications()
@@ -290,22 +261,7 @@ const selectAll      = ref(false)
 function goToView(id)      { router.visit(route('admin.activitylogs.show', id)) }
 function handleViewClick(id){ if (!canView.value)   return; goToView(id) }
 
-const isDeleteModalOpen = ref(false)
-const logToDeleteId     = ref(null)
-
-function openDeleteModal(id)  { logToDeleteId.value = id; isDeleteModalOpen.value = true }
-function handleDeleteClick(id){ if (!canDelete.value) return; openDeleteModal(id) }
-function closeDeleteModal()   { isDeleteModalOpen.value = false; logToDeleteId.value = null }
-
-function confirmDelete() {
-  if (logToDeleteId.value) {
-    router.delete(route('admin.activitylogs.destroy', logToDeleteId.value), {
-      onSuccess: () => { success(t('activitylogs.deletedSuccessfully')); closeDeleteModal() },
-      onError:   () => { error(t('activitylogs.deletionFailed'));       closeDeleteModal() },
-      preserveScroll: true,
-    })
-  }
-}
+// delete-related state and handlers removed
 
 // فلترة وفرز مشابه تماما للنمط
 const filteredData = computed(() => {

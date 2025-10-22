@@ -110,6 +110,24 @@
     "email": "Email",
     "type": "Type"
   },
+  "activitylogs": {
+    "add": "Add Activity Log",
+    "description": "Description",
+    "event": "Event",
+    "subjectType": "Subject Type",
+    "subjectId": "Subject ID",
+    "causer": "User/System",
+    "subject": "Subject",
+    "createdAt": "Created at",
+    "noLogs": "No activity logs.",
+    "deletedSuccessfully": "Activity log deleted successfully.",
+    "deletionFailed": "Failed to delete activity log.",
+    "properties": {
+      "attributes": "Attributes",
+      "old": "Old values",
+      "new": "New values"
+    }
+  },
   "roles": {
     "addRole": "Add Role",
     "editRole": "Edit Role",

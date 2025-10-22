@@ -33,7 +33,7 @@
     "areas": "المناطق",
     "governorates": "المحافظات",
     "districts": "المديريات",
-    "activityLog": "سجل التغييرات"
+    "activityLogs": "سجل التغييرات"
   },
   "pages": {
     "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",
@@ -122,6 +122,8 @@
     "add": "إضافة سجل نشاط",
     "description": "الوصف",
     "event": "الحدث",
+    "subjectType": "نوع المورد",
+    "subjectId": "معرف المورد",
     "causer": "المستخدم/النظام",
     "subject": "المورد/الكائن",
     "createdAt": "تاريخ الإنشاء",
