@@ -211,7 +211,8 @@ import {
   UserCircleIcon,
   ChevronDownIcon,
   HorizontalDots,
-  BuildingIcon
+  BuildingIcon,
+  HistoryIcon
 } from "../../icons"
 import { useSidebar } from "@/composables/useSidebar"
 import { usePermissions } from "@/composables/usePermissions"
@@ -324,6 +325,12 @@ const menuGroups = computed(() =>
               permission: 'permissions.view',
             },
           ],
+        },
+        {
+          icon: HistoryIcon,
+          name: t('menu.activityLog'),
+          path: '/activitylogs',
+          permission: 'activitylogs.view',
         },
       ],
     },

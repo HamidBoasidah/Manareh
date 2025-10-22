@@ -18,6 +18,11 @@ class GovernorateService
         return $this->governorates->all($with);
     }
 
+    public function paginate(int $perPage = 15, array $with = [])
+    {
+        return $this->governorates->paginate($perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->governorates->findOrFail($id, $with);

@@ -18,6 +18,11 @@ class PermissionService
         return $this->permissions->all($with);
     }
 
+    public function paginate(int $perPage = 15, array $with = [])
+    {
+        return $this->permissions->paginate($perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->permissions->findOrFail($id, $with);

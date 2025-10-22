@@ -19,6 +19,11 @@ class RoleService
         return $this->roles->all($with);
     }
 
+    public function paginate(int $perPage = 15, array $with = [])
+    {
+        return $this->roles->paginate($perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->roles->findOrFail($id, $with);
@@ -55,8 +60,4 @@ class RoleService
         return $this->roles->delete($id);
     }
 
-    public function paginate($perPage = 10, $with = [])
-    {
-        return $this->roles->paginate($perPage, $with);
-    }
 }

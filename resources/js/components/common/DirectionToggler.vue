@@ -24,15 +24,17 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { toggleDirection, getCurrentDirection } from '@/utils/direction'
-import { i18n, setHtmlLang } from '@/i18n'
+import { i18n } from '@/i18n'
+import { switchLocale } from '@/composables/useLocale' // 👈 المهم
 
-const title = computed(() => (getCurrentDirection() === 'rtl' ? i18n.global.t('common.switchToLTR') : i18n.global.t('common.switchToRTL')))
+const title = computed(() =>
+  i18n.global.locale.value === 'ar'
+    ? i18n.global.t('common.switchToLTR')
+    : i18n.global.t('common.switchToRTL')
+)
 
-function onToggle() {
-  const nextDir = toggleDirection()
-  const nextLocale = nextDir === 'rtl' ? 'ar' : 'en'
-  i18n.global.locale.value = nextLocale
-  setHtmlLang(nextLocale as 'ar' | 'en')
+async function onToggle() {
+  const next = i18n.global.locale.value === 'ar' ? 'en' : 'ar'
+  await switchLocale(next) // 👈 يحدّث i18n + <html lang/dir> + يحفظ في السيرفر
 }
 </script>

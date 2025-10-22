@@ -32,7 +32,8 @@
     "locations": "المواقع",
     "areas": "المناطق",
     "governorates": "المحافظات",
-    "districts": "المديريات"
+    "districts": "المديريات",
+    "activityLog": "سجل التغييرات"
   },
   "pages": {
     "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",
@@ -117,6 +118,23 @@
     "userUpdateFailed": "فشل تحديث المستخدم"
   ,"noImage": "لا توجد صورة للمستخدم"
   },
+  "activitylogs": {
+    "add": "إضافة سجل نشاط",
+    "description": "الوصف",
+    "event": "الحدث",
+    "causer": "المستخدم/النظام",
+    "subject": "المورد/الكائن",
+    "createdAt": "تاريخ الإنشاء",
+    "noLogs": "لا توجد سجلات نشاط.",
+    "deletedSuccessfully": "تم حذف سجل النشاط بنجاح.",
+    "deletionFailed": "فشل حذف سجل النشاط.",
+    "properties": {
+      "attributes": "السمات",
+      "old": "القيم القديمة",
+      "new": "القيم الجديدة"
+    }
+  },
+  
   "roles": {
     "roleInformation": "معلومات الدور",
     "selectRole": "اختر الدور",

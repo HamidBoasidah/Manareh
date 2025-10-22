@@ -33,7 +33,6 @@ class RepositoryServiceProvider extends ServiceProvider
 
         // Bind Services to their Repositories
         $this->app->bind(UserService::class, fn($app) => new UserService($app->make(UserRepository::class)));
-        $this->app->bind(WorkingPeriodService::class, fn($app) => new WorkingPeriodService($app->make(WorkingPeriodRepository::class)));
         $this->app->bind(AreaService::class, fn($app) => new AreaService($app->make(AreaRepository::class)));
         $this->app->bind(DistrictService::class, fn($app) => new DistrictService($app->make(DistrictRepository::class)));
         $this->app->bind(GovernorateService::class, fn($app) => new GovernorateService($app->make(GovernorateRepository::class)));

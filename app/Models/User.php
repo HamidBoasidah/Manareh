@@ -21,9 +21,12 @@ class User extends Authenticatable
         'is_active',
         'password',
         'attachment',
+        'locale',
         'created_by',
         'updated_by',
     ];
+
+    protected array $dontLog = ['password', 'remember_token'];
 
     public function createdUsers()
     {

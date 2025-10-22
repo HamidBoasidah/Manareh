@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->string('password');
             $table->string('attachment')->nullable();
+            $table->string('locale', 10)->default('ar');
             $table->foreignId('created_by')->nullable()->constrained('users')->onDelete('set null');
             $table->foreignId('updated_by')->nullable()->constrained('users')->onDelete('set null');
             $table->rememberToken();

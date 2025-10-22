@@ -36,7 +36,8 @@
     "videos": "Videos",
     "auth": "Authentication",
     "signin": "Signin",
-    "signup": "Signup"
+    "signup": "Signup",
+    "activityLog": "Activity Log"
   },
   "pages": {
     "welcomeLoggedIn": "You're logged in!",

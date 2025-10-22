@@ -8,7 +8,9 @@ use App\Http\Controllers\Admin\GovernorateController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Support\RoutePermissions;
+use App\Http\Controllers\LocaleController;
 
 
 Route::middleware(['auth'])->group(function () {
@@ -85,9 +87,15 @@ Route::middleware(['auth'])->group(function () {
     // Permissions
     Route::get('permissions', [PermissionController::class, 'index'])
         ->name('admin.permissions.index');
+
+    // Activity Log
+    Route::resource('activitylogs', ActivityLogController::class)
+        ->only(['index', 'show' , 'destroy'])
+        ->names('admin.activitylogs');
 });
 
 // روابط مصادقة لوحة التحكم (بدون حماية)
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/locale', LocaleController::class)->name('locale.set')->middleware('throttle:10,1');

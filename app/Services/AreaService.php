@@ -18,6 +18,11 @@ class AreaService
         return $this->areas->all($with);
     }
 
+    public function paginate(int $perPage = 15, array $with = [])
+    {
+        return $this->areas->paginate($perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->areas->findOrFail($id, $with);

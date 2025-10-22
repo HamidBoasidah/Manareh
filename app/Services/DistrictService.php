@@ -18,6 +18,11 @@ class DistrictService
         return $this->districts->all($with);
     }
 
+    public function paginate(int $perPage = 15, array $with = [])
+    {
+        return $this->districts->paginate($perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->districts->findOrFail($id, $with);
