@@ -154,7 +154,9 @@
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ log.event ?? '—' }}</p>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                {{ t('activitylogs.events.' + (log.event ?? '')) || log.event || '—' }}
+              </p>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
@@ -168,7 +170,9 @@
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ log.created_at }}</p>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">
+                {{ dayjs(log.created_at).format('YYYY-MM-DD HH:mm:ss') }}
+              </p>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
@@ -236,6 +240,7 @@ import { useI18n } from 'vue-i18n'
 import Tooltip from '@/components/ui/Tooltip.vue'
 import { usePermissions } from '@/composables/usePermissions'
 import { useNotifications } from '@/composables/useNotifications'
+import dayjs from 'dayjs'
 
 const { hasAnyPermission } = usePermissions()
 
