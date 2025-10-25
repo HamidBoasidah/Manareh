@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('guardians', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('phone_number')->nullable();
+            $table->string('whatsapp_number')->nullable();
+            $table->string('relation')->nullable(); // أب/أم/أخ...
             $table->timestamps();
         });
     }
