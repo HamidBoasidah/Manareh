@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->enum('role_in_plan', ['teacher','supervisor_edu','supervisor_tarbawi']);
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

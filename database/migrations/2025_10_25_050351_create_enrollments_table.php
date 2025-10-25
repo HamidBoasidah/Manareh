@@ -18,6 +18,8 @@ return new class extends Migration
             $table->enum('status', ['active','on_hold','graduated','withdrawn'])->default('active');
             $table->date('joined_at')->nullable();
             $table->date('left_at')->nullable();
+               $table->boolean('is_active')->default(true);
+               $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['circle_id','student_id']);

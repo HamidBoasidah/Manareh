@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
             $table->foreignId('classification_id')->nullable()->constrained('circle_classifications')->nullOnDelete();
-            $table->string('name');
+                $table->string('name');
+                $table->boolean('is_active')->default(true);
+                $table->softDeletes();
             $table->unsignedSmallInteger('capacity')->default(20);
             $table->text('notes')->nullable();
             $table->timestamps();

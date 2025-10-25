@@ -17,7 +17,9 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->string('whatsapp_number')->nullable();
             $table->string('relation')->nullable(); // أب/أم/أخ...
-            $table->timestamps();
+                $table->boolean('is_active')->default(true);
+                $table->softDeletes();
+                $table->timestamps();
         });
     }
 

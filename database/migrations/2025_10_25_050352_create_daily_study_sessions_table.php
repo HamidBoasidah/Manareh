@@ -17,6 +17,8 @@ return new class extends Migration
             $table->date('session_date_g');
             $table->string('session_date_h')->nullable();
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['circle_id','session_date_g']);

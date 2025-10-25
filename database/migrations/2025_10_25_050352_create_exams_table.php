@@ -22,6 +22,8 @@ return new class extends Migration
             $table->unsignedSmallInteger('total_points')->nullable();
             $table->string('total_grade')->nullable(); // نسبة/حرف
             $table->text('remarks')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['student_id','exam_date_g']);

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('status')->default('queued'); // queued/sent/failed
             $table->timestamp('sent_at')->nullable();
             $table->text('error')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->index(['recipient_type','recipient_id','status'], 'idx_notify_recipient');

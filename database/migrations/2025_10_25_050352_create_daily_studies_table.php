@@ -33,6 +33,8 @@ return new class extends Migration
             $table->unsignedTinyInteger('points')->default(0); // 0..3
             $table->enum('attendance_status',['present','absent','excused','late_in','early_out'])->default('present');
             $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
 
             $table->unique(['session_id','student_id']);

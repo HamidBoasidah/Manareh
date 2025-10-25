@@ -20,7 +20,9 @@ return new class extends Migration
             $table->string('activity_date_h')->nullable();
             $table->string('place')->nullable();
             $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
-            $table->timestamps();
+                $table->boolean('is_active')->default(true);
+                $table->softDeletes();
+                $table->timestamps();
         });
     }
 

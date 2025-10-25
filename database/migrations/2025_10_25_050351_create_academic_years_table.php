@@ -19,6 +19,8 @@ return new class extends Migration
             $table->date('end_date_g')->nullable();
             $table->string('start_date_h')->nullable();
             $table->string('end_date_h')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

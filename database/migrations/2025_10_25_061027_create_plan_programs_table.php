@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
             $table->foreignId('program_id')->constrained('programs')->cascadeOnDelete();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

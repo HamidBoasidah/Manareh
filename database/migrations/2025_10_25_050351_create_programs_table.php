@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('name'); // اجتماع/رحلة/تكريم...
             $table->string('type')->nullable(); // meeting/trip/award...
             $table->text('description')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

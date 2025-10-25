@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('date_h')->nullable();
             $table->enum('status', ['present','absent','excused','late_in','early_out']);
             $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

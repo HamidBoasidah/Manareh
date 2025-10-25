@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
             $table->string('file_url');
             $table->string('caption')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

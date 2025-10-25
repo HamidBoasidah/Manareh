@@ -23,6 +23,8 @@ return new class extends Migration
             $table->unique(['circle_id','user_id','role_in_circle'], 'uniq_circle_user_role');
             $table->index(['user_id','role_in_circle','end_at']);
             $table->index(['circle_id','role_in_circle','end_at']);
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

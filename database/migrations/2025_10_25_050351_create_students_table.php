@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('whatsapp_number')->nullable();
             $table->string('nationality')->nullable();
             $table->text('notes')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

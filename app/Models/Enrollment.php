@@ -2,9 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\BaseModel;
 
-class Enrollment extends Model
+class Enrollment extends BaseModel
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'circle_id',
+        'student_id',
+        'status',
+        'joined_at',
+        'left_at',
+    ];
+
+    public function circle()
+    {
+        return $this->belongsTo(Circle::class);
+    }
+
+    public function student()
+    {
+        return $this->belongsTo(Student::class);
+    }
 }

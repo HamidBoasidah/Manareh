@@ -17,6 +17,8 @@ return new class extends Migration
             $t->string('name_ar');
             $t->string('name_en')->nullable();
             $t->unsignedSmallInteger('ayah_count');
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

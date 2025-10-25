@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('purpose'); // completion_quran / excellence / hadith_memorization ...
             $table->longText('html_template');
             $table->json('variables')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
