@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('exam_types', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->string('name'); // daily/weekly/term/tajweed...
+            $table->boolean('part_required')->default(false);
             $table->timestamps();
         });
     }
