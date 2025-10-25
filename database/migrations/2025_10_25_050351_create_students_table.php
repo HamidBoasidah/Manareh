@@ -13,6 +13,15 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->unique()->constrained('users')->cascadeOnDelete(); // 1:1 مع users
+            $table->foreignId('mosque_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('guardian_id')->nullable()->constrained()->nullOnDelete();
+            $table->date('birth_date')->nullable();
+            $table->string('address')->nullable();
+            $table->string('phone_number')->nullable();
+            $table->string('whatsapp_number')->nullable();
+            $table->string('nationality')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
