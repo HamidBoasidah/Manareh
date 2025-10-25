@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('plan_circles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
+            $table->foreignId('circle_id')->constrained('circles')->cascadeOnDelete();
             $table->timestamps();
         });
     }
