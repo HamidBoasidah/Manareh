@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('circles', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('classification_id')->nullable()->constrained('circle_classifications')->nullOnDelete();
+            $table->string('name');
+            $table->unsignedSmallInteger('capacity')->default(20);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
