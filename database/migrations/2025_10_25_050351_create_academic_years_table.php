@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('academic_years', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->string('name'); // 1447 هـ
+            $table->date('start_date_g')->nullable();
+            $table->date('end_date_g')->nullable();
+            $table->string('start_date_h')->nullable();
+            $table->string('end_date_h')->nullable();
             $table->timestamps();
         });
     }
