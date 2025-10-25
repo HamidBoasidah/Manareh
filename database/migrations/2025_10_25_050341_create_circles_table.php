@@ -11,17 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('daily_study_sessions', function (Blueprint $table) {
+        Schema::create('circles', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
-            $table->date('session_date_g');
-            $table->string('session_date_h')->nullable();
-            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('classification_id')->nullable()->constrained('circle_classifications')->nullOnDelete();
+            $table->string('name');
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
-            $table->timestamps();
-
-            $table->unique(['circle_id','session_date_g']);
+            $table->unsignedSmallInteger('capacity')->default(20);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('daily_study_sessions');
+        Schema::dropIfExists('circles');
     }
 };

@@ -24,7 +24,6 @@ return new class extends Migration
             $table->text('remarks')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
-            $table->timestamps();
 
             $table->index(['student_id','exam_date_g']);
             $table->index(['circle_id','exam_type_id']);

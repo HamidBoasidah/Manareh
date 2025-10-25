@@ -22,7 +22,6 @@ return new class extends Migration
             $table->foreignId('recorded_by')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
-            $table->timestamps();
 
             $table->index(['circle_id','date_g']);
             $table->index(['student_id','date_g']);

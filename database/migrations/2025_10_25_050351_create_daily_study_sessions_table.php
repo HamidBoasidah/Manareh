@@ -11,18 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('enrollments', function (Blueprint $table) {
+        Schema::create('daily_study_sessions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['active','on_hold','graduated','withdrawn'])->default('active');
-            $table->date('joined_at')->nullable();
-            $table->date('left_at')->nullable();
+            $table->date('session_date_g');
+            $table->string('session_date_h')->nullable();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
 
-            $table->unique(['circle_id','student_id']);
-            $table->index(['student_id','status']);
+            $table->unique(['circle_id','session_date_g']);
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('enrollments');
+        Schema::dropIfExists('daily_study_sessions');
     }
 };

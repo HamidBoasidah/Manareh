@@ -12,11 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('quran_suras', function (Blueprint $table) {
-            $table->id();
-            $t->unsignedSmallInteger('id')->primary(); // 1..114
-            $t->string('name_ar');
-            $t->string('name_en')->nullable();
-            $t->unsignedSmallInteger('ayah_count');
+            $table->unsignedSmallInteger('id')->primary(); // 1..114
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->unsignedSmallInteger('ayah_count');
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

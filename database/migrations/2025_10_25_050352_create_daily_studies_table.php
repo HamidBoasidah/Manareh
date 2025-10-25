@@ -35,15 +35,14 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
-            $table->timestamps();
 
             $table->unique(['session_id','student_id']);
 
             // FK للسور
-            $table->foreign('mem_from_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
-            $table->foreign('mem_to_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
-            $table->foreign('rev_from_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
-            $table->foreign('rev_to_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
+            $table->foreign('hifz_from_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
+            $table->foreign('hifz_to_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
+            $table->foreign('murajaah_from_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
+            $table->foreign('murajaah_to_sura_id')->references('id')->on('quran_suras')->nullOnDelete();
             $table->timestamps();
         });
     }
