@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('quran_suras', function (Blueprint $table) {
             $table->id();
+            $t->unsignedSmallInteger('id')->primary(); // 1..114
+            $t->string('name_ar');
+            $t->string('name_en')->nullable();
+            $t->unsignedSmallInteger('ayah_count');
             $table->timestamps();
         });
     }
