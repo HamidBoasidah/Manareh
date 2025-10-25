@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('message_templates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->string('code'); // ABSENT_TODAY / COMPLETED_MEM ...
+            $table->enum('channel', ['inbox','sms','whatsapp','email'])->default('inbox');
+            $table->string('subject')->nullable();
+            $table->text('body'); // يدعم متغيرات
             $table->timestamps();
         });
     }
