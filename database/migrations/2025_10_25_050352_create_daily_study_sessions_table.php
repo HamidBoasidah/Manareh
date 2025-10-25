@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('daily_study_sessions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
+            $table->date('session_date_g');
+            $table->string('session_date_h')->nullable();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
+            $table->timestamps();
+
+            $table->unique(['circle_id','session_date_g']);
             $table->timestamps();
         });
     }
