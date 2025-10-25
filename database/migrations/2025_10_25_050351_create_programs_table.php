@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('programs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->string('name'); // اجتماع/رحلة/تكريم...
+            $table->string('type')->nullable(); // meeting/trip/award...
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }
