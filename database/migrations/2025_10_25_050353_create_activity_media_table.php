@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('activity_media', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('activity_id')->constrained('activities')->cascadeOnDelete();
+            $table->string('file_url');
+            $table->string('caption')->nullable();
             $table->timestamps();
         });
     }
