@@ -21,7 +21,7 @@
 
 ```bash
 git clone <your-repo-url> .
-cd /path/to/hamid_templetev2
+cd /path/to/_Manareh
 ```
 
 2. تثبيت تبعيات PHP:
