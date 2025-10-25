@@ -13,6 +13,12 @@ return new class extends Migration
     {
         Schema::create('teacher_attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete(); // المعلّم
+            $table->date('date_g');
+            $table->string('date_h')->nullable();
+            $table->enum('status', ['present','absent','excused','late_in','early_out']);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
