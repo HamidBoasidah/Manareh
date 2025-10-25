@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('plan_staff', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('plan_id')->constrained('plans')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->enum('role_in_plan', ['teacher','supervisor_edu','supervisor_tarbawi']);
             $table->timestamps();
         });
     }
