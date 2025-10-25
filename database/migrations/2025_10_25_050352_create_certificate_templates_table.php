@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('certificate_templates', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('mosque_id')->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('purpose'); // completion_quran / excellence / hadith_memorization ...
+            $table->longText('html_template');
+            $table->json('variables')->nullable();
             $table->timestamps();
         });
     }
