@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('exam_items', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('exam_id')->constrained('exams')->cascadeOnDelete();
+            $table->string('item_key'); // q1..q6 / tajweed1 / tajweed2
+            $table->unsignedSmallInteger('max_points');
+            $table->unsignedSmallInteger('score_points')->default(0);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }
