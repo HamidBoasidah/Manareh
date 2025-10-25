@@ -33,7 +33,33 @@
     "areas": "المناطق",
     "governorates": "المحافظات",
     "districts": "المديريات",
-    "activityLogs": "سجل التغييرات"
+    "activityLogs": "سجل التغييرات",
+    "academic_years": "السنوات الدراسية",
+    "mosques": "المساجد",
+    "programs": "البرامج",
+    "plans": "الخطط",
+    "terms": "الفصول الدراسية",
+    "students": "الطلاب",
+    "guardians": "الأوصياء",
+    "enrollments": "الالتحاقات",
+    "circles": "الحلقات",
+    "circle_classifications": "تصنيفات الحلقات",
+    "staff_assignments": "تعيينات الموظفين",
+    "daily_study_sessions": "جلسات الدراسة اليومية",
+    "daily_studies": "المذاكرات اليومية",
+    "quran_suras": "سور القرآن",
+    "student_attendances": "حضور الطلاب",
+    "teacher_attendances": "حضور المعلمين",
+    "exams": "الاختبارات",
+    "exam_items": "بنود الاختبار",
+    "exam_types": "أنواع الاختبارات",
+    "nominations": "الترشيحات",
+    "activities": "الأنشطة",
+    "activity_media": "وسائط النشاط",
+    "message_templates": "قوالب الرسائل",
+    "notifications": "الإشعارات",
+    "certificate_templates": "قوالب الشهادات",
+    "certificate_issued": "الشهادات المصدرة"
   },
   "pages": {
     "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",
@@ -318,10 +344,198 @@
     "draft": "حفظ كمسودة",
     "publishProduct": "نشر المنتج"
   },
-  "notifications": {
+  "notification_messages": {
     "requestsPermission": "يطلب إذنًا للتغيير",
     "project": "المشروع - {name}",
-    "typeProject": "مشروع"
+    "typeProject": "مشروع",
+    "addNotification": "إضافة إشعار",
+    "editNotification": "تعديل الإشعار",
+    "showNotification": "عرض الإشعار",
+    "noNotification": "لا توجد إشعارات"
+  },
+
+  "academic_years": {
+    "addAcademicYear": "إضافة سنة دراسية",
+    "editAcademicYear": "تعديل السنة الدراسية",
+    "showAcademicYear": "عرض السنة الدراسية",
+    "noAcademicYear": "لا توجد سنة دراسية",
+    "academicYear": "السنة الدراسية"
+  },
+
+  "mosques": {
+    "addMosque": "إضافة مسجد",
+    "editMosque": "تعديل المسجد",
+    "showMosque": "عرض المسجد",
+    "noMosque": "لا يوجد مسجد",
+    "mosque": "المسجد"
+  },
+
+  "programs": {
+    "addProgram": "إضافة برنامج",
+    "editProgram": "تعديل البرنامج",
+    "showProgram": "عرض البرنامج",
+    "noProgram": "لا يوجد برنامج"
+  },
+
+  "plans": {
+    "addPlan": "إضافة خطة",
+    "editPlan": "تعديل الخطة",
+    "showPlan": "عرض الخطة",
+    "noPlan": "لا توجد خطة"
+  },
+
+  "terms": {
+    "addTerm": "إضافة فصل دراسي",
+    "editTerm": "تعديل الفصل الدراسي",
+    "showTerm": "عرض الفصل الدراسي",
+    "noTerm": "لا يوجد فصل دراسي"
+  },
+
+  "students": {
+    "addStudent": "إضافة طالب",
+    "editStudent": "تعديل الطالب",
+    "showStudent": "عرض الطالب",
+    "noStudent": "لا يوجد طالب"
+  },
+
+  "guardians": {
+    "addGuardian": "إضافة ولي أمر",
+    "editGuardian": "تعديل ولي الأمر",
+    "showGuardian": "عرض ولي الأمر",
+    "noGuardian": "لا يوجد ولي أمر"
+  },
+
+  "enrollments": {
+    "addEnrollment": "إضافة تسجيل",
+    "editEnrollment": "تعديل التسجيل",
+    "showEnrollment": "عرض التسجيل",
+    "noEnrollment": "لا يوجد تسجيل"
+  },
+
+  "circles": {
+    "addCircle": "إضافة حلقة",
+    "editCircle": "تعديل الحلقة",
+    "showCircle": "عرض الحلقة",
+    "noCircle": "لا توجد حلقة"
+  },
+
+  "circle_classifications": {
+    "addCircleClassification": "إضافة تصنيف حلقة",
+    "editCircleClassification": "تعديل تصنيف الحلقة",
+    "showCircleClassification": "عرض تصنيف الحلقة",
+    "noCircleClassification": "لا يوجد تصنيف"
+  },
+
+  "staff_assignments": {
+    "addStaffAssignment": "إضافة تعيين موظف",
+    "editStaffAssignment": "تعديل تعيين الموظف",
+    "showStaffAssignment": "عرض تعيين الموظف",
+    "noStaffAssignment": "لا يوجد تعيين"
+  },
+
+  "daily_study_sessions": {
+    "addDailyStudySession": "إضافة جلسة دراسة يومية",
+    "editDailyStudySession": "تعديل جلسة الدراسة",
+    "showDailyStudySession": "عرض جلسة الدراسة",
+    "noDailyStudySession": "لا توجد جلسات"
+  },
+
+  "daily_studies": {
+    "addDailyStudy": "إضافة مذاكرة",
+    "editDailyStudy": "تعديل المذاكرة",
+    "showDailyStudy": "عرض المذاكرة",
+    "noDailyStudy": "لا توجد مذاكرات"
+  },
+
+  "quran_suras": {
+    "addQuranSura": "إضافة سورة",
+    "editQuranSura": "تعديل السورة",
+    "showQuranSura": "عرض السورة",
+    "noQuranSura": "لا توجد سور"
+  },
+
+  "student_attendances": {
+    "addStudentAttendance": "إضافة حضور طالب",
+    "editStudentAttendance": "تعديل حضور الطالب",
+    "showStudentAttendance": "عرض حضور الطالب",
+    "noStudentAttendance": "لا توجد بيانات حضور"
+  },
+
+  "teacher_attendances": {
+    "addTeacherAttendance": "إضافة حضور معلم",
+    "editTeacherAttendance": "تعديل حضور المعلم",
+    "showTeacherAttendance": "عرض حضور المعلم",
+    "noTeacherAttendance": "لا توجد بيانات حضور"
+  },
+
+  "exams": {
+    "addExam": "إضافة اختبار",
+    "editExam": "تعديل الاختبار",
+    "showExam": "عرض الاختبار",
+    "noExam": "لا توجد اختبارات"
+  },
+
+  "exam_items": {
+    "addExamItem": "إضافة بند اختبار",
+    "editExamItem": "تعديل بند الاختبار",
+    "showExamItem": "عرض بند الاختبار",
+    "noExamItem": "لا توجد بنود"
+  },
+
+  "exam_types": {
+    "addExamType": "إضافة نوع اختبار",
+    "editExamType": "تعديل نوع الاختبار",
+    "showExamType": "عرض نوع الاختبار",
+    "noExamType": "لا يوجد أنواع"
+  },
+
+  "nominations": {
+    "addNomination": "إضافة ترشيح",
+    "editNomination": "تعديل الترشيح",
+    "showNomination": "عرض الترشيح",
+    "noNomination": "لا توجد ترشيحات"
+  },
+
+  "activities": {
+    "addActivity": "إضافة نشاط",
+    "editActivity": "تعديل النشاط",
+    "showActivity": "عرض النشاط",
+    "noActivity": "لا توجد أنشطة"
+  },
+
+  "activity_media": {
+    "addActivityMedia": "إضافة وسائط نشاط",
+    "editActivityMedia": "تعديل وسائط النشاط",
+    "showActivityMedia": "عرض وسائط النشاط",
+    "noActivityMedia": "لا توجد وسائط"
+  },
+
+  "message_templates": {
+    "addMessageTemplate": "إضافة قالب رسالة",
+    "editMessageTemplate": "تعديل قالب الرسالة",
+    "showMessageTemplate": "عرض قالب الرسالة",
+    "noMessageTemplate": "لا توجد قوالب"
+  },
+
+  "notifications": {
+    "addNotification": "إضافة إشعار",
+    "editNotification": "تعديل الإشعار",
+    "showNotification": "عرض الإشعار",
+    "noNotification": "لا توجد إشعارات"
+  },
+
+  "certificate_templates": {
+    "addCertificateTemplate": "إضافة قالب شهادة",
+    "editCertificateTemplate": "تعديل قالب الشهادة",
+    "showCertificateTemplate": "عرض قالب الشهادة",
+    "noCertificateTemplate": "لا توجد قوالب"
+  },
+
+  "certificate_issued": {
+    "addCertificateIssued": "إصدار شهادة",
+    "editCertificateIssued": "تعديل الشهادة المصدرة",
+    "showCertificateIssued": "عرض الشهادة المصدرة",
+    "noCertificateIssued": "لم تُصدر شهادات بعد"
   },
   "datatable": {
     "show": "عرض",
