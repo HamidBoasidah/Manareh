@@ -108,7 +108,7 @@
 
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
               <div class="flex items-center justify-between w-full">
-                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('areas.district') }}</p>
+                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('districts.district') }}</p>
               </div>
             </th>
 

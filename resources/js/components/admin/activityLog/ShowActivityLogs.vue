@@ -229,7 +229,6 @@
     </div>
   </div>
 
-  <!-- DangerAlert removed because deletion is not supported for activity logs -->
 </template>
 
 <script setup>

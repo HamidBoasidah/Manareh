@@ -47,7 +47,11 @@
     "viewAllNotifications": "عرض جميع الإشعارات",
     "daysLeft": "متبقي من الأيام",
     "areYouSure": "هل أنت متأكد؟",
-    "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
+    "deleteUserConfirmation": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
+    "deleteGovernorateConfirmation": "هل أنت متأكد أنك تريد حذف هذه المحافظة؟",
+    "deleteDistrictConfirmation": "هل أنت متأكد أنك تريد حذف هذه المديرية؟",
+    "deleteAreaConfirmation": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟",
+    "deleteRoleConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "notAuthorized": "غير مصرح لك"
   },
   "charts": {
@@ -120,6 +124,8 @@
   },
   "activitylogs": {
     "add": "إضافة سجل نشاط",
+    "activityInformation": "معلومات النشاط",
+    "showActivityLog": "عرض سجل التغيير",
     "description": "الوصف",
     "event": "الحدث",
     "subjectType": "نوع المورد",
