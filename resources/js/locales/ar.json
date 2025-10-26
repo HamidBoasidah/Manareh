@@ -78,6 +78,7 @@
     "deleteDistrictConfirmation": "هل أنت متأكد أنك تريد حذف هذه المديرية؟",
     "deleteAreaConfirmation": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟",
     "deleteRoleConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
+    "deleteMosqueConfirmation": "هل أنت متأكد أنك تريد حذف هذا المسجد؟",
     "notAuthorized": "غير مصرح لك"
   },
   "charts": {
@@ -89,6 +90,7 @@
     "switchToLTR": "تحويل إلى الاتجاه من اليسار لليمين",
     "home": "الرئيسية",
     "new": "جديد",
+    "city" :"المدينة",
     "pro": "برو",
     "loading": "جاري التحميل...",
     "name": "الاسم",
@@ -101,6 +103,7 @@
     "inactive": "غير نشط",
     "action": "الإجراء",
     "address": "العنوان",
+    "notes" : "ملاحظات",
     "type": "النوع",
     "attachment": "المرفق",
     "clickToUpload": "اضغط للرفع",
@@ -286,7 +289,7 @@
     "address": {
       "title": "العنوان",
       "country": "البلد",
-      "cityState": "المدينة/الولاية",
+      "city": "المدينة",
       "postalCode": "الرمز البريدي",
       "cityPlaceholder": "Phoenix, United States",
       "taxId": "معرف الضريبة"
@@ -363,6 +366,14 @@
   },
 
   "mosques": {
+    "mosqueInformation": "معلومات المسجد",
+    "mosqueDeleteSuccessfully": "تم حذف المسجد بنجاح",
+    "mosqueDeletionFailed": "فشل حذف المسجد",
+    "mosqueCreatedSuccessfully": "تم إنشاء المسجد بنجاح",
+    "mosqueCreationFailed": "فشل إنشاء المسجد",
+    "mosqueUpdatedSuccessfully": "تم تحديث المسجد بنجاح",
+    "mosqueUpdateFailed": "فشل تحديث المسجد",
+    "name": "اسم المسجد",
     "addMosque": "إضافة مسجد",
     "editMosque": "تعديل المسجد",
     "showMosque": "عرض المسجد",

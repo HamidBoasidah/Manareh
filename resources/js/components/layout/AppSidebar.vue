@@ -302,6 +302,12 @@ const menuGroups = computed(() =>
         // Additional admin sections (scaffolded). Icons are placeholders and can be changed later.
         {
           icon: GridIcon,
+          name: t('menu.mosques'),
+          path: route('admin.mosques.index'),
+          permission: 'mosques.view',
+        },
+        {
+          icon: GridIcon,
           name: t('menu.academic_years'),
           path: route('admin.academic_years.index'),
           permission: 'academic_years.view',

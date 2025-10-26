@@ -8,17 +8,20 @@ use App\Repositories\UserRepository;
 use App\Repositories\AreaRepository;
 use App\Repositories\DistrictRepository;
 use App\Repositories\GovernorateRepository;
+use App\Repositories\MosqueRepository;
 // Models
 use App\Models\User;
 use App\Models\Area;
 use App\Models\District;
 use App\Models\Governorate;
+use App\Models\Mosque;
 
 // Services
 use App\Services\UserService;
 use App\Services\AreaService;
 use App\Services\DistrictService;
 use App\Services\GovernorateService;
+use App\Services\MosqueService;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -29,6 +32,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AreaRepository::class, fn($app) => new AreaRepository($app->make(Area::class)));
         $this->app->bind(DistrictRepository::class, fn($app) => new DistrictRepository($app->make(District::class)));
         $this->app->bind(GovernorateRepository::class, fn($app) => new GovernorateRepository($app->make(Governorate::class)));
+    $this->app->bind(MosqueRepository::class, fn($app) => new MosqueRepository($app->make(Mosque::class)));
         
 
         // Bind Services to their Repositories
@@ -36,5 +40,6 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AreaService::class, fn($app) => new AreaService($app->make(AreaRepository::class)));
         $this->app->bind(DistrictService::class, fn($app) => new DistrictService($app->make(DistrictRepository::class)));
         $this->app->bind(GovernorateService::class, fn($app) => new GovernorateService($app->make(GovernorateRepository::class)));
+        $this->app->bind(MosqueService::class, fn($app) => new MosqueService($app->make(MosqueRepository::class)));
     }
 }

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\AreaController;
 use App\Http\Controllers\Admin\DistrictController;
 use App\Http\Controllers\Admin\GovernorateController;
+use App\Http\Controllers\Admin\MosqueController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
@@ -105,6 +106,7 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.mosques.deactivate')
         ->middleware(RoutePermissions::can('mosques.update'));
 
+    
     // Programs
     Route::resource('programs', ProgramController::class)
         ->names('admin.programs');
@@ -404,6 +406,7 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('notifications/{id}/deactivate', [NotificationController::class, 'deactivate'])
         ->name('admin.notifications.deactivate')
         ->middleware(RoutePermissions::can('notifications.update'));
+    
 });
 
 // روابط مصادقة لوحة التحكم (بدون حماية)

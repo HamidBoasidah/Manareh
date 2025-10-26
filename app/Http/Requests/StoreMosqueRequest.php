@@ -20,8 +20,6 @@ class StoreMosqueRequest extends FormRequest
             'phone' => 'nullable|string|max:50',
             'notes' => 'nullable|string',
             'is_active' => 'nullable|boolean',
-            'created_by' => 'nullable|exists:users,id',
-            'updated_by' => 'nullable|exists:users,id',
         ];
     }
 }

@@ -14,7 +14,7 @@ class Mosque extends BaseModel
         'city',
         'address',
         'phone',
-        'notes',
+        'notes'
     ];
 
     public function circles()
