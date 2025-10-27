@@ -16,6 +16,7 @@ class TeacherAttendance extends BaseModel
         'date_h',
         'status',
         'notes',
+        'is_active',
     ];
 
     public function circle()

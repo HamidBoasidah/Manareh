@@ -17,6 +17,7 @@ class StudentAttendance extends BaseModel
         'status',
         'reason',
         'recorded_by',
+        'is_active',
     ];
 
     public function circle()

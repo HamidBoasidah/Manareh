@@ -14,6 +14,7 @@ class Guardian extends BaseModel
         'phone_number',
         'whatsapp_number',
         'relation',
+        'is_active',
     ];
 
     public function students()

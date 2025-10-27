@@ -20,6 +20,7 @@ class Nomination extends BaseModel
         'approved_by',
         'approved_at',
         'notes',
+        'is_active',
     ];
 
     public function circle()

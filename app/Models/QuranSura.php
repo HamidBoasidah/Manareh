@@ -13,5 +13,6 @@ class QuranSura extends BaseModel
         'name_ar',
         'name_en',
         'ayah_count',
+        'is_active',
     ];
 }

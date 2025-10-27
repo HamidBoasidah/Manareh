@@ -25,6 +25,7 @@ class DailyStudy extends BaseModel
         'points',
         'attendance_status',
         'notes',
+        'is_active',
     ];
 
     public function session()

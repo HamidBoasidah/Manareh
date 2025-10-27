@@ -13,6 +13,7 @@ class ExamType extends BaseModel
         'mosque_id',
         'name',
         'part_required',
+        'is_active',
     ];
 
     public function mosque()

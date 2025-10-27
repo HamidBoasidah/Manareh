@@ -11,9 +11,9 @@ class ActivityMedia extends BaseModel
 
     protected $fillable = [
         'activity_id',
-        'type',
-        'path',
+        'file_url',
         'caption',
+        'is_active',
     ];
 
     public function activity()

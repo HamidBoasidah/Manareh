@@ -11,6 +11,9 @@ class District extends BaseModel
         'name_ar',
         'name_en',
         'governorate_id',
+        'created_by',
+        'updated_by',
+        'is_active',
     ];
 
     // لا توجد خصائص تحويل إضافية مطلوبة هنا

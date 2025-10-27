@@ -11,12 +11,13 @@ class QuranSuraDTO extends BaseDTO
     public $name_en;
     public $ayah_count;
     public $is_active;
-    public function __construct($id, $name_ar, $name_en, $ayah_count)
+    public function __construct($id, $name_ar, $name_en, $ayah_count, $is_active)
     {
         $this->id = $id;
         $this->name_ar = $name_ar;
         $this->name_en = $name_en;
         $this->ayah_count = $ayah_count;
+        $this->is_active = $is_active;
     }
 
     public static function fromModel(QuranSura $m): self
@@ -25,7 +26,8 @@ class QuranSuraDTO extends BaseDTO
             $m->id,
             $m->name_ar,
             $m->name_en,
-            $m->ayah_count
+            $m->ayah_count,
+            $m->is_active
         );
     }
 
@@ -36,6 +38,7 @@ class QuranSuraDTO extends BaseDTO
             'name_ar' => $this->name_ar,
             'name_en' => $this->name_en,
             'ayah_count' => $this->ayah_count,
+            'is_active' => $this->is_active,
         ];
     }
 
@@ -44,7 +47,9 @@ class QuranSuraDTO extends BaseDTO
         return [
             'id' => $this->id,
             'name_ar' => $this->name_ar,
-            'is_active' => $this->is_active ?? null,
+            'name_en' => $this->name_en,
+            'ayah_count' => $this->ayah_count,
+            'is_active' => $this->is_active,
         ];
     }
 }

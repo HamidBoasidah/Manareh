@@ -79,6 +79,10 @@
     "deleteAreaConfirmation": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟",
     "deleteRoleConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "deleteMosqueConfirmation": "هل أنت متأكد أنك تريد حذف هذا المسجد؟",
+    "deleteGuardianConfirmation": "هل أنت متأكد أنك تريد حذف ولي الامر هذا؟",
+    "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟",
+    "deleteAcademicYearConfirmation": "هل أنت متأكد أنك تريد حذف هذه السنة الدراسية؟",
+  "deleteActivityConfirmation": "هل أنت متأكد أنك تريد حذف هذا النشاط؟",
     "notAuthorized": "غير مصرح لك"
   },
   "charts": {
@@ -358,9 +362,32 @@
   },
 
   "academic_years": {
+    "academic_year": "العام الدراسي",
+    "academicYearInformation": "معلومات السنة الدراسية",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
     "addAcademicYear": "إضافة سنة دراسية",
     "editAcademicYear": "تعديل السنة الدراسية",
     "showAcademicYear": "عرض السنة الدراسية",
+    "noAcademicYear": "لا توجد سنة دراسية",
+    "academicYear": "السنة الدراسية"
+  },
+
+  "academicYears": {
+    "academicYearInformation": "معلومات السنة الدراسية",
+    "nameAr": "اسم السنة الدراسية بالعربية",
+    "nameEn": "اسم السنة الدراسية بالإنجليزية",
+    "mosqueName": "اسم المسجد",
+    "date": "التاريخ",
+    "addAcademicYear": "إضافة سنة دراسية",
+    "editAcademicYear": "تعديل السنة الدراسية",
+    "showAcademicYear": "عرض السنة الدراسية",
+    "academicYearCreatedSuccessfully": "تم إنشاء السنة الدراسية بنجاح",
+    "academicYearCreationFailed": "فشل إنشاء السنة الدراسية",
+    "academicYearUpdatedSuccessfully": "تم تحديث السنة الدراسية بنجاح",
+    "academicYearUpdateFailed": "فشل تحديث السنة الدراسية",
+    "academicYearDeletedSuccessfully": "تم حذف السنة الدراسية بنجاح",
+    "academicYearDeletionFailed": "فشل حذف السنة الدراسية",
     "noAcademicYear": "لا توجد سنة دراسية",
     "academicYear": "السنة الدراسية"
   },
@@ -410,6 +437,14 @@
   },
 
   "guardians": {
+    "guardianInformation": "معلومات ولي الأمر",
+    "guardianUpdatedSuccessfully": "تم تحديث ولي الأمر بنجاح",
+    "guardianUpdateFailed": "فشل تحديث ولي الأمر",
+    "guardianDeletedSuccessfully": "تم حذف ولي الأمر بنجاح",
+    "guardianDeletionFailed": "فشل حذف ولي الأمر",
+    "guardianCreatedSuccessfully": "تم إنشاء ولي الأمر بنجاح",
+    "guardianCreationFailed": "فشل إنشاء ولي الأمر",
+    "relation": "صلة القرابة",
     "addGuardian": "إضافة ولي أمر",
     "editGuardian": "تعديل ولي الأمر",
     "showGuardian": "عرض ولي الأمر",
@@ -431,6 +466,13 @@
   },
 
   "circle_classifications": {
+    "circleClassificationInformation": "معلومات تصنيف الحلقة",
+    "circleClassificationUpdatedSuccessfully": "تم تحديث تصنيف الحلقة بنجاح",
+    "circleClassificationUpdateFailed": "فشل تحديث تصنيف الحلقة",
+    "circleClassificationDeletedSuccessfully": "تم حذف تصنيف الحلقة بنجاح",
+    "circleClassificationDeletionFailed": "فشل حذف تصنيف الحلقة",
+    "circleClassificationCreatedSuccessfully": "تم إنشاء تصنيف الحلقة بنجاح",
+    "circleClassificationCreationFailed": "فشل إنشاء تصنيف الحلقة",
     "addCircleClassification": "إضافة تصنيف حلقة",
     "editCircleClassification": "تعديل تصنيف الحلقة",
     "showCircleClassification": "عرض تصنيف الحلقة",
@@ -459,9 +501,21 @@
   },
 
   "quran_suras": {
+    "quranSuraInformation": "معلومات السورة",
+    "nameAr": "اسم السورة بالعربية",
+    "nameEn": "اسم السورة بالإنجليزية",
+    "ayahCount": "عدد الآيات",
+  "number": "رقم السورة",
     "addQuranSura": "إضافة سورة",
     "editQuranSura": "تعديل السورة",
     "showQuranSura": "عرض السورة",
+    "quranSuraCreatedSuccessfully": "تم إنشاء السورة بنجاح",
+    "quranSuraCreationFailed": "فشل إنشاء السورة",
+    "quranSuraUpdatedSuccessfully": "تم تحديث السورة بنجاح",
+    "quranSuraUpdateFailed": "فشل تحديث السورة",
+    "quranSuraDeletedSuccessfully": "تم حذف السورة بنجاح",
+    "quranSuraDeletionFailed": "فشل حذف السورة",
+    "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذه السورة؟",
     "noQuranSura": "لا توجد سور"
   },
 
@@ -508,10 +562,23 @@
   },
 
   "activities": {
+    "activityInformation": "معلومات النشاط",
+    "title": "العنوان",
+    "place": "المكان",
+    "activityDate": "تاريخ النشاط",
+    "description": "الوصف",
+    "mosqueName": "اسم المسجد",
+    "selectMosque": "اختر المسجد",
     "addActivity": "إضافة نشاط",
     "editActivity": "تعديل النشاط",
     "showActivity": "عرض النشاط",
-    "noActivity": "لا توجد أنشطة"
+    "noActivity": "لا توجد أنشطة",
+    "activityCreatedSuccessfully": "تم إنشاء النشاط بنجاح",
+    "activityCreationFailed": "فشل إنشاء النشاط",
+    "activityUpdatedSuccessfully": "تم تحديث النشاط بنجاح",
+    "activityUpdateFailed": "فشل تحديث النشاط",
+    "activityDeletedSuccessfully": "تم حذف النشاط بنجاح",
+    "activityDeletionFailed": "فشل حذف النشاط"
   },
 
   "activity_media": {

@@ -11,6 +11,9 @@ class Area extends BaseModel
         'name_ar',
         'name_en',
         'district_id',
+        'created_by',
+        'updated_by',
+        'is_active',
     ];
 
     // لا توجد خصائص تحويل إضافية مطلوبة هنا

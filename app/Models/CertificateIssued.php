@@ -10,5 +10,7 @@ class CertificateIssued extends BaseModel
     use HasFactory;
 
     // This migration has no specific columns yet; keep fillable minimal
-    protected $fillable = [];
+    protected $fillable = [
+        'is_active',
+    ];
 }

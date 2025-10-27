@@ -16,7 +16,7 @@ class AcademicYearDTO extends BaseDTO
     public $is_active;
     public $mosque_name;
 
-    public function __construct($id, $mosque_id, $name, $start_date_g, $end_date_g, $start_date_h, $end_date_h, $mosque_name = null)
+    public function __construct($id, $mosque_id, $name, $start_date_g, $end_date_g, $start_date_h, $end_date_h, $mosque_name = null, $is_active = null)
     {
         $this->id = $id;
         $this->mosque_id = $mosque_id;
@@ -26,6 +26,7 @@ class AcademicYearDTO extends BaseDTO
         $this->start_date_h = $start_date_h;
         $this->end_date_h = $end_date_h;
         $this->mosque_name = $mosque_name;
+        $this->is_active = $is_active;
     }
 
     public static function fromModel(AcademicYear $m): self
@@ -38,7 +39,9 @@ class AcademicYearDTO extends BaseDTO
             $m->end_date_g,
             $m->start_date_h,
             $m->end_date_h,
-            $m->mosque?->name ?? null
+            $m->mosque?->name ?? null,
+            $m->is_active ?? null,
+            $m->start_date_g ?? null
         );
     }
 
@@ -53,7 +56,7 @@ class AcademicYearDTO extends BaseDTO
             'start_date_h' => $this->start_date_h,
             'end_date_h' => $this->end_date_h,
             'mosque_name' => $this->mosque_name,
-            // created_by/updated_by intentionally omitted from DTO output
+            'is_active' => $this->is_active,
         ];
     }
 
@@ -62,8 +65,9 @@ class AcademicYearDTO extends BaseDTO
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'mosque_id' => $this->mosque_id,
             'mosque_name' => $this->mosque_name,
+            'start_date_g' => $this->start_date_g,
+            'end_date_g' => $this->end_date_g,
             'is_active' => $this->is_active ?? null,
         ];
     }

@@ -15,6 +15,7 @@ class Program extends BaseModel
         'name',
         'type',
         'description',
+        'is_active',
     ];
 
     /**

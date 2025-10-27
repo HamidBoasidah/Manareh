@@ -15,6 +15,7 @@ class CertificateTemplate extends BaseModel
         'purpose',
         'html_template',
         'variables',
+        'is_active',
     ];
 
     public function mosque()

@@ -16,6 +16,7 @@ class StaffAssignment extends BaseModel
         'start_at',
         'end_at',
         'notes',
+        'is_active',
     ];
 
     public function user()

@@ -14,8 +14,19 @@ class ActivityDTO extends BaseDTO
     public $activity_date_h;
     public $place;
     public $is_active;
+    public $mosque_name;
 
-    public function __construct($id, $mosque_id = null, $title = null, $description = null, $activity_date_g = null, $activity_date_h = null, $place = null)
+    public function __construct(
+        $id,
+        $mosque_id = null,
+        $title = null,
+        $description = null,
+        $activity_date_g = null,
+        $activity_date_h = null,
+        $place = null,
+        $is_active = null,
+        $mosque_name = null
+    )
     {
         $this->id = $id;
         $this->mosque_id = $mosque_id;
@@ -24,6 +35,8 @@ class ActivityDTO extends BaseDTO
         $this->activity_date_g = $activity_date_g;
         $this->activity_date_h = $activity_date_h;
         $this->place = $place;
+        $this->is_active = $is_active;
+        $this->mosque_name = $mosque_name;
     }
 
     public static function fromModel(Activity $m): self
@@ -35,7 +48,9 @@ class ActivityDTO extends BaseDTO
             $m->description ?? null,
             $m->activity_date_g ?? null,
             $m->activity_date_h ?? null,
-            $m->place ?? null
+            $m->place ?? null,
+            $m->is_active ?? null,
+            optional($m->mosque)->name
         );
     }
 
@@ -49,6 +64,8 @@ class ActivityDTO extends BaseDTO
             'activity_date_g' => $this->activity_date_g,
             'activity_date_h' => $this->activity_date_h,
             'place' => $this->place,
+            'is_active' => $this->is_active,
+            'mosque_name' => $this->mosque_name,
         ];
     }
 
@@ -57,6 +74,9 @@ class ActivityDTO extends BaseDTO
         return [
             'id' => $this->id,
             'title' => $this->title,
+            'mosque_name' => $this->mosque_name,
+            'activity_date_g' => $this->activity_date_g,
+            'place' => $this->place,
             'is_active' => $this->is_active ?? null,
         ];
     }

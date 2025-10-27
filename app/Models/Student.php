@@ -19,6 +19,7 @@ class Student extends BaseModel
         'whatsapp_number',
         'nationality',
         'notes',
+        'is_active',
     ];
 
     public function user()

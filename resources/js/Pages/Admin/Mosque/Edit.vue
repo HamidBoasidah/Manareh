@@ -17,6 +17,7 @@ const { t } = useI18n()
 const currentPageTitle = computed(() => t('mosques.editMosque'))
 
 const mosque = computed(() => usePage().props.mosque)
+
 </script>
 
 <style scoped>

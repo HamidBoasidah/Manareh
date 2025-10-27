@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateActivityRequest;
 use App\Services\ActivityService;
 use App\DTOs\ActivityDTO;
 use App\Models\Activity;
+use App\Models\Mosque;
 use Inertia\Inertia;
 
 class ActivityController extends Controller
@@ -33,7 +34,12 @@ class ActivityController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Activity/Create');
+        // need mosques for selection
+        // mosques have a single 'name' field (no name_ar/name_en)
+        $mosques = Mosque::all(['id', 'name']);
+        return Inertia::render('Admin/Activity/Create', [
+            'mosques' => $mosques,
+        ]);
     }
 
     public function store(StoreActivityRequest $request, ActivityService $service)
@@ -51,7 +57,13 @@ class ActivityController extends Controller
     public function edit(Activity $activity)
     {
         $dto = ActivityDTO::fromModel($activity)->toArray();
-        return Inertia::render('Admin/Activity/Edit', ['activity' => $dto]);
+        // need mosques for selection
+        // mosques have a single 'name' field (no name_ar/name_en)
+        $mosques = Mosque::all(['id', 'name']);
+        return Inertia::render('Admin/Activity/Edit', [
+            'activity' => $dto,
+            'mosques' => $mosques,
+        ]);
     }
 
     public function update(UpdateActivityRequest $request, ActivityService $service, Activity $activity)

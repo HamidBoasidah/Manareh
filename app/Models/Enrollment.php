@@ -15,6 +15,7 @@ class Enrollment extends BaseModel
         'status',
         'joined_at',
         'left_at',
+        'is_active',
     ];
 
     public function circle()

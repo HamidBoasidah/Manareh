@@ -15,6 +15,7 @@ class Circle extends BaseModel
         'name',
         'capacity',
         'notes',
+        'is_active',
     ];
 
     public function mosque()

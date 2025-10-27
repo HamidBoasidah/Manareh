@@ -16,6 +16,7 @@ class AcademicYear extends BaseModel
         'end_date_g',
         'start_date_h',
         'end_date_h',
+        'is_active',
     ];
 
     public function mosque()

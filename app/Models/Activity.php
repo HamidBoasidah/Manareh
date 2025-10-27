@@ -17,6 +17,7 @@ class Activity extends BaseModel
         'activity_date_h',
         'place',
         'created_by',
+        'is_active',
     ];
 
     public function mosque()

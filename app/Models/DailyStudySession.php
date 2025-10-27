@@ -14,6 +14,7 @@ class DailyStudySession extends BaseModel
         'session_date_g',
         'session_date_h',
         'created_by',
+        'is_active',
     ];
 
     public function circle()

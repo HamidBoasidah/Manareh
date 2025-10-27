@@ -18,6 +18,7 @@ class Notification extends BaseModel
         'status',
         'sent_at',
         'error',
+        'is_active',
     ];
 
     public function template()

@@ -10,6 +10,9 @@ class Governorate extends BaseModel
     protected $fillable = [
         'name_ar',
         'name_en',
+        'created_by',
+        'updated_by',
+        'is_active',
     ];
 
     // لا توجد خصائص تحويل إضافية مطلوبة هنا

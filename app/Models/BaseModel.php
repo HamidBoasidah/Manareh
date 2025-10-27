@@ -2,25 +2,49 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 
 abstract class BaseModel extends Model
 {
-    use LogsActivity, SoftDeletes;
-
-    protected $fillable = [
-        'created_by',
-        'updated_by',
-        'is_active',
-    ];
+    use LogsActivity, SoftDeletes , HasFactory;
 
     protected $casts = [
         'is_active' => 'boolean',
     ];
+    
+    protected static function booted(): void
+    {
+        static::creating(function (Model $model) {
+            if (!Auth::check()) {
+                return;
+            }
+
+            if (in_array('created_by', $model->getFillable(), true) && empty($model->created_by)) {
+                $model->created_by = Auth::id();
+            }
+
+            if (in_array('updated_by', $model->getFillable(), true) && empty($model->updated_by)) {
+                $model->updated_by = Auth::id();
+            }
+        });
+
+        static::updating(function (Model $model) {
+            if (!Auth::check()) {
+                return;
+            }
+
+            if (in_array('updated_by', $model->getFillable(), true)) {
+                $model->updated_by = Auth::id();
+            }
+        });
+    }
+
 
     /**
      * إعدادات الـ Activity Log لهذا الـ Model

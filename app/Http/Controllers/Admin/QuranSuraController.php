@@ -45,13 +45,13 @@ class QuranSuraController extends Controller
     public function show(QuranSura $quranSura)
     {
         $dto = QuranSuraDTO::fromModel($quranSura)->toArray();
-        return Inertia::render('Admin/QuranSura/Show', ['sura' => $dto]);
+    return Inertia::render('Admin/QuranSura/Show', ['quranSura' => $dto]);
     }
 
     public function edit(QuranSura $quranSura)
     {
         $dto = QuranSuraDTO::fromModel($quranSura)->toArray();
-        return Inertia::render('Admin/QuranSura/Edit', ['sura' => $dto]);
+    return Inertia::render('Admin/QuranSura/Edit', ['quranSura' => $dto]);
     }
 
     public function update(UpdateQuranSuraRequest $request, QuranSuraService $service, QuranSura $quranSura)

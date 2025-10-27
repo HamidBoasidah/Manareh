@@ -15,6 +15,7 @@ class ExamItem extends BaseModel
         'max_points',
         'score_points',
         'notes',
+        'is_active',
     ];
 
     public function exam()

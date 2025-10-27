@@ -15,6 +15,7 @@ class MessageTemplate extends BaseModel
         'channel',
         'subject',
         'body',
+        'is_active',
     ];
 
     public function mosque()
