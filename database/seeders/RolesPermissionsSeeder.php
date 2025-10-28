@@ -117,13 +117,13 @@ class RolesPermissionsSeeder extends Seeder
             $editorPerms = $permNames($geoResources, ['view', 'update']);
             $editor->syncPermissions($editorPerms->all());
 
-            // (هـ) Data Entry: (view+create) للموارد الجغرافية
-            $dataEntry = Role::updateOrCreate(
-                ['name' => 'data-entry', 'guard_name' => $guard],
-                ['display_name' => ['en' => 'Data Entry', 'ar' => 'مدخل بيانات']]
+            // (هـ) Student: (view+create) للموارد الجغرافية
+            $studentRole = Role::updateOrCreate(
+                ['name' => 'student', 'guard_name' => $guard],
+                ['display_name' => ['en' => 'Student', 'ar' => 'طالب']]
             );
-            $dataEntryPerms = $permNames($geoResources, ['view', 'create']);
-            $dataEntry->syncPermissions($dataEntryPerms->all());
+            $studentPerms = $permNames($geoResources, ['view', 'create']);
+            $studentRole->syncPermissions($studentPerms->all());
 
             // (و) Viewer: مشاهدة فقط لكل الموارد التي تدعم "view"
             $viewer = Role::updateOrCreate(

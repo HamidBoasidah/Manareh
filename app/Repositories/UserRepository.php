@@ -8,6 +8,10 @@ use App\Repositories\Eloquent\BaseRepository;
 
 class UserRepository extends BaseRepository
 {
+    protected array $defaultWith = [
+        'roles:id,name',
+    ];
+
     public function __construct(User $model)
     {
         parent::__construct($model);

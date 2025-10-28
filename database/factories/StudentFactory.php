@@ -14,9 +14,6 @@ class StudentFactory extends Factory
         $ar = \Faker\Factory::create('ar_SA');
         return [
             'birth_date' => $this->faker->date(),
-            'address' => $ar->address(),
-            'phone_number' => $ar->phoneNumber(),
-            'whatsapp_number' => $ar->phoneNumber(),
             'nationality' => $ar->country(),
             'notes' => $ar->sentence(),
         ];

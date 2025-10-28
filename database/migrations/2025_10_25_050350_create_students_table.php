@@ -17,12 +17,8 @@ return new class extends Migration
             $table->foreignId('mosque_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('guardian_id')->nullable()->constrained()->nullOnDelete();
             $table->date('birth_date')->nullable();
-            $table->string('address')->nullable();
-            $table->string('phone_number')->nullable();
-            $table->string('whatsapp_number')->nullable();
             $table->string('nationality')->nullable();
             $table->text('notes')->nullable();
-            $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
         });

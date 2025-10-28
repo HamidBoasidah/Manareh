@@ -14,9 +14,11 @@ class UpdateProgramRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'is_active' => 'nullable|boolean',
-            'created_by' => 'nullable|exists:users,id',
-            'updated_by' => 'nullable|exists:users,id',
+            'name' => 'required|string|max:255',
+            'mosque_id' => 'required|exists:mosques,id',
+            'type' => 'nullable|string|max:255',
+            'description' => 'nullable|string',
+            'is_active' => 'sometimes|boolean',
         ];
     }
 }

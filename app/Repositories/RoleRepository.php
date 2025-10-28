@@ -7,14 +7,22 @@ use App\Repositories\Eloquent\BaseRepository;
 
 class RoleRepository extends BaseRepository
 {
+    protected array $defaultWith = [
+        'permissions:id,name',
+    ];
+
     public function __construct(Role $model)
     {
         parent::__construct($model);
     }
 
-    public function paginate($perPage = 10, $with = [])
+    public function paginate(int $perPage = 10, array $with = [])
     {
-        return $this->model->with($with)->withCount('permissions')->paginate($perPage);
+        return $this->query()
+            ->with($this->applyDefaultWith($with))
+            ->withCount('permissions')
+            ->latest()
+            ->paginate($perPage);
     }
 
     public function create(array $attributes)

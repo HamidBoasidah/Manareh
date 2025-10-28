@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateProgramRequest;
 use App\Services\ProgramService;
 use App\DTOs\ProgramDTO;
 use App\Models\Program;
+use App\Models\Mosque;
 use Inertia\Inertia;
 
 class ProgramController extends Controller
@@ -33,7 +34,11 @@ class ProgramController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Program/Create');
+        $mosques = Mosque::all(['id', 'name']);
+
+        return Inertia::render('Admin/Program/Create', [
+            'mosques' => $mosques,
+        ]);
     }
 
     public function store(StoreProgramRequest $request, ProgramService $service)
@@ -44,14 +49,21 @@ class ProgramController extends Controller
 
     public function show(Program $program)
     {
+        $program->loadMissing('mosque:id,name');
         $dto = ProgramDTO::fromModel($program)->toArray();
         return Inertia::render('Admin/Program/Show', ['program' => $dto]);
     }
 
     public function edit(Program $program)
     {
+        $program->loadMissing('mosque:id,name');
         $dto = ProgramDTO::fromModel($program)->toArray();
-        return Inertia::render('Admin/Program/Edit', ['program' => $dto]);
+        $mosques = Mosque::all(['id', 'name']);
+
+        return Inertia::render('Admin/Program/Edit', [
+            'program' => $dto,
+            'mosques' => $mosques,
+        ]);
     }
 
     public function update(UpdateProgramRequest $request, ProgramService $service, Program $program)

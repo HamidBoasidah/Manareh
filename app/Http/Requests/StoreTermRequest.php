@@ -13,11 +13,14 @@ class StoreTermRequest extends FormRequest
 
     public function rules(): array
     {
-        // Term model is currently empty; use permissive defaults
         return [
+            'academic_year_id' => 'required|exists:academic_years,id',
+            'name' => 'required|string|max:191',
+            'start_date_g' => 'nullable|date',
+            'end_date_g' => 'nullable|date|after_or_equal:start_date_g',
+            'start_date_h' => 'nullable|string|max:50',
+            'end_date_h' => 'nullable|string|max:50',
             'is_active' => 'nullable|boolean',
-            'created_by' => 'nullable|exists:users,id',
-            'updated_by' => 'nullable|exists:users,id',
         ];
     }
 }

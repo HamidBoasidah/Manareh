@@ -14,12 +14,8 @@ class Student extends BaseModel
         'mosque_id',
         'guardian_id',
         'birth_date',
-        'address',
-        'phone_number',
-        'whatsapp_number',
         'nationality',
         'notes',
-        'is_active',
     ];
 
     public function user()
@@ -30,6 +26,11 @@ class Student extends BaseModel
     public function guardian()
     {
         return $this->belongsTo(Guardian::class);
+    }
+
+    public function mosque()
+    {
+        return $this->belongsTo(Mosque::class);
     }
 
     public function enrollments()

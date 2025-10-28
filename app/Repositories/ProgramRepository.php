@@ -7,6 +7,10 @@ use App\Repositories\Eloquent\BaseRepository;
 
 class ProgramRepository extends BaseRepository
 {
+    protected array $defaultWith = [
+        'mosque:id,name',
+    ];
+
     public function __construct(Program $model)
     {
         parent::__construct($model);

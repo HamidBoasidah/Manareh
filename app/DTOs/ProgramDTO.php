@@ -9,24 +9,39 @@ class ProgramDTO extends BaseDTO
     public $id;
     public $name;
     public $mosque_id;
-    public $notes;
+    public $mosque_name;
+    public $type;
+    public $description;
     public $is_active;
 
-    public function __construct($id, $name = null, $mosque_id = null, $notes = null)
-    {
+    public function __construct(
+        $id,
+        $name = null,
+        $mosque_id = null,
+        $mosque_name = null,
+        $type = null,
+        $description = null,
+        $is_active = null
+    ) {
         $this->id = $id;
         $this->name = $name;
         $this->mosque_id = $mosque_id;
-        $this->notes = $notes;
+        $this->mosque_name = $mosque_name;
+        $this->type = $type;
+        $this->description = $description;
+        $this->is_active = $is_active;
     }
 
-    public static function fromModel(Program $m): self
+    public static function fromModel(Program $program): self
     {
         return new self(
-            $m->id,
-            $m->name ?? null,
-            $m->mosque_id ?? null,
-            $m->notes ?? null
+            $program->id,
+            $program->name,
+            $program->mosque_id,
+            $program->mosque?->name,
+            $program->type,
+            $program->description,
+            $program->is_active,
         );
     }
 
@@ -36,7 +51,10 @@ class ProgramDTO extends BaseDTO
             'id' => $this->id,
             'name' => $this->name,
             'mosque_id' => $this->mosque_id,
-            'notes' => $this->notes,
+            'mosque_name' => $this->mosque_name,
+            'type' => $this->type,
+            'description' => $this->description,
+            'is_active' => $this->is_active,
         ];
     }
 
@@ -45,7 +63,9 @@ class ProgramDTO extends BaseDTO
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'is_active' => $this->is_active ?? null,
+            'type' => $this->type,
+            'mosque_name' => $this->mosque_name,
+            'is_active' => $this->is_active,
         ];
     }
 }

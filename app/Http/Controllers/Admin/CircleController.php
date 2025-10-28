@@ -9,6 +9,8 @@ use App\Http\Requests\UpdateCircleRequest;
 use App\Services\CircleService;
 use App\DTOs\CircleDTO;
 use App\Models\Circle;
+use App\Models\Mosque;
+use App\Models\CircleClassification;
 use Inertia\Inertia;
 
 class CircleController extends Controller
@@ -33,7 +35,13 @@ class CircleController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Circle/Create');
+        $mosques = Mosque::all(['id', 'name']);
+        $classifications = CircleClassification::all(['id', 'name']);
+
+        return Inertia::render('Admin/Circle/Create', [
+            'mosques' => $mosques,
+            'classifications' => $classifications,
+        ]);
     }
 
     public function store(StoreCircleRequest $request, CircleService $service)
@@ -51,7 +59,14 @@ class CircleController extends Controller
     public function edit(Circle $circle)
     {
         $dto = CircleDTO::fromModel($circle)->toArray();
-        return Inertia::render('Admin/Circle/Edit', ['circle' => $dto]);
+        $mosques = Mosque::all(['id', 'name']);
+        $classifications = CircleClassification::all(['id', 'name']);
+
+        return Inertia::render('Admin/Circle/Edit', [
+            'circle' => $dto,
+            'mosques' => $mosques,
+            'classifications' => $classifications,
+        ]);
     }
 
     public function update(UpdateCircleRequest $request, CircleService $service, Circle $circle)

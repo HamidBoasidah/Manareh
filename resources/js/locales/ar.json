@@ -61,29 +61,27 @@
     "certificate_templates": "قوالب الشهادات",
     "certificate_issued": "الشهادات المصدرة"
   },
-  "pages": {
-    "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",
-    "notificationTitle": "الإشعارات",
-    "viewAllNotifications": "عرض جميع الإشعارات",
-    "daysLeft": "متبقي من الأيام"
-  },
   "messages": {
-    "welcomeLoggedIn": "لقد قمت بتسجيل الدخول!",
+    "welcomeLoggedIn": "لقد سجلت الدخول!",
     "notificationTitle": "الإشعارات",
     "viewAllNotifications": "عرض جميع الإشعارات",
-    "daysLeft": "متبقي من الأيام",
+    "daysLeft": "أيام متبقية",
     "areYouSure": "هل أنت متأكد؟",
-    "deleteUserConfirmation": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
-    "deleteGovernorateConfirmation": "هل أنت متأكد أنك تريد حذف هذه المحافظة؟",
+    "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
+    "notAuthorizedDelete": "أنت غير مخول لتنفيذ عملية الحذف.",
+    "notAuthorized": "أنت غير مخول لتنفيذ هذا الإجراء.",
+    "notAuthorizedShort": "غير مصرح لك",
+    "deleteAcademicYearConfirmation": "هل أنت متأكد أنك تريد حذف هذه السنة الدراسية؟",
+    "deleteActivityConfirmation": "هل أنت متأكد أنك تريد حذف هذا النشاط؟",
+    "deleteCircleConfirmation": "هل أنت متأكد أنك تريد حذف هذه الحلقة؟",
+    "deleteStudentConfirmation": "هل أنت متأكد أنك تريد حذف هذا الطالب؟",
+  "deleteTermConfirmation": "هل أنت متأكد أنك تريد حذف هذا الفصل الدراسي؟",
     "deleteDistrictConfirmation": "هل أنت متأكد أنك تريد حذف هذه المديرية؟",
     "deleteAreaConfirmation": "هل أنت متأكد أنك تريد حذف هذه المنطقة؟",
     "deleteRoleConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "deleteMosqueConfirmation": "هل أنت متأكد أنك تريد حذف هذا المسجد؟",
     "deleteGuardianConfirmation": "هل أنت متأكد أنك تريد حذف ولي الامر هذا؟",
-    "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟",
-    "deleteAcademicYearConfirmation": "هل أنت متأكد أنك تريد حذف هذه السنة الدراسية؟",
-  "deleteActivityConfirmation": "هل أنت متأكد أنك تريد حذف هذا النشاط؟",
-    "notAuthorized": "غير مصرح لك"
+    "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟"
   },
   "charts": {
     "lineChart": "مخطط خطي",
@@ -302,6 +300,7 @@
   "buttons": {
     "close": "إغلاق",
     "saveChanges": "حفظ التغييرات",
+    "save": "حفظ",
     "cancel": "إلغاء",
     "create": "إنشاء",
     "update": "تحديث",
@@ -409,10 +408,25 @@
   },
 
   "programs": {
+    "programInformation": "معلومات البرنامج",
     "addProgram": "إضافة برنامج",
     "editProgram": "تعديل البرنامج",
     "showProgram": "عرض البرنامج",
-    "noProgram": "لا يوجد برنامج"
+    "noProgram": "لا يوجد برنامج",
+    "name": "اسم البرنامج",
+    "type": "نوع البرنامج",
+    "typePlaceholder": "مثال: اجتماع، رحلة، تكريم",
+    "mosque": "المسجد",
+    "selectMosque": "اختر المسجد",
+    "description": "وصف البرنامج",
+    "descriptionPlaceholder": "أدخل وصفًا مفصلًا حول البرنامج",
+    "deleteProgramConfirmation": "هل أنت متأكد أنك تريد حذف هذا البرنامج؟",
+    "programCreatedSuccessfully": "تم إنشاء البرنامج بنجاح",
+    "programCreationFailed": "فشل إنشاء البرنامج",
+    "programUpdatedSuccessfully": "تم تحديث البرنامج بنجاح",
+    "programUpdateFailed": "فشل تحديث البرنامج",
+    "programDeletedSuccessfully": "تم حذف البرنامج بنجاح",
+    "programDeletionFailed": "فشل حذف البرنامج"
   },
 
   "plans": {
@@ -423,17 +437,57 @@
   },
 
   "terms": {
+    "termInformation": "معلومات الفصل الدراسي",
     "addTerm": "إضافة فصل دراسي",
     "editTerm": "تعديل الفصل الدراسي",
     "showTerm": "عرض الفصل الدراسي",
-    "noTerm": "لا يوجد فصل دراسي"
+    "noTerm": "لا توجد فصول دراسية",
+    "selectAcademicYear": "اختر العام الدراسي",
+    "name": "اسم الفصل الدراسي",
+    "namePlaceholder": "أدخل اسم الفصل الدراسي",
+    "startDateG": "تاريخ البداية (ميلادي)",
+    "endDateG": "تاريخ النهاية (ميلادي)",
+    "startDateH": "تاريخ البداية (هجري)",
+    "endDateH": "تاريخ النهاية (هجري)",
+    "startDateHPlaceholder": "مثال: 01/01/1446",
+    "endDateHPlaceholder": "مثال: 30/04/1446",
+    "termCreatedSuccessfully": "تم إنشاء الفصل الدراسي بنجاح",
+    "termCreationFailed": "فشل إنشاء الفصل الدراسي",
+    "termUpdatedSuccessfully": "تم تحديث الفصل الدراسي بنجاح",
+    "termUpdateFailed": "فشل تحديث الفصل الدراسي",
+    "termDeletedSuccessfully": "تم حذف الفصل الدراسي بنجاح",
+    "termDeletionFailed": "فشل حذف الفصل الدراسي"
   },
 
   "students": {
+    "studentInformation": "معلومات الطالب",
+    "studentName": "اسم الطالب",
+    "email": "البريد الإلكتروني",
+    "guardian": "ولي الأمر",
+    "guardianPhone": "هاتف ولي الأمر",
+    "mosque": "المسجد",
+    "birthDate": "تاريخ الميلاد",
+    "phoneNumber": "رقم الجوال",
+    "whatsappNumber": "رقم الواتساب",
+    "address": "العنوان",
+    "nationality": "الجنسية",
+    "notes": "الملاحظات",
+    "selectUser": "اختر المستخدم",
+    "selectUserPlaceholder": "اختر مستخدمًا",
+    "selectGuardian": "اختر ولي الأمر",
+    "selectGuardianPlaceholder": "اختر ولي أمر",
+    "selectMosque": "اختر المسجد",
+    "selectMosquePlaceholder": "اختر مسجدًا",
     "addStudent": "إضافة طالب",
     "editStudent": "تعديل الطالب",
     "showStudent": "عرض الطالب",
-    "noStudent": "لا يوجد طالب"
+    "noStudent": "لا يوجد طالب",
+    "studentCreatedSuccessfully": "تم إنشاء الطالب بنجاح",
+    "studentCreationFailed": "فشل إنشاء الطالب",
+    "studentUpdatedSuccessfully": "تم تحديث الطالب بنجاح",
+    "studentUpdateFailed": "فشل تحديث الطالب",
+    "studentDeletedSuccessfully": "تم حذف الطالب بنجاح",
+    "studentDeletionFailed": "فشل حذف الطالب"
   },
 
   "guardians": {
@@ -459,10 +513,24 @@
   },
 
   "circles": {
+    "circleInformation": "معلومات الحلقة",
+    "name": "اسم الحلقة",
+    "mosque": "المسجد",
+    "classification": "التصنيف",
+    "capacity": "الطاقة الاستيعابية",
+    "notes": "الملاحظات",
+    "selectMosque": "اختر المسجد",
+    "selectClassification": "اختر التصنيف",
     "addCircle": "إضافة حلقة",
     "editCircle": "تعديل الحلقة",
     "showCircle": "عرض الحلقة",
-    "noCircle": "لا توجد حلقة"
+    "noCircle": "لا توجد حلقة",
+    "circleCreatedSuccessfully": "تم إنشاء الحلقة بنجاح",
+    "circleCreationFailed": "فشل إنشاء الحلقة",
+    "circleUpdatedSuccessfully": "تم تحديث الحلقة بنجاح",
+    "circleUpdateFailed": "فشل تحديث الحلقة",
+    "circleDeletedSuccessfully": "تم حذف الحلقة بنجاح",
+    "circleDeletionFailed": "فشل حذف الحلقة"
   },
 
   "circle_classifications": {

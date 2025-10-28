@@ -494,7 +494,35 @@ const menuGroups = computed(() =>
   ]),
 )
 
-const isActive = (path) => page.url === path;
+const isActive = (path) => {
+  if (!path) return false;
+
+  // Normalize both values to compare pathname-only and ignore trailing slashes
+  const normalize = (p) => {
+    try {
+      // If `p` is a full URL, extract its pathname
+      const url = new URL(p, window.location.origin);
+      p = url.pathname;
+    } catch (e) {
+      // not a full URL, keep as-is
+    }
+
+    // Ensure string, remove origin if present, strip trailing slashes (but keep single '/')
+    let s = String(p || '');
+    s = s.replace(window.location.origin, '');
+    s = s.replace(/\/+$|^(?:)$/, ''); // remove trailing slashes
+    if (s === '') s = '/';
+    return s;
+  };
+
+  const current = normalize(page.url);
+  const target = normalize(path);
+
+  // Exact match or a parent path (e.g. /admin/terms and /admin/terms/1)
+  // Special-case root path: only match exactly '/'
+  if (target === '/') return current === '/';
+  return current === target || current.startsWith(target + '/');
+};
 
 const toggleSubmenu = (groupIndex, itemIndex) => {
   const key = `${groupIndex}-${itemIndex}`;

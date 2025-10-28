@@ -6,14 +6,41 @@ use Illuminate\Database\Eloquent\Model;
 use App\Repositories\Contracts\BaseRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 abstract class BaseRepository implements BaseRepositoryInterface
 {
     protected Model $model;
 
+    /** علاقات تُحمَّل افتراضياً (يمكن لكل مستودع override) */
+    protected array $defaultWith = []; 
+    // مثال في DistrictRepository: ['governorate' => ['id','name_ar','name_en']]
+
     public function __construct(Model $model)
     {
         $this->model = $model;
+    }
+
+    protected function applyWith($query, array $with = [])
+    {
+        // دمج الوحدات: السماح بتمرير with عند النداء + المزج مع الافتراضي
+        $merged = array_replace($this->defaultWith, $with);
+
+        foreach ($merged as $relation => $cols) {
+            if (is_int($relation)) {
+                // صيغة: ['governorate', 'services']
+                $query->with($cols);
+            } else {
+                // صيغة: ['governorate' => ['id','name_ar','name_en']]
+                $query->with([
+                    $relation => function ($q) use ($cols) {
+                        $q->select($cols);
+                    }
+                ]);
+            }
+        }
+
+        return $query;
     }
 
     public function query()
@@ -21,24 +48,33 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model->newQuery();
     }
 
+    public function builder(array $with = []): Builder
+    {
+        return $this->applyWith($this->query(), $with);
+    }
+
     public function all(array $with = [])
     {
-        return $this->query()->with($with)->latest()->get();
+        $q = $this->applyWith($this->query(), $with);
+        return $q->latest()->get();
     }
 
     public function paginate(int $perPage = 15, array $with = [])
     {
-        return $this->query()->with($with)->latest()->paginate($perPage);
+        $q = $this->applyWith($this->query(), $with);
+        return $q->latest()->paginate($perPage);
     }
 
     public function find(int|string $id, array $with = [])
     {
-        return $this->query()->with($with)->find($id);
+        $q = $this->applyWith($this->query(), $with);
+        return $q->find($id);
     }
 
     public function findOrFail(int|string $id, array $with = [])
     {
-        return $this->query()->with($with)->findOrFail($id);
+        $q = $this->applyWith($this->query(), $with);
+        return $q->findOrFail($id);
     }
 
     public function create(array $attributes)
