@@ -40,6 +40,11 @@ class CircleDTO extends BaseDTO
 
     public static function fromModel(Circle $circle): self
     {
+        // لن يعيد التحميل إذا كانت محملة مسبقًا (idempotent)
+        $circle->loadMissing([
+            'mosque:id,name',
+            'classification:id,name',
+        ]);
         return new self(
             $circle->id,
             $circle->name,
