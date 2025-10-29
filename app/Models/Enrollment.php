@@ -27,4 +27,9 @@ class Enrollment extends BaseModel
     {
         return $this->belongsTo(Student::class);
     }
+
+    public function scopeCurrent($q)
+    {
+        return $q->whereNull('left_at');
+    }
 }
