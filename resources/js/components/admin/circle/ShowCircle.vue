@@ -62,6 +62,90 @@
       </div>
     </div>
 
+    <!-- جداول الطلاب -->
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <!-- جدول: طلاب الحلقة الحاليين -->
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white">
+            {{ t('circles.currentStudents') }}
+          </h3>
+        </div>
+    
+        <div class="max-w-full overflow-x-auto">
+          <table class="w-full min-w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-20">
+                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">ID</p>
+                </th>
+                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
+                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in joinedStudents" :key="`joined-${s.id}`">
+                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.id }}</p>
+                </td>
+                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name ?? '—' }}</p>
+                </td>
+              </tr>
+    
+              <tr v-if="!joinedStudents || joinedStudents.length === 0">
+                <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                  {{ t('circles.noCurrentStudents') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    
+      <!-- جدول: الطلاب غير المرتبطين بأي حلقة -->
+      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+          <h3 class="text-base font-medium text-gray-800 dark:text-white">
+            {{ t('circles.freeStudents') }}
+          </h3>
+        </div>
+    
+        <div class="max-w-full overflow-x-auto">
+          <table class="w-full min-w-full">
+            <thead>
+              <tr>
+                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-20">
+                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">ID</p>
+                </th>
+                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
+                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</p>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="s in freeStudents" :key="`free-${s.id}`">
+                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.id }}</p>
+                </td>
+                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name ?? '—' }}</p>
+                </td>
+              </tr>
+    
+              <tr v-if="!freeStudents || freeStudents.length === 0">
+                <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+                  {{ t('circles.noFreeStudents') }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  
+
     <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
       <Link
         :href="route('admin.circles.index')"
@@ -88,5 +172,8 @@ const { t } = useI18n()
 
 defineProps({
   circle: { type: Object, required: true },
+  joinedStudents: { type: Array, required: true }, // [{id, name}]
+  freeStudents:   { type: Array, required: true }, // [{id, name}]
 })
+
 </script>
