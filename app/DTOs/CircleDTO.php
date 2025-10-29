@@ -84,4 +84,13 @@ class CircleDTO extends BaseDTO
             'classification_name' => $this->classification_name,
         ];
     }
+
+    public static function tiny(\App\Models\Student $s): array
+    {
+        return [
+            'id'   => $s->id,
+            'name' => $s->user?->name,
+        ];
+    }
+
 }
