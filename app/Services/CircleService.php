@@ -52,4 +52,28 @@ class CircleService
     {
         return $this->circles->deactivate($id);
     }
+
+    public function getJoinedStudents(int $circleId)
+    {
+        return Circle::findOrFail($circleId)
+            ->currentStudents()
+            ->with(['user:id,name'])          // للحصول على الاسم فقط
+            ->orderBy(
+                \App\Models\User::select('name')->whereColumn('users.id','students.user_id')
+            )
+            ->get()
+            ->map(fn($s) => StudentDTO::tiny($s))
+    }
+    
+    public function getFreeStudents()
+    {
+        return Student::query()
+            ->free()
+            ->with(['user:id,name'])          // للحصول على الاسم
+            ->orderBy(
+                \App\Models\User::select('name')->whereColumn('users.id','students.user_id')
+            )
+            ->get()
+            ->map(fn($s) => StudentDTO::tiny($s))
+    }
 }
