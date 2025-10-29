@@ -50,11 +50,17 @@ class CircleController extends Controller
         return redirect()->route('admin.circles.index');
     }
 
-    public function show(Circle $circle)
+    public function show(Circle $circle, CircleService $service)
     {
-        $dto = CircleDTO::fromModel($circle)->toArray();
-        return Inertia::render('Admin/Circle/Show', ['circle' => $dto]);
+        $dto = \App\DTOs\CircleDTO::fromModel($circle)->toArray();
+    
+        return \Inertia\Inertia::render('Admin/Circle/Show', [
+            'circle'         => $dto,
+            'joinedStudents' => $service->getJoinedStudents($circle->id),
+            'freeStudents'   => $service->getFreeStudents(),
+        ]);
     }
+
 
     public function edit(Circle $circle)
     {
