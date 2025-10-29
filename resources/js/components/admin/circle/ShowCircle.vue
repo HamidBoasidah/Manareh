@@ -62,88 +62,186 @@
       </div>
     </div>
 
-    <!-- جداول الطلاب -->
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <!-- جدول: طلاب الحلقة الحاليين -->
-      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-          <h3 class="text-base font-medium text-gray-800 dark:text-white">
-            {{ t('circles.currentStudents') }}
-          </h3>
+    <!-- ✅ أضِف هذا القسم أسفل بطاقة معلومات الحلقة وقبل أزرار "رجوع/تعديل" -->
+
+<!-- Students Tables -->
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+  <!-- جدول طلاب الحلقة الحاليين -->
+  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+      <h3 class="text-base font-medium text-gray-800 dark:text-white">
+        {{ t('circles.currentStudents') || 'Current Students' }}
+      </h3>
+
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <button class="absolute text-gray-500 -translate-y-1/2 left-3 top-1/2 dark:text-gray-400">
+            <svg class="fill-current" width="18" height="18" viewBox="0 0 20 20" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M3.042 9.374c0-3.497 2.835-6.332 6.333-6.332 3.497 0 6.333 2.835 6.333 6.332 0 3.497-2.836 6.333-6.333 6.333-3.498 0-6.333-2.836-6.333-6.333Zm6.333-7.832C5.05 1.542 1.542 5.048 1.542 9.374c0 4.325 3.508 7.831 7.833 7.831 1.892 0 3.628-.671 4.982-1.788l2.82 2.82c.293.293.768.293 1.06 0 .293-.293.293-.768 0-1.06l-2.82-2.821c1.118-1.354 1.79-3.09 1.79-4.982 0-4.326-3.508-7.832-7.832-7.832Z" />
+            </svg>
+          </button>
+          <input
+            v-model="tables.current.search"
+            type="text"
+            :placeholder="t('datatable.searchPlaceholder')"
+            class="dark:bg-dark-900 h-10 w-40 rounded-lg border border-gray-300 bg-transparent py-2 pl-9 pr-3 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+          />
         </div>
-    
-        <div class="max-w-full overflow-x-auto">
-          <table class="w-full min-w-full">
-            <thead>
-              <tr>
-                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-20">
-                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">ID</p>
-                </th>
-                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</p>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="s in joinedStudents" :key="`joined-${s.id}`">
-                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.id }}</p>
-                </td>
-                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name ?? '—' }}</p>
-                </td>
-              </tr>
-    
-              <tr v-if="!joinedStudents || joinedStudents.length === 0">
-                <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                  {{ t('circles.noCurrentStudents') }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    
-      <!-- جدول: الطلاب غير المرتبطين بأي حلقة -->
-      <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
-          <h3 class="text-base font-medium text-gray-800 dark:text-white">
-            {{ t('circles.freeStudents') }}
-          </h3>
-        </div>
-    
-        <div class="max-w-full overflow-x-auto">
-          <table class="w-full min-w-full">
-            <thead>
-              <tr>
-                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-20">
-                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">ID</p>
-                </th>
-                <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-                  <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</p>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="s in freeStudents" :key="`free-${s.id}`">
-                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.id }}</p>
-                </td>
-                <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-                  <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name ?? '—' }}</p>
-                </td>
-              </tr>
-    
-              <tr v-if="!freeStudents || freeStudents.length === 0">
-                <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-                  {{ t('circles.noFreeStudents') }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+        <div class="relative z-10 bg-transparent">
+          <select
+            v-model="tables.current.perPage"
+            class="w-[64px] h-9 rounded-lg border border-gray-300 bg-transparent pl-2 pr-6 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+          >
+            <option :value="5"  class="dark:bg-gray-900">5</option>
+            <option :value="8"  class="dark:bg-gray-900">8</option>
+            <option :value="10" class="dark:bg-gray-900">10</option>
+          </select>
+          <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.833 5.917 8 10.083l4.167-4.166" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
         </div>
       </div>
     </div>
+
+    <div class="max-w-full overflow-x-auto">
+      <table class="w-full min-w-full">
+        <thead>
+          <tr>
+            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-16">#</th>
+            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
+              <div class="flex cursor-pointer items-center justify-between" @click="tables.current.sortBy('name')">
+                <span class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</span>
+                <span class="flex flex-col">
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5"><path d="M4.41.585a.5.5 0 0 0-.82 0L1.05 4.213C.819 4.545 1.056 5 1.46 5h5.08c.404 0 .641-.455.41-.787L4.41.585Z"/></svg>
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5"><path d="M4.41 4.415a.5.5 0 0 1-.82 0L1.05.787C.819.455 1.056 0 1.46 0h5.08c.404 0 .641.455.41.787L4.41 4.415Z"/></svg>
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(s, idx) in tables.current.paginated" :key="s.id">
+            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">{{ tables.current.rowNumber(idx) }}</td>
+            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+              <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name }}</span>
+            </td>
+          </tr>
+          <tr v-if="tables.current.total === 0">
+            <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              {{ t('students.noStudents') || 'No students' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- pagination -->
+    <div class="border border-t-0 rounded-b-2xl border-gray-100 px-4 py-3 dark:border-gray-800">
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ t('datatable.showing', { start: tables.current.startEntry, end: tables.current.endEntry, total: tables.current.total }) }}
+        </p>
+        <div class="flex items-center gap-1">
+          <button @click="tables.current.prev()" :disabled="tables.current.page === 1" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            {{ t('datatable.previous') }}
+          </button>
+          <button @click="tables.current.next()" :disabled="tables.current.page === tables.current.totalPages" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            {{ t('datatable.next') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- جدول الطلاب غير الملتحقين بأي حلقة -->
+  <div class="overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+    <div class="flex items-center justify-between border-b border-gray-200 px-4 py-3 dark:border-gray-800">
+      <h3 class="text-base font-medium text-gray-800 dark:text-white">
+        {{ t('circles.freeStudents') || 'Unassigned Students' }}
+      </h3>
+
+      <div class="flex items-center gap-3">
+        <div class="relative">
+          <button class="absolute text-gray-500 -translate-y-1/2 left-3 top-1/2 dark:text-gray-400">
+            <svg class="fill-current" width="18" height="18" viewBox="0 0 20 20" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M3.042 9.374c0-3.497 2.835-6.332 6.333-6.332 3.497 0 6.333 2.835 6.333 6.332 0 3.497-2.836 6.333-6.333 6.333-3.498 0-6.333-2.836-6.333-6.333Z"/></svg>
+          </button>
+          <input
+            v-model="tables.free.search"
+            type="text"
+            :placeholder="t('datatable.searchPlaceholder')"
+            class="dark:bg-dark-900 h-10 w-40 rounded-lg border border-gray-300 bg-transparent py-2 pl-9 pr-3 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+          />
+        </div>
+
+        <div class="relative z-10 bg-transparent">
+          <select
+            v-model="tables.free.perPage"
+            class="w-[64px] h-9 rounded-lg border border-gray-300 bg-transparent pl-2 pr-6 text-sm text-gray-800 shadow-theme-xs focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90"
+          >
+            <option :value="5"  class="dark:bg-gray-900">5</option>
+            <option :value="8"  class="dark:bg-gray-900">8</option>
+            <option :value="10" class="dark:bg-gray-900">10</option>
+          </select>
+          <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3.833 5.917 8 10.083l4.167-4.166" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="max-w-full overflow-x-auto">
+      <table class="w-full min-w-full">
+        <thead>
+          <tr>
+            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800 w-16">#</th>
+            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
+              <div class="flex cursor-pointer items-center justify-between" @click="tables.free.sortBy('name')">
+                <span class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.name') }}</span>
+                <span class="flex flex-col">
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5"><path d="M4.41.585a.5.5 0 0 0-.82 0L1.05 4.213C.819 4.545 1.056 5 1.46 5h5.08c.404 0 .641-.455.41-.787L4.41.585Z"/></svg>
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5"><path d="M4.41 4.415a.5.5 0 0 1-.82 0L1.05.787C.819.455 1.056 0 1.46 0h5.08c.404 0 .641.455.41.787L4.41 4.415Z"/></svg>
+                </span>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(s, idx) in tables.free.paginated" :key="s.id">
+            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">{{ tables.free.rowNumber(idx) }}</td>
+            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+              <span class="text-gray-700 text-theme-sm dark:text-gray-400">{{ s.name }}</span>
+            </td>
+          </tr>
+          <tr v-if="tables.free.total === 0">
+            <td colspan="2" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+              {{ t('students.noFreeStudents') || 'No unassigned students' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- pagination -->
+    <div class="border border-t-0 rounded-b-2xl border-gray-100 px-4 py-3 dark:border-gray-800">
+      <div class="flex items-center justify-between">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ t('datatable.showing', { start: tables.free.startEntry, end: tables.free.endEntry, total: tables.free.total }) }}
+        </p>
+        <div class="flex items-center gap-1">
+          <button @click="tables.free.prev()" :disabled="tables.free.page === 1" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            {{ t('datatable.previous') }}
+          </button>
+          <button @click="tables.free.next()" :disabled="tables.free.page === tables.free.totalPages" class="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 shadow-theme-xs hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400">
+            {{ t('datatable.next') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /Students Tables -->
+
   
 
     <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
