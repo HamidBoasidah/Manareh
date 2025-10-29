@@ -165,15 +165,71 @@
 </template>
 
 <script setup>
+import { ref, reactive, computed, watch } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 
-defineProps({
+/** ✅ عدّل الـ props لتستقبل القوائم (id,name) */
+const props = defineProps({
   circle: { type: Object, required: true },
-  joinedStudents: { type: Array, required: true }, // [{id, name}]
-  freeStudents:   { type: Array, required: true }, // [{id, name}]
+  currentStudents: { type: Array, default: () => [] }, // [{id,name}]
+  freeStudents:    { type: Array, default: () => [] }, // [{id,name}]
 })
 
+/** 🔁 مُنشئ حالة جدول عام لتفادي تكرار الكود */
+function useSimpleTable(rawItemsRef) {
+  const search   = ref('')
+  const page     = ref(1)
+  const perPage  = ref(8)
+  const sortCol  = ref('name')
+  const sortDir  = ref('asc') // asc | desc
+
+  const filtered = computed(() => {
+    const term = (search.value || '').toLowerCase().trim()
+    let arr = (rawItemsRef.value || []).filter(x =>
+      !term ? true : (x.name || '').toLowerCase().includes(term)
+    )
+    // sort
+    const m = sortDir.value === 'asc' ? 1 : -1
+    arr = arr.slice().sort((a, b) => (a[sortCol.value] || '').localeCompare(b[sortCol.value] || '') * m)
+    return arr
+  })
+
+  const total = computed(() => filtered.value.length)
+  const totalPages = computed(() => Math.max(1, Math.ceil(total.value / perPage.value)))
+  watch([perPage, filtered], () => { if (page.value > totalPages.value) page.value = 1 })
+
+  const startIndex = computed(() => (page.value - 1) * perPage.value)
+  const endIndex   = computed(() => Math.min(startIndex.value + perPage.value, total.value))
+  const paginated  = computed(() => filtered.value.slice(startIndex.value, endIndex.value))
+
+  function sortBy(col) {
+    if (sortCol.value === col) sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc'
+    else { sortCol.value = col; sortDir.value = 'asc' }
+  }
+
+  function next() { if (page.value < totalPages.value) page.value++ }
+  function prev() { if (page.value > 1) page.value-- }
+
+  function rowNumber(idxInPage) { return startIndex.value + idxInPage + 1 }
+  const startEntry = computed(() => (total.value ? startIndex.value + 1 : 0))
+  const endEntry   = computed(() => endIndex.value)
+
+  return reactive({
+    // state
+    search, page, perPage, sortCol, sortDir,
+    // data
+    filtered, paginated, total, totalPages, startEntry, endEntry,
+    // actions
+    sortBy, next, prev, rowNumber,
+  })
+}
+
+/** 🔗 اربط الجدولين */
+const tables = {
+  current: useSimpleTable(computed(() => props.currentStudents)),
+  free:    useSimpleTable(computed(() => props.freeStudents)),
+}
 </script>
