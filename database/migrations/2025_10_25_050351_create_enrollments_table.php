@@ -17,26 +17,36 @@ return new class extends Migration
             $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
         
+            // زمن الانضمام والمغادرة لكل فترة
             $table->date('joined_at')->nullable();
             $table->date('left_at')->nullable();
         
+            // لتوثيق الأخطاء وإمكانية الرجوع لها
             $table->softDeletes();
             $table->timestamps();
         
-            // اختياري: لمنع تكرار سجلين لنفس الطالب في نفس الحلقة (تاريخياً)
-            $table->unique(['circle_id','student_id','deleted_at']);
+            // 🔒 ضمان "ارتباط حالي وحيد" لكل طالب:
+            // عمود مولّد يحمل student_id فقط إذا كان left_at NULL
+            $table->unsignedBigInteger('current_guard')
+                  ->storedAs("IF(left_at IS NULL, student_id, NULL)");
         
-            // عمود مولَّد يحدد إن كان السجل "حالي"
-            // (في MySQL: GENERATED ALWAYS AS ... STORED)
-            $table->boolean('is_current')->storedAs("(left_at IS NULL)");
+            // يمنع أن يكون لطالب واحد أكثر من سجل is_current=TRUE (left_at NULL)
+            $table->unique(['current_guard', 'deleted_at']);
         
-            // فهارس للأداء
-            $table->index(['student_id','is_current']);
-            $table->index(['circle_id','is_current']);
+            // ⚡️ (اختياري) عدّ طلاب الحلقة الحاليين بسرعة:
+            // عمود مولّد يحمل circle_id فقط إذا كان left_at NULL
+            $table->unsignedBigInteger('circle_current_guard')
+                  ->storedAs("IF(left_at IS NULL, circle_id, NULL)");
+            $table->index('circle_current_guard');
         
-            // ضمان عدم وجود أكثر من ارتباط حالي لنفس الطالب
-            $table->unique(['student_id','is_current','deleted_at']);
+            // ⚡️ فهارس مساعدة للاستعلامات العامة
+            $table->index(['student_id']);
+            $table->index(['circle_id']);
+        
+            // (اختياري) منع إدخالات مكررة بنفس اليوم لنفس الحلقة — حسب رغبتك
+            // $table->unique(['circle_id','student_id','joined_at','deleted_at']);
         });
+
 
     }
 
