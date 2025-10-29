@@ -530,7 +530,11 @@
     "circleUpdatedSuccessfully": "تم تحديث الحلقة بنجاح",
     "circleUpdateFailed": "فشل تحديث الحلقة",
     "circleDeletedSuccessfully": "تم حذف الحلقة بنجاح",
-    "circleDeletionFailed": "فشل حذف الحلقة"
+    "circleDeletionFailed": "فشل حذف الحلقة",
+    "currentStudents": "طلاب الحلقة الحاليون",
+    "freeStudents": "طلاب غير مرتبطين بأي حلقة",
+    "noCurrentStudents": "لا يوجد طلاب مرتبطون بهذه الحلقة حاليًا",
+    "noFreeStudents": "لا يوجد طلاب غير مرتبطين"
   },
 
   "circle_classifications": {
