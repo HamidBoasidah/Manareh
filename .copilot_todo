@@ -1,0 +1,5 @@
+# TODO
+- [x] Update EnrollmentFactory to align with new enrollments table structure (remove status/is_active, adjust dates).
+- [x] Update EnrollmentSeeder to enroll only half of the students and respect new schema.
+- [ ] Adjust EnrollmentSeeder so each circle gets 22 students and remaining students stay free.
+- [ ] Document/verify seeding steps for the user after changes.

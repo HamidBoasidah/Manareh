@@ -1,7 +1,9 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <ShowCircle :circle="circle" />
+    <ShowCircle :circle="circle"
+    :joinedStudents="joinedStudents"
+    :freeStudents="freeStudents" />
   </AdminLayout>
 </template>
 
@@ -17,6 +19,8 @@ const { t } = useI18n()
 const currentPageTitle = computed(() => t('circles.showCircle'))
 
 const circle = computed(() => usePage().props.circle)
+const joinedStudents = computed(() => usePage().props.joinedStudents)
+const freeStudents = computed(() => usePage().props.freeStudents)
 </script>
 
 <style scoped>

@@ -25,7 +25,7 @@
         <img
           v-if="isExpanded || isHovered || isMobileOpen"
           class="hidden dark:block"
-          src="/images/logo/logo-dark.svg"
+          src="/images/logo/manara_logo.svg"
           alt="Logo"
           width="150"
           height="40"

@@ -11,10 +11,14 @@ class EnrollmentFactory extends Factory
 
     public function definition()
     {
+        $joinedAt = $this->faker->dateTimeBetween('-2 years', 'now');
+        $leftAt = $this->faker->boolean(30)
+            ? $this->faker->dateTimeBetween($joinedAt, 'now')
+            : null;
+
         return [
-            'status' => $this->faker->randomElement(['active','on_hold','graduated','withdrawn']),
-            'joined_at' => $this->faker->date(),
-            'left_at' => null,
+            'joined_at' => $joinedAt->format('Y-m-d'),
+            'left_at' => $leftAt?->format('Y-m-d'),
         ];
     }
 }

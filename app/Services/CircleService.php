@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Repositories\CircleRepository;
+use App\Models\Circle;
+use App\Models\Student;
+use App\Models\User;
 
 class CircleService
 {
