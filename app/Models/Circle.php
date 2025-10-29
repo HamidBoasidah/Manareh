@@ -37,4 +37,16 @@ class Circle extends BaseModel
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function currentEnrollments()
+    {
+        return $this->hasMany(\App\Models\Enrollment::class)->current();
+    }
+    
+    public function currentStudents()
+    {
+        return $this->belongsToMany(\App\Models\Student::class, 'enrollments')
+            ->withPivot(['joined_at','left_at'])
+            ->wherePivotNull('left_at'); // الطلاب الحاليون في هذه الحلقة
+    }
 }
