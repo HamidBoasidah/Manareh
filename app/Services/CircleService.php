@@ -57,23 +57,29 @@ class CircleService
     {
         return Circle::findOrFail($circleId)
             ->currentStudents()
-            ->with(['user:id,name'])          // للحصول على الاسم فقط
+            ->with(['user:id,name']) // الاسم من جدول users
             ->orderBy(
-                \App\Models\User::select('name')->whereColumn('users.id','students.user_id')
+                User::select('name')->whereColumn('users.id', 'students.user_id')
             )
-            ->get()
-            ->map(fn($s) => StudentDTO::tiny($s))
+            ->get(['students.id', 'students.user_id']) // أعمدة قليلة
+            ->map(fn($s) => [
+                'id'   => $s->id,
+                'name' => $s->user?->name ?? '—',
+            ]);
     }
     
     public function getFreeStudents()
     {
         return Student::query()
             ->free()
-            ->with(['user:id,name'])          // للحصول على الاسم
+            ->with(['user:id,name']) // الاسم من جدول users
             ->orderBy(
-                \App\Models\User::select('name')->whereColumn('users.id','students.user_id')
+                User::select('name')->whereColumn('users.id', 'students.user_id')
             )
-            ->get()
-            ->map(fn($s) => StudentDTO::tiny($s))
+            ->get(['students.id', 'students.user_id'])
+            ->map(fn($s) => [
+                'id'   => $s->id,
+                'name' => $s->user?->name ?? '—',
+            ]);
     }
 }
