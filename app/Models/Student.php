@@ -37,4 +37,9 @@ class Student extends BaseModel
     {
         return $this->hasMany(Enrollment::class);
     }
+
+    public function scopeFree($q)
+    {
+        return $q->whereDoesntHave('enrollments', fn($x) => $x->whereNull('left_at'));
+    }
 }
