@@ -11,6 +11,7 @@ use App\DTOs\CircleDTO;
 use App\Models\Circle;
 use App\Models\Mosque;
 use App\Models\CircleClassification;
+use App\Models\Student;
 use Inertia\Inertia;
 
 class CircleController extends Controller
@@ -58,6 +59,7 @@ class CircleController extends Controller
             'circle'         => $dto,
             'joinedStudents' => $service->getJoinedStudents($circle->id),
             'freeStudents'   => $service->getFreeStudents(),
+            'canManageStudents' => auth()->user()?->can('circles.update') ?? false,
         ]);
     }
 
@@ -97,5 +99,23 @@ class CircleController extends Controller
     {
         $service->deactivate($id);
         return back()->with('success', 'Circle deactivated successfully');
+    }
+
+    public function joinStudent(Request $request, CircleService $service, Circle $circle)
+    {
+        $validated = $request->validate([
+            'student_id' => ['required', 'integer', 'exists:students,id'],
+        ]);
+
+        $service->attachStudent($circle->id, (int) $validated['student_id']);
+
+        return redirect()->route('admin.circles.show', $circle);
+    }
+
+    public function leaveStudent(CircleService $service, Circle $circle, Student $student)
+    {
+        $service->detachStudent($circle->id, $student->id);
+
+        return redirect()->route('admin.circles.show', $circle);
     }
 }

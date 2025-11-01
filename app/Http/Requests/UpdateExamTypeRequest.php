@@ -18,7 +18,7 @@ class UpdateExamTypeRequest extends FormRequest
         return [
             'mosque_id' => 'sometimes|required|exists:mosques,id',
             'name' => 'sometimes|required|string|max:255',
-            'part_required' => 'nullable|boolean',
+            // 'part_required' removed
             'is_active' => 'nullable|boolean',
             'created_by' => 'nullable|exists:users,id',
             'updated_by' => 'nullable|exists:users,id',

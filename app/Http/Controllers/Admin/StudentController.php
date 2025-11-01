@@ -9,6 +9,8 @@ use App\Http\Requests\UpdateStudentRequest;
 use App\Services\StudentService;
 use App\DTOs\StudentDTO;
 use App\Models\Student;
+use App\Models\Guardian;
+use App\Models\Mosque;
 use Inertia\Inertia;
 
 class StudentController extends Controller
@@ -33,13 +35,21 @@ class StudentController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Student/Create');
+        $guardians = Guardian::all(['id', 'name']);
+        $mosques = Mosque::all(['id', 'name']);
+        return Inertia::render('Admin/Student/Create', [
+            'guardians' => $guardians,
+            'mosques' => $mosques
+        ]);
     }
 
     public function store(StoreStudentRequest $request, StudentService $service)
     {
         $service->create($request->validated());
-        return redirect()->route('admin.students.index');
+
+        return redirect()
+            ->route('admin.students.index')
+            ->with('success', __('students.studentCreatedSuccessfully'));
     }
 
     public function show(Student $student)
@@ -57,13 +67,19 @@ class StudentController extends Controller
     public function update(UpdateStudentRequest $request, StudentService $service, Student $student)
     {
         $service->update($student->id, $request->validated());
-        return redirect()->route('admin.students.index');
+
+        return redirect()
+            ->route('admin.students.index')
+            ->with('success', __('students.studentUpdatedSuccessfully'));
     }
 
     public function destroy(StudentService $service, Student $student)
     {
         $service->delete($student->id);
-        return redirect()->route('admin.students.index');
+
+        return redirect()
+            ->route('admin.students.index')
+            ->with('success', __('students.studentDeletedSuccessfully'));
     }
 
     public function activate(StudentService $service, $id)

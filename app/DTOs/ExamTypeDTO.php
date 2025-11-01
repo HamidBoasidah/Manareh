@@ -9,25 +9,42 @@ class ExamTypeDTO extends BaseDTO
     public $id;
     public $mosque_id;
     public $name;
-    public $part_required;
     public $is_active;
+    public $mosque;
+    public $mosque_name_ar;
+    public $mosque_name_en;
 
-    public function __construct($id, $mosque_id = null, $name = null, $part_required = null)
+    public function __construct($id, $mosque_id = null, $name = null, $is_active = null)
     {
         $this->id = $id;
         $this->mosque_id = $mosque_id;
         $this->name = $name;
-        $this->part_required = $part_required;
+        $this->is_active = $is_active;
     }
 
     public static function fromModel(ExamType $m): self
     {
-        return new self(
+        $dto = new self(
             $m->id,
             $m->mosque_id ?? null,
             $m->name ?? null,
-            $m->part_required ?? null
+            (bool) $m->is_active,
         );
+
+        if ($m->relationLoaded('mosque') && $m->mosque) {
+            $dto->mosque = [
+                'id' => $m->mosque->id,
+                'name' => $m->mosque->name,
+            ];
+            $dto->mosque_name_ar = $m->mosque->name_ar ?? $m->mosque->name;
+            $dto->mosque_name_en = $m->mosque->name_en ?? $m->mosque->name;
+        } else {
+            $dto->mosque = null;
+            $dto->mosque_name_ar = null;
+            $dto->mosque_name_en = null;
+        }
+
+        return $dto;
     }
 
     public function toArray(): array
@@ -36,7 +53,10 @@ class ExamTypeDTO extends BaseDTO
             'id' => $this->id,
             'mosque_id' => $this->mosque_id,
             'name' => $this->name,
-            'part_required' => $this->part_required,
+            'is_active' => $this->is_active,
+            'mosque' => $this->mosque,
+            'mosque_name_ar' => $this->mosque_name_ar,
+            'mosque_name_en' => $this->mosque_name_en,
         ];
     }
 
@@ -45,7 +65,11 @@ class ExamTypeDTO extends BaseDTO
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'is_active' => $this->is_active ?? null,
+            'mosque_id' => $this->mosque_id,
+            'is_active' => $this->is_active,
+            'mosque' => $this->mosque,
+            'mosque_name_ar' => $this->mosque_name_ar,
+            'mosque_name_en' => $this->mosque_name_en,
         ];
     }
 }

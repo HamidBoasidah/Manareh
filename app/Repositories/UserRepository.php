@@ -20,10 +20,15 @@ class UserRepository extends BaseRepository
     public function create(array $data)
     {
         $user = parent::create($data); // استدعاء دالة الإنشاء من الأب
-        $role = Role::find($data['role_id']);
-        if ($role) {
-            $user->assignRole($role->name);
+
+        $roleId = $data['role_id'] ?? null;
+        if ($roleId) {
+            $role = Role::find($roleId);
+            if ($role) {
+                $user->assignRole($role->name);
+            }
         }
+
         return $user;
     }
 

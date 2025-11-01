@@ -37,4 +37,5 @@ class DailyStudy extends BaseModel
     {
         return $this->belongsTo(Student::class);
     }
+
 }

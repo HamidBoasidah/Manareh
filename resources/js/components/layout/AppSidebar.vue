@@ -344,12 +344,6 @@ const menuGroups = computed(() =>
         },
         {
           icon: GridIcon,
-          name: t('menu.enrollments'),
-          path: route('admin.enrollments.index'),
-          permission: 'enrollments.view',
-        },
-        {
-          icon: GridIcon,
           name: t('menu.circles'),
           path: route('admin.circles.index'),
           permission: 'circles.view',
@@ -371,12 +365,6 @@ const menuGroups = computed(() =>
           name: t('menu.daily_study_sessions'),
           path: route('admin.daily_study_sessions.index'),
           permission: 'daily_study_sessions.view',
-        },
-        {
-          icon: GridIcon,
-          name: t('menu.daily_studies'),
-          path: route('admin.daily_studies.index'),
-          permission: 'daily_studies.view',
         },
         {
           icon: GridIcon,

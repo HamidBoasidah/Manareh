@@ -9,12 +9,16 @@ use App\Repositories\AreaRepository;
 use App\Repositories\DistrictRepository;
 use App\Repositories\GovernorateRepository;
 use App\Repositories\MosqueRepository;
+use App\Repositories\DailyStudySessionRepository;
+use App\Repositories\DailyStudyRepository;
 // Models
 use App\Models\User;
 use App\Models\Area;
 use App\Models\District;
 use App\Models\Governorate;
 use App\Models\Mosque;
+use App\Models\DailyStudySession;
+use App\Models\DailyStudy;
 
 // Services
 use App\Services\UserService;
@@ -22,6 +26,8 @@ use App\Services\AreaService;
 use App\Services\DistrictService;
 use App\Services\GovernorateService;
 use App\Services\MosqueService;
+use App\Services\DailyStudySessionService;
+use App\Services\DailyStudyService;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -32,7 +38,9 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(AreaRepository::class, fn($app) => new AreaRepository($app->make(Area::class)));
         $this->app->bind(DistrictRepository::class, fn($app) => new DistrictRepository($app->make(District::class)));
         $this->app->bind(GovernorateRepository::class, fn($app) => new GovernorateRepository($app->make(Governorate::class)));
-    $this->app->bind(MosqueRepository::class, fn($app) => new MosqueRepository($app->make(Mosque::class)));
+        $this->app->bind(MosqueRepository::class, fn($app) => new MosqueRepository($app->make(Mosque::class)));
+        $this->app->bind(DailyStudySessionRepository::class, fn($app) => new DailyStudySessionRepository($app->make(DailyStudySession::class)));
+        $this->app->bind(DailyStudyRepository::class, fn($app) => new DailyStudyRepository($app->make(DailyStudy::class)));
         
 
         // Bind Services to their Repositories
@@ -41,5 +49,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DistrictService::class, fn($app) => new DistrictService($app->make(DistrictRepository::class)));
         $this->app->bind(GovernorateService::class, fn($app) => new GovernorateService($app->make(GovernorateRepository::class)));
         $this->app->bind(MosqueService::class, fn($app) => new MosqueService($app->make(MosqueRepository::class)));
+        $this->app->bind(DailyStudySessionService::class, fn($app) => new DailyStudySessionService(
+            $app->make(DailyStudySessionRepository::class),
+            $app->make(DailyStudyRepository::class)
+        ));
+        $this->app->bind(DailyStudyService::class, fn($app) => new DailyStudyService($app->make(DailyStudyRepository::class)));
     }
 }

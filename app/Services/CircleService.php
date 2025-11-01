@@ -6,6 +6,7 @@ use App\Repositories\CircleRepository;
 use App\Models\Circle;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class CircleService
 {
@@ -84,5 +85,60 @@ class CircleService
                 'id'   => $s->id,
                 'name' => $s->user?->name ?? '—',
             ]);
+    }
+
+    public function attachStudent(int $circleId, int $studentId): void
+    {
+        $circle = Circle::findOrFail($circleId);
+        $student = Student::findOrFail($studentId);
+
+        $this->ensureCircleHasCapacity($circle);
+
+        if ($student->enrollments()->whereNull('left_at')->exists()) {
+            throw ValidationException::withMessages([
+                'student_id' => __('circles.studentAlreadyAssigned'),
+            ]);
+        }
+
+        $circle->enrollments()->create([
+            'student_id' => $student->id,
+            'joined_at' => now()->toDateString(),
+            'left_at' => null,
+        ]);
+    }
+
+    public function detachStudent(int $circleId, int $studentId): void
+    {
+        $circle = Circle::findOrFail($circleId);
+
+        $enrollment = $circle->enrollments()
+            ->where('student_id', $studentId)
+            ->whereNull('left_at')
+            ->first();
+
+        if (! $enrollment) {
+            throw ValidationException::withMessages([
+                'student_id' => __('circles.studentNotEnrolled'),
+            ]);
+        }
+
+        $enrollment->update([
+            'left_at' => now()->toDateString(),
+        ]);
+    }
+
+    private function ensureCircleHasCapacity(Circle $circle): void
+    {
+        if (is_null($circle->capacity)) {
+            return;
+        }
+
+        $activeCount = $circle->enrollments()->whereNull('left_at')->count();
+
+        if ($activeCount >= $circle->capacity) {
+            throw ValidationException::withMessages([
+                'circle_id' => __('circles.circleCapacityReached'),
+            ]);
+        }
     }
 }

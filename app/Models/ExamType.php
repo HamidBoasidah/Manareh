@@ -12,7 +12,6 @@ class ExamType extends BaseModel
     protected $fillable = [
         'mosque_id',
         'name',
-        'part_required',
         'is_active',
     ];
 

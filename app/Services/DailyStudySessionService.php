@@ -3,14 +3,19 @@
 namespace App\Services;
 
 use App\Repositories\DailyStudySessionRepository;
+use App\Repositories\DailyStudyRepository;
+use App\Models\Enrollment;
+use Illuminate\Support\Facades\DB;
 
 class DailyStudySessionService
 {
     protected DailyStudySessionRepository $sessions;
+    protected DailyStudyRepository $studies;
 
-    public function __construct(DailyStudySessionRepository $sessions)
+    public function __construct(DailyStudySessionRepository $sessions, DailyStudyRepository $studies)
     {
         $this->sessions = $sessions;
+        $this->studies = $studies;
     }
 
     public function all(array $with = [])
@@ -30,7 +35,31 @@ class DailyStudySessionService
 
     public function create(array $attributes)
     {
-        return $this->sessions->create($attributes);
+        return DB::transaction(function () use ($attributes) {
+            $session = $this->sessions->create($attributes);
+
+            $studentIds = Enrollment::query()
+                ->where('circle_id', $session->circle_id)
+                ->current()
+                ->pluck('student_id')
+                ->unique()
+                ->values();
+
+            if ($studentIds->isNotEmpty()) {
+                $timestamp = now();
+
+                $this->studies->query()->insert(
+                    $studentIds->map(fn ($studentId) => [
+                        'session_id' => $session->id,
+                        'student_id' => $studentId,
+                        'created_at' => $timestamp,
+                        'updated_at' => $timestamp,
+                    ])->all()
+                );
+            }
+
+            return $session;
+        });
     }
 
     public function update($id, array $attributes)

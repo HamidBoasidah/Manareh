@@ -9,6 +9,7 @@ use App\Http\Requests\UpdateDailyStudyRequest;
 use App\Services\DailyStudyService;
 use App\DTOs\DailyStudyDTO;
 use App\Models\DailyStudy;
+use App\Models\QuranSura;
 use Inertia\Inertia;
 
 class DailyStudyController extends Controller
@@ -51,7 +52,16 @@ class DailyStudyController extends Controller
     public function edit(DailyStudy $dailyStudy)
     {
         $dto = DailyStudyDTO::fromModel($dailyStudy)->toArray();
-        return Inertia::render('Admin/DailyStudy/Edit', ['dailyStudy' => $dto]);
+        $suras = QuranSura::select('id', 'name_ar', 'name_en')->orderBy('id')->get()->map(fn ($sura) => [
+            'id' => $sura->id,
+            'name_ar' => $sura->name_ar,
+            'name_en' => $sura->name_en,
+        ]);
+
+        return Inertia::render('Admin/DailyStudy/Edit', [
+            'dailyStudy' => $dto,
+            'suras' => $suras,
+        ]);
     }
 
     public function update(UpdateDailyStudyRequest $request, DailyStudyService $service, DailyStudy $dailyStudy)

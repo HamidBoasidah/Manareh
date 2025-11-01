@@ -14,7 +14,7 @@ class ExamTypeFactory extends Factory
         $ar = \Faker\Factory::create('ar_SA');
         return [
             'name' => $ar->word(),
-            'part_required' => $this->faker->boolean(20),
+            'is_active' => true,
         ];
     }
 }
