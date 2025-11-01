@@ -11,7 +11,7 @@ class CircleSeeder extends Seeder
     public function run(): void
     {
         Mosque::all()->each(function ($mosque) {
-            Circle::factory()->count(3)->for($mosque)->create();
+            Circle::factory()->count(10)->for($mosque)->create();
         });
     }
 }

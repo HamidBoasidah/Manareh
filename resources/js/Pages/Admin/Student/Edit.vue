@@ -1,7 +1,8 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <EditStudent :student="student" />
+    <EditStudent :student="student" 
+    :guardians="guardians" :mosques="mosques" />
   </AdminLayout>
 </template>
 
@@ -17,6 +18,9 @@ const { t } = useI18n()
 const currentPageTitle = computed(() => t('students.editStudent'))
 
 const student = computed(() => usePage().props.student)
+
+const guardians = computed(() => usePage().props.guardians)
+const mosques = computed(() => usePage().props.mosques)
 </script>
 
 <style scoped>

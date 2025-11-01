@@ -10,147 +10,6 @@
       <div class="p-4 sm:p-6 dark:border-gray-800">
         <form @submit.prevent>
           <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
-            <!-- UserName Input -->
-            <div>
-              <label
-                for="user-name"
-                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
-                >{{ t('adduser.userName') }}</label
-              >
-              <input
-                v-model="form.name"
-                type="text"
-                id="user-name"
-                autocomplete="username"
-                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-                :placeholder="t('adduser.userNamePlaceholder')"
-              />
-            </div>
-            <!-- Email Input -->
-            <div>
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                {{ t('common.email') }}
-              </label>
-              <div class="relative">
-                <span
-                  class="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400"
-                >
-                  <svg
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M3.04175 7.06206V14.375C3.04175 14.6511 3.26561 14.875 3.54175 14.875H16.4584C16.7346 14.875 16.9584 14.6511 16.9584 14.375V7.06245L11.1443 11.1168C10.457 11.5961 9.54373 11.5961 8.85638 11.1168L3.04175 7.06206ZM16.9584 5.19262C16.9584 5.19341 16.9584 5.1942 16.9584 5.19498V5.20026C16.9572 5.22216 16.946 5.24239 16.9279 5.25501L10.2864 9.88638C10.1145 10.0062 9.8862 10.0062 9.71437 9.88638L3.07255 5.25485C3.05342 5.24151 3.04202 5.21967 3.04202 5.19636C3.042 5.15695 3.07394 5.125 3.11335 5.125H16.8871C16.9253 5.125 16.9564 5.15494 16.9584 5.19262ZM18.4584 5.21428V14.375C18.4584 15.4796 17.563 16.375 16.4584 16.375H3.54175C2.43718 16.375 1.54175 15.4796 1.54175 14.375V5.19498C1.54175 5.1852 1.54194 5.17546 1.54231 5.16577C1.55858 4.31209 2.25571 3.625 3.11335 3.625H16.8871C17.7549 3.625 18.4584 4.32843 18.4585 5.19622C18.4585 5.20225 18.4585 5.20826 18.4584 5.21428Z"
-                      fill="#667085"
-                    />
-                  </svg>
-                </span>
-                <input
-                  v-model="form.email"
-                  type="text"
-                  autocomplete="new-email"
-                  :placeholder="t('users.emailPlaceholder')"
-                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[62px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
-            </div>
-            <!-- Phone Input with Prepended Country Code -->
-            <div>
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                {{ t('common.phoneNumber') }}
-              </label>
-              <div class="relative">
-                <div class="absolute">
-                  <select
-                    v-model="selectedCountry"
-                    @change="updatePhoneNumber"
-                    class="appearance-none rounded-l-lg border-0 border-r border-gray-200 bg-transparent bg-none py-3 pl-3.5 pr-8 leading-tight text-gray-700 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:text-gray-400"
-                  >
-                    <option v-for="(code, country) in countryCodes" :key="country" :value="country">
-                      {{ country }}
-                    </option>
-                  </select>
-                  <div
-                    class="absolute inset-y-0 flex items-center text-gray-700 pointer-events-none right-3 dark:text-gray-400"
-                  >
-                    <svg
-                      class="stroke-current"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
-                        stroke=""
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <input
-                  v-model="form.phone_number"
-                  :placeholder="t('users.phonePlaceholder')"
-                  type="tel"
-                  autocomplete="new-tel"
-                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-3 pl-[84px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
-            </div>
-            <!-- Phone Input with Prepended Country Code -->
-            <div>
-              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-                {{ t('common.whatsappNumber') }}
-              </label>
-              <div class="relative">
-                <div class="absolute">
-                  <select
-                    v-model="selectedCountry"
-                    @change="updatePhoneNumber"
-                    class="appearance-none rounded-l-lg border-0 border-r border-gray-200 bg-transparent bg-none py-3 pl-3.5 pr-8 leading-tight text-gray-700 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:text-gray-400"
-                  >
-                    <option v-for="(code, country) in countryCodes" :key="country" :value="country">
-                      {{ country }}
-                    </option>
-                  </select>
-                  <div
-                    class="absolute inset-y-0 flex items-center text-gray-700 pointer-events-none right-3 dark:text-gray-400"
-                  >
-                    <svg
-                      class="stroke-current"
-                      width="20"
-                      height="20"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
-                        stroke=""
-                        stroke-width="1.5"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <input
-                  v-model="form.whatsapp_number"
-                  :placeholder="t('users.whatsappPlaceholder')"
-                  type="tel"
-                  autocomplete="new-tel"
-                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-3 pl-[84px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
-                />
-              </div>
-            </div>
             <!-- User Role Input -->
             <div>
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
@@ -198,24 +57,164 @@
             </div>
             <!-- End User Role Input -->
             <!-- UserName Input -->
-            <div>
+            <div v-if="!isStudentRoleSelected">
               <label
                 for="user-name"
+                class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
+                >{{ t('adduser.userName') }}</label
+              >
+              <input
+                v-model="form.name"
+                type="text"
+                id="user-name"
+                autocomplete="username"
+                class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+                :placeholder="t('adduser.userNamePlaceholder')"
+              />
+            </div>
+            <!-- Email Input -->
+            <div v-if="!isStudentRoleSelected">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                {{ t('common.email') }}
+              </label>
+              <div class="relative">
+                <span
+                  class="absolute left-0 top-1/2 -translate-y-1/2 border-r border-gray-200 px-3.5 py-3 text-gray-500 dark:border-gray-800 dark:text-gray-400"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M3.04175 7.06206V14.375C3.04175 14.6511 3.26561 14.875 3.54175 14.875H16.4584C16.7346 14.875 16.9584 14.6511 16.9584 14.375V7.06245L11.1443 11.1168C10.457 11.5961 9.54373 11.5961 8.85638 11.1168L3.04175 7.06206ZM16.9584 5.19262C16.9584 5.19341 16.9584 5.1942 16.9584 5.19498V5.20026C16.9572 5.22216 16.946 5.24239 16.9279 5.25501L10.2864 9.88638C10.1145 10.0062 9.8862 10.0062 9.71437 9.88638L3.07255 5.25485C3.05342 5.24151 3.04202 5.21967 3.04202 5.19636C3.042 5.15695 3.07394 5.125 3.11335 5.125H16.8871C16.9253 5.125 16.9564 5.15494 16.9584 5.19262ZM18.4584 5.21428V14.375C18.4584 15.4796 17.563 16.375 16.4584 16.375H3.54175C2.43718 16.375 1.54175 15.4796 1.54175 14.375V5.19498C1.54175 5.1852 1.54194 5.17546 1.54231 5.16577C1.55858 4.31209 2.25571 3.625 3.11335 3.625H16.8871C17.7549 3.625 18.4584 4.32843 18.4585 5.19622C18.4585 5.20225 18.4585 5.20826 18.4584 5.21428Z"
+                      fill="#667085"
+                    />
+                  </svg>
+                </span>
+                <input
+                  v-model="form.email"
+                  type="text"
+                  autocomplete="new-email"
+                  :placeholder="t('users.emailPlaceholder')"
+                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 pl-[62px] text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
+              </div>
+            </div>
+            <!-- Phone Input with Prepended Country Code -->
+            <div v-if="!isStudentRoleSelected">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                {{ t('common.phoneNumber') }}
+              </label>
+              <div class="relative">
+                <div class="absolute">
+                  <select
+                    v-model="selectedCountry"
+                    @change="updatePhoneNumber"
+                    class="appearance-none rounded-l-lg border-0 border-r border-gray-200 bg-transparent bg-none py-3 pl-3.5 pr-8 leading-tight text-gray-700 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:text-gray-400"
+                  >
+                    <option v-for="(code, country) in countryCodes" :key="country" :value="country">
+                      {{ country }}
+                    </option>
+                  </select>
+                  <div
+                    class="absolute inset-y-0 flex items-center text-gray-700 pointer-events-none right-3 dark:text-gray-400"
+                  >
+                    <svg
+                      class="stroke-current"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+                        stroke=""
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <input
+                  v-model="form.phone_number"
+                  :placeholder="t('users.phonePlaceholder')"
+                  type="tel"
+                  autocomplete="new-tel"
+                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-3 pl-[84px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
+              </div>
+            </div>
+            <!-- Phone Input with Prepended Country Code -->
+            <div v-if="!isStudentRoleSelected">
+              <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                {{ t('common.whatsappNumber') }}
+              </label>
+              <div class="relative">
+                <div class="absolute">
+                  <select
+                    v-model="selectedCountry"
+                    @change="updatePhoneNumber"
+                    class="appearance-none rounded-l-lg border-0 border-r border-gray-200 bg-transparent bg-none py-3 pl-3.5 pr-8 leading-tight text-gray-700 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:text-gray-400"
+                  >
+                    <option v-for="(code, country) in countryCodes" :key="country" :value="country">
+                      {{ country }}
+                    </option>
+                  </select>
+                  <div
+                    class="absolute inset-y-0 flex items-center text-gray-700 pointer-events-none right-3 dark:text-gray-400"
+                  >
+                    <svg
+                      class="stroke-current"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396"
+                        stroke=""
+                        stroke-width="1.5"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  </div>
+                </div>
+                <input
+                  v-model="form.whatsapp_number"
+                  :placeholder="t('users.whatsappPlaceholder')"
+                  type="tel"
+                  autocomplete="new-tel"
+                  class="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-300 bg-transparent py-3 pl-[84px] pr-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800"
+                />
+              </div>
+            </div>
+            <!-- Address Input -->
+            <div v-if="!isStudentRoleSelected">
+              <label
+                for="user-address"
                 class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400"
                 >{{ t('common.address') }}</label
               >
               <input
                 v-model="form.address"
                 type="text"
-                id="user-name"
+                id="user-address"
                 autocomplete="address"
                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 :placeholder="t('users.addressPlaceholder')"
               />
             </div>
-            <!-- End User Name Input -->
             <!-- Password Type Input -->
-            <div>
+            <div v-if="!isStudentRoleSelected">
               <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
                 {{ t('users.password') }}
               </label>
@@ -266,12 +265,32 @@
             </div>
             <!-- End Password Type Input -->
           </div>
+          <div
+            v-if="isStudentRoleSelected"
+            class="mt-6 rounded-lg border border-brand-100 bg-brand-50 p-4 text-sm text-brand-700 dark:border-brand-500/40 dark:bg-brand-500/10 dark:text-brand-200"
+          >
+            <p class="text-sm font-medium text-gray-800 dark:text-white">
+              {{ t('users.studentRoleNoticeTitle') }}
+            </p>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-300">
+              {{ t('users.studentRoleNoticeBody') }}
+            </p>
+            <div class="mt-4">
+              <Link
+                :href="route('admin.students.create')"
+                class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-white transition"
+              >
+                {{ t('users.goToStudentCreation') }}
+              </Link>
+            </div>
+          </div>
         </form>
       </div>
     </div>
 
     <!-- Status Section -->
     <div
+      v-if="!isStudentRoleSelected"
       class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
       <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
         <h2 class="text-lg font-medium text-gray-800 dark:text-white">{{ t('common.status') }}</h2>
@@ -310,6 +329,7 @@
     </div>
     <!-- Products Images Section -->
     <div
+      v-if="!isStudentRoleSelected"
       class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
 
       <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
@@ -373,11 +393,19 @@
         {{ t('buttons.backToList') }}
       </Link>
       <button
+        v-if="!isStudentRoleSelected"
         @click="create"
         class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
       >
   {{ t('buttons.create') }}
       </button>
+      <Link
+        v-else
+        :href="route('admin.students.create')"
+        class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
+      >
+        {{ t('users.goToStudentCreation') }}
+      </Link>
     </div>
   </div>
 </template>
@@ -385,7 +413,7 @@
 <script setup>
 
 import { useForm , Link} from '@inertiajs/vue3'
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, onBeforeUnmount, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useNotifications } from '@/composables/useNotifications'
 const { t , locale } = useI18n()
@@ -407,6 +435,18 @@ const form = useForm({
   attachment: null,
   role_id: ''
 
+})
+
+const studentRoleId = computed(() => {
+  const studentRole = props.roles?.find(role => role?.name === 'student')
+  return studentRole?.id ?? null
+})
+
+const isStudentRoleSelected = computed(() => {
+  if (!studentRoleId.value) {
+    return false
+  }
+  return String(form.role_id ?? '') === String(studentRoleId.value)
 })
 
 const showPassword = ref(false)
@@ -446,6 +486,9 @@ function saveDraft() {
 }
 
 function create() {
+  if (isStudentRoleSelected.value) {
+    return
+  }
   form.post(route('admin.users.store'), {
     onSuccess: () => {
       success(t('users.userCreatedSuccessfully'))

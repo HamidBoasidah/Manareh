@@ -45,7 +45,7 @@
           <!-- اختيار المديرية -->
           <div class="md:col-span-2">
             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ t('areas.district') }}
+              {{ t('districts.selectDistrict') }}
             </label>
             <div class="relative z-20 bg-transparent">
               <select
@@ -54,7 +54,7 @@
                 :class="{ 'text-gray-800 dark:text-white/90': form.district_id }"
               >
                 <option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                  {{ t('areas.selectDistrict') }}
+                  {{ t('districts.selectDistrict') }}
                 </option>
                 <option
                   v-for="d in districts"

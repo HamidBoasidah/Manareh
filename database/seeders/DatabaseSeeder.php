@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolesPermissionsSeeder::class,
+            QuranSuraSeeder::class,
             UserSeeder::class,
             GovernorateSeeder::class,
             DistrictSeeder::class,
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
             StudentSeeder::class,
             StaffAssignmentSeeder::class,
             EnrollmentSeeder::class,
+            DailyStudySessionSeeder::class,
             ExamTypeSeeder::class,
             ActivitySeeder::class,
             MessageTemplateSeeder::class,

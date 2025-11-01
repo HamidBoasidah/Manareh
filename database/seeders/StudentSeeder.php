@@ -18,7 +18,7 @@ class StudentSeeder extends Seeder
             ['display_name' => ['en' => 'Student', 'ar' => 'طالب'], 'guard_name' => config('acl.guard', 'web')]
         );
 
-        $users = User::factory()->count(20)->create();
+        $users = User::factory()->count(1000)->create();
         $guardians = Guardian::all();
         if ($guardians->isEmpty()) {
             $guardians = Guardian::factory()->count(5)->create();

@@ -3,7 +3,7 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="currentPageTitle">
-        <ShowEnrollments :enrollments="enrollments" />
+        <ShowDailyStudySessions :dailyStudySessions="dailyStudySessions" />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -13,15 +13,15 @@
 import PageBreadcrumb from '@/components/common/PageBreadcrumb.vue'
 import AdminLayout from '@/components/layout/AdminLayout.vue'
 import ComponentCard from '@/components/common/ComponentCard.vue'
-import ShowEnrollments from '@/components/admin/enrollment/ShowEnrollments.vue'
+import ShowDailyStudySessions from '@/components/admin/dailyStudySession/ShowDailyStudySessions.vue'
 import { usePage } from '@inertiajs/vue3'
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const currentPageTitle = computed(() => t('menu.enrollments'))
+const currentPageTitle = computed(() => t('menu.daily_study_sessions'))
 
-const enrollments = computed(() => usePage().props.enrollments)
+const dailyStudySessions = computed(() => usePage().props.daily_study_sessions)
 </script>
 
 <style scoped>

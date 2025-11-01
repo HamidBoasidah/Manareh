@@ -22,6 +22,7 @@ class StudentDTO extends BaseDTO
     public $guardian_name;
     public $guardian_phone;
     public $mosque_name;
+    public $user_attachment;
 
     public function __construct(
         $id,
@@ -39,7 +40,8 @@ class StudentDTO extends BaseDTO
         $user_email = null,
         $guardian_name = null,
         $guardian_phone = null,
-        $mosque_name = null
+        $mosque_name = null,
+        $user_attachment = null
     ) {
         $this->id = $id;
         $this->user_id = $user_id;
@@ -57,27 +59,33 @@ class StudentDTO extends BaseDTO
         $this->guardian_name = $guardian_name;
         $this->guardian_phone = $guardian_phone;
         $this->mosque_name = $mosque_name;
+        $this->user_attachment = $user_attachment;
     }
 
     public static function fromModel(Student $student): self
     {
+        $user = $student->user;
+        $guardian = $student->guardian;
+        $mosque = $student->mosque;
+
         return new self(
             $student->id,
             $student->user_id,
             $student->mosque_id,
             $student->guardian_id,
             $student->birth_date,
-            $student->address,
-            $student->phone_number,
-            $student->whatsapp_number,
+            $user?->address,
+            $user?->phone_number,
+            $user?->whatsapp_number,
             $student->nationality,
             $student->notes,
-            $student->is_active,
-            $student->user?->name,
-            $student->user?->email,
-            $student->guardian?->name,
-            $student->guardian?->phone_number,
-            $student->mosque?->name
+            $user?->is_active ?? false,
+            $user?->name,
+            $user?->email,
+            $guardian?->name,
+            $guardian?->phone_number,
+            $mosque?->name,
+            $user?->attachment
         );
     }
 
@@ -100,6 +108,7 @@ class StudentDTO extends BaseDTO
             'guardian_name' => $this->guardian_name,
             'guardian_phone' => $this->guardian_phone,
             'mosque_name' => $this->mosque_name,
+            'user_attachment' => $this->user_attachment,
         ];
     }
 
@@ -110,12 +119,7 @@ class StudentDTO extends BaseDTO
             'user_name' => $this->user_name,
             'email' => $this->user_email,
             'guardian_name' => $this->guardian_name,
-            'guardian_phone' => $this->guardian_phone,
-            'mosque_name' => $this->mosque_name,
             'phone_number' => $this->phone_number,
-            'whatsapp_number' => $this->whatsapp_number,
-            'address' => $this->address,
-            'nationality' => $this->nationality,
             'is_active' => $this->is_active,
         ];
     }

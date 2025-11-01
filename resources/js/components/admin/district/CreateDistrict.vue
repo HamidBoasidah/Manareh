@@ -45,7 +45,7 @@
           <!-- اختيار المحافظة -->
           <div class="md:col-span-2">
             <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ t('districts.governorate') }}
+              {{ t('governorates.selectGovernorate') }}
             </label>
             <div class="relative z-20 bg-transparent">
               <select
@@ -54,7 +54,7 @@
                 :class="{ 'text-gray-800 dark:text-white/90': form.governorate_id }"
               >
                 <option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
-                  {{ t('districts.selectGovernorate') }}
+                  {{ t('governorates.selectGovernorate') }}
                 </option>
                 <option
                   v-for="g in governorates"

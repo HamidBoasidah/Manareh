@@ -104,6 +104,23 @@
       </div>
     </div>
 
+    <!-- Student Image Section -->
+    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">{{ t('users.userImage') }}</h2>
+      </div>
+      <div class="p-4 sm:p-6">
+        <div v-if="student.user_attachment" class="relative flex justify-center p-4">
+          <img :src="`/storage/${student.user_attachment}`" alt="Student Image" class="max-h-64 rounded-lg border border-gray-200 object-contain dark:border-gray-800" />
+        </div>
+        <div v-else class="flex justify-center p-10">
+          <p class="text-center text-sm text-gray-500 dark:text-gray-400">
+            {{ t('users.noImage') }}
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
       <Link
         :href="route('admin.students.index')"

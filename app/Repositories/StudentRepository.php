@@ -8,7 +8,7 @@ use App\Repositories\Eloquent\BaseRepository;
 class StudentRepository extends BaseRepository
 {
     protected array $defaultWith = [
-        'user:id,name,email',
+        'user:id,name,email,is_active,phone_number,whatsapp_number,address',
         'guardian:id,name,phone_number',
         'mosque:id,name',
     ];

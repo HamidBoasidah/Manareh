@@ -220,6 +220,14 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('circles', CircleController::class)
         ->names('admin.circles');
 
+    Route::post('circles/{circle}/students', [CircleController::class, 'joinStudent'])
+        ->name('admin.circles.students.join')
+        ->middleware(RoutePermissions::can('circles.update'));
+
+    Route::delete('circles/{circle}/students/{student}', [CircleController::class, 'leaveStudent'])
+        ->name('admin.circles.students.leave')
+        ->middleware(RoutePermissions::can('circles.update'));
+
     Route::patch('circles/{id}/activate', [CircleController::class, 'activate'])
         ->name('admin.circles.activate')
         ->middleware(RoutePermissions::can('circles.update'));

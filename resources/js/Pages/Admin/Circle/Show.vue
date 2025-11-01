@@ -1,7 +1,12 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <ShowCircle :circle="circle" />
+    <ShowCircle
+      :circle="circle"
+      :joinedStudents="joinedStudents"
+      :freeStudents="freeStudents"
+      :can-manage-students="canManageStudents"
+    />
   </AdminLayout>
 </template>
 
@@ -17,6 +22,9 @@ const { t } = useI18n()
 const currentPageTitle = computed(() => t('circles.showCircle'))
 
 const circle = computed(() => usePage().props.circle)
+const joinedStudents = computed(() => usePage().props.joinedStudents)
+const freeStudents = computed(() => usePage().props.freeStudents)
+const canManageStudents = computed(() => usePage().props.canManageStudents ?? false)
 </script>
 
 <style scoped>

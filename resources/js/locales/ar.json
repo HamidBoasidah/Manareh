@@ -4,7 +4,7 @@
     "others": "أخرى",
     "dashboard": "لوحة التحكم",
     "dashboard_short": "لوحة التحكم",
-    "ecommerce": "التجارة الإلكترونية",
+    "ecommerce": "الإحصائيات",
     "calendar": "التقويم",
     "profile": "الملف الشخصي",
     "users": "المستخدمون",
@@ -133,12 +133,12 @@
     "userNamePlaceholder": "ادخل اسم المستخدم",
     "emailPlaceholder": "ادخل البريد الإلكتروني",
     "passwordPlaceholder": "ادخل كلمة المرور",
+  "passwordConfirmation": "تأكيد كلمة المرور",
+  "passwordConfirmationPlaceholder": "أعد إدخال كلمة المرور",
     "addressPlaceholder": "ادخل عنوان المستخدم",
     "phonePlaceholder": "777 777 777",
     "whatsappPlaceholder": "777 777 777",
     "password": "كلمة المرور",
-    "medicalFacility": "المرفق الطبي",
-    "selectMedicalFacility": "اختر المرفق الطبي",
     "selectUserType": "اختر نوع المستخدم",
     "addUser": "إضافة مستخدم",
     "editUser": "تعديل مستخدم",
@@ -150,7 +150,10 @@
     "userCreatedSuccessfully": "تم إنشاء المستخدم بنجاح",
     "userCreationFailed": "فشل إنشاء المستخدم",
     "userUpdatedSuccessfully": "تم تحديث المستخدم بنجاح",
-    "userUpdateFailed": "فشل تحديث المستخدم"
+    "userUpdateFailed": "فشل تحديث المستخدم",
+    "studentRoleNoticeTitle": "قم بإنشاء حسابات الطلاب من نموذج الطلاب",
+    "studentRoleNoticeBody": "تتطلب حسابات الطلاب معلومات إضافية عن ولي الأمر والجوانب الأكاديمية. استخدم صفحة إنشاء الطالب المخصصة بدلاً من نموذج المستخدم العام.",
+    "goToStudentCreation": "الانتقال إلى إنشاء الطالب"
   ,"noImage": "لا توجد صورة للمستخدم"
   },
   "activitylogs": {
@@ -306,7 +309,8 @@
     "update": "تحديث",
     "edit": "تعديل",
     "delete": "حذف",
-    "backToList": "العودة إلى القائمة"
+    "backToList": "العودة إلى القائمة",
+    "view": "عرض"
   },
   "adduser": {
     "productsDescription": "وصف المنتجات",
@@ -404,7 +408,8 @@
     "editMosque": "تعديل المسجد",
     "showMosque": "عرض المسجد",
     "noMosque": "لا يوجد مسجد",
-    "mosque": "المسجد"
+    "mosque": "المسجد",
+    "selectMosque": "اختر المسجد"
   },
 
   "programs": {
@@ -472,6 +477,7 @@
     "address": "العنوان",
     "nationality": "الجنسية",
     "notes": "الملاحظات",
+  "notesPlaceholder": "أضف أي ملاحظات ذات صلة",
     "selectUser": "اختر المستخدم",
     "selectUserPlaceholder": "اختر مستخدمًا",
     "selectGuardian": "اختر ولي الأمر",
@@ -534,7 +540,12 @@
     "currentStudents": "طلاب الحلقة الحاليون",
     "freeStudents": "طلاب غير مرتبطين بأي حلقة",
     "noCurrentStudents": "لا يوجد طلاب مرتبطون بهذه الحلقة حاليًا",
-    "noFreeStudents": "لا يوجد طلاب غير مرتبطين"
+    "noFreeStudents": "لا يوجد طلاب غير مرتبطين",
+  "studentAssignedSuccessfully": "تم ربط الطالب بالحلقة بنجاح",
+    "studentRemovedSuccessfully": "تم إخراج الطالب من الحلقة بنجاح",
+    "studentAlreadyAssigned": "الطالب مرتبط بالفعل بحلقة أخرى",
+    "studentNotEnrolled": "الطالب غير مرتبط بهذه الحلقة",
+    "circleCapacityReached": "تم الوصول إلى الطاقة الاستيعابية للحلقة"
   },
 
   "circle_classifications": {
@@ -562,14 +573,59 @@
     "addDailyStudySession": "إضافة جلسة دراسة يومية",
     "editDailyStudySession": "تعديل جلسة الدراسة",
     "showDailyStudySession": "عرض جلسة الدراسة",
-    "noDailyStudySession": "لا توجد جلسات"
+    "noDailyStudySession": "لا توجد جلسات",
+    "sessionInformation": "معلومات جلسة الدراسة",
+    "circle": "الحلقة",
+    "selectCircle": "اختر الحلقة",
+    "sessionDateG": "تاريخ الجلسة (ميلادي)",
+    "sessionDateH": "تاريخ الجلسة (هجري)",
+    "sessionDateHPlaceholder": "مثال: 15/02/1446",
+    "dailyStudySessionCreatedSuccessfully": "تم إنشاء جلسة الدراسة بنجاح",
+    "dailyStudySessionCreationFailed": "فشل إنشاء جلسة الدراسة",
+    "dailyStudySessionUpdatedSuccessfully": "تم تحديث جلسة الدراسة بنجاح",
+    "dailyStudySessionUpdateFailed": "فشل تحديث جلسة الدراسة",
+    "dailyStudySessionDeletedSuccessfully": "تم حذف جلسة الدراسة بنجاح",
+    "dailyStudySessionDeletionFailed": "فشل حذف جلسة الدراسة",
+    "deleteDailyStudySessionConfirmation": "هل أنت متأكد أنك تريد حذف هذه الجلسة؟"
   },
 
   "daily_studies": {
     "addDailyStudy": "إضافة مذاكرة",
     "editDailyStudy": "تعديل المذاكرة",
     "showDailyStudy": "عرض المذاكرة",
-    "noDailyStudy": "لا توجد مذاكرات"
+    "noDailyStudy": "لا توجد مذاكرات",
+    "dailyStudyRecords": "سجلات المذاكرة اليومية",
+    "dailyStudyInformation": "معلومات المذاكرة اليومية",
+    "student": "الطالب",
+    "studentId": "معرف الطالب",
+    "attendanceStatus": "حالة الحضور",
+    "notes": "الملاحظات",
+    "session": "الجلسة",
+    "deleteDailyStudyConfirmation": "هل أنت متأكد أنك تريد حذف هذه المذاكرة؟",
+    "dailyStudyUpdatedSuccessfully": "تم تحديث المذاكرة بنجاح",
+    "dailyStudyUpdateFailed": "فشل تحديث المذاكرة",
+    "points": "النقاط",
+    "hifzSection": "تفاصيل الحفظ",
+    "hifzFromSura": "الحفظ من السورة",
+    "hifzFromAyah": "الحفظ من الآية",
+    "hifzToSura": "الحفظ إلى السورة",
+    "hifzToAyah": "الحفظ إلى الآية",
+    "hifzPages": "عدد صفحات الحفظ",
+    "murajaahSection": "تفاصيل المراجعة",
+    "murajaahFromSura": "المراجعة من السورة",
+    "murajaahFromAyah": "المراجعة من الآية",
+    "murajaahToSura": "المراجعة إلى السورة",
+    "murajaahToAyah": "المراجعة إلى الآية",
+  "murajaahPages": "عدد صفحات المراجعة",
+  "selectSura": "اختر السورة",
+    "attendance": {
+      "present": "حاضر",
+      "absent": "غائب",
+      "late": "متأخر",
+      "excused": "معذور",
+      "late_in": "تأخر في الحضور",
+      "early_out": "انصراف مبكر"
+    }
   },
 
   "quran_suras": {
@@ -623,6 +679,15 @@
     "addExamType": "إضافة نوع اختبار",
     "editExamType": "تعديل نوع الاختبار",
     "showExamType": "عرض نوع الاختبار",
+    "examTypeInformation": "معلومات نوع الاختبار",
+    "name": "اسم نوع الاختبار",
+    "examTypeCreatedSuccessfully": "تم إنشاء نوع الاختبار بنجاح",
+    "examTypeCreationFailed": "فشل إنشاء نوع الاختبار",
+    "examTypeUpdatedSuccessfully": "تم تحديث نوع الاختبار بنجاح",
+    "examTypeUpdateFailed": "فشل تحديث نوع الاختبار",
+    "examTypeDeletedSuccessfully": "تم حذف نوع الاختبار بنجاح",
+    "examTypeDeletionFailed": "فشل حذف نوع الاختبار",
+    "deleteExamTypeConfirmation": "هل أنت متأكد أنك تريد حذف هذا النوع من الاختبارات؟",
     "noExamType": "لا يوجد أنواع"
   },
 
@@ -702,6 +767,7 @@
     "updatedAt": "تاريخ التحديث",
     "showing": "عرض {start} إلى {end} من {total} مدخلات",
     "previous": "السابق",
-    "next": "التالي"
+    "next": "التالي",
+    "action": "الإجراء"
   }
 }
