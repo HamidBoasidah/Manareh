@@ -50,7 +50,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none">
               <path d="M5 10.0002H15.0006M10.0002 5V15.0006" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
-            {{ t('districts.addDistrict') }}
+            {{ t('staff_assignments.addAssignment') }}
           </button>
         </Tooltip>
       </div>
@@ -78,10 +78,10 @@
               </label>
             </th>
 
-            <!-- name_ar -->
+            <!-- user_name -->
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('name_ar')">
-                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('districts.nameAr') }}</p>
+              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('user_name')">
+                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('staff_assignments.userName') }}</p>
                 <span class="flex flex-col gap-0.5">
                   <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"/></svg>
                   <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"/></svg>
@@ -89,10 +89,10 @@
               </div>
             </th>
 
-            <!-- name_en -->
+            <!-- circle_name -->
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('name_en')">
-                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('districts.nameEn') }}</p>
+              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('circle_name')">
+                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('staff_assignments.circleName') }}</p>
                 <span class="flex flex-col gap-0.5">
                   <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"/></svg>
                   <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"/></svg>
@@ -100,10 +100,14 @@
               </div>
             </th>
 
-            <!-- governorate name -->
+            <!-- role_in_circle -->
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-              <div class="flex items-center justify-between w-full">
-                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('governorates.governorate') }}</p>
+              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('role_in_circle')">
+                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('staff_assignments.roleInCircle') }}</p>
+                <span class="flex flex-col gap-0.5">
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 0.585167C4.21057 0.300808 3.78943 0.300807 3.59038 0.585166L1.05071 4.21327C0.81874 4.54466 1.05582 5 1.46033 5H6.53967C6.94418 5 7.18126 4.54466 6.94929 4.21327L4.40962 0.585167Z"/></svg>
+                  <svg class="fill-gray-300 dark:fill-gray-700" width="8" height="5" viewBox="0 0 8 5" fill="none"><path d="M4.40962 4.41483C4.21057 4.69919 3.78943 4.69919 3.59038 4.41483L1.05071 0.786732C0.81874 0.455343 1.05582 0 1.46033 0H6.53967C6.94418 0 7.18126 0.455342 6.94929 0.786731L4.40962 4.41483Z"/></svg>
+                </span>
               </div>
             </th>
 
@@ -129,19 +133,19 @@
 
         <tbody>
           <tr
-            v-for="district in paginatedData"
-            :key="district.id"
-            :class="{ 'bg-gray-50 dark:bg-gray-900': district.selected }"
+            v-for="assignment in paginatedData"
+            :key="assignment.id"
+            :class="{ 'bg-gray-50 dark:bg-gray-900': assignment.selected }"
           >
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
               <label class="flex items-center text-sm font-medium text-gray-700 cursor-pointer select-none dark:text-gray-400">
                 <span class="relative">
-                  <input type="checkbox" class="sr-only" v-model="district.selected" @change="updateSelectAll" />
+                  <input type="checkbox" class="sr-only" v-model="assignment.selected" @change="updateSelectAll" />
                   <span
-                    :class="district.selected ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
+                    :class="assignment.selected ? 'border-brand-500 bg-brand-500' : 'bg-transparent border-gray-300 dark:border-gray-700'"
                     class="flex h-4 w-4 items-center justify-center rounded-sm border-[1.25px]"
                   >
-                    <span :class="district.selected ? '' : 'opacity-0'">
+                    <span :class="assignment.selected ? '' : 'opacity-0'">
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                         <path d="M10 3L4.5 8.5L2 6" stroke="white" stroke-width="1.6666" stroke-linecap="round" stroke-linejoin="round"/>
                       </svg>
@@ -152,47 +156,41 @@
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ district.name_ar }}</p>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ assignment.user_name }}</p>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ district.name_en }}</p>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ assignment.circle_name }}</p>
             </td>
 
-            <!-- governorate name from relation or DTO fields -->
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <p class="text-gray-700 text-theme-sm dark:text-gray-400">
-                {{ locale === 'ar'
-                  ? (district.governorate?.name_ar ?? district.governorate_name_ar ?? '—')
-                  : (district.governorate?.name_en ?? district.governorate_name_en ?? '—')
-                }}
-              </p>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ assignment.role_in_circle }}</p>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
               <span
                 class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium"
                 :class="{
-                  'bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500': district.is_active,
-                  'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500': !district.is_active,
+                  'bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500': assignment.is_active,
+                  'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500': !assignment.is_active,
                 }"
               >
-                {{ district.is_active ? t('common.active') : t('common.inactive') }}
+                {{ assignment.is_active ? t('common.active') : t('common.inactive') }}
               </span>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <label :for="'toggle-' + district.id" class="cursor-pointer">
+              <label :for="'toggle-' + assignment.id" class="cursor-pointer">
                 <div class="relative">
                   <input
                     type="checkbox"
-                    :id="'toggle-' + district.id"
+                    :id="'toggle-' + assignment.id"
                     class="sr-only"
-                    :checked="district.is_active"
-                    @change="toggleDistrictStatus(district)"
+                    :checked="assignment.is_active"
+                    @change="toggleAssignmentStatus(assignment)"
                   />
-                  <div class="block h-5 w-9 rounded-full" :class="district.is_active ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"></div>
-                  <div :class="[district.is_active ? 'rtl:translate-x-[-100%] ltr:translate-x-full' : 'translate-x-0']" class="shadow-theme-sm absolute top-0.5 h-4 w-4 rounded-full bg-white duration-200 ease-linear rtl:right-0.5 ltr:left-0.5"></div>
+                  <div class="block h-5 w-9 rounded-full" :class="assignment.is_active ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"></div>
+                  <div :class="[assignment.is_active ? 'rtl:translate-x-[-100%] ltr:translate-x-full' : 'translate-x-0']" class="shadow-theme-sm absolute top-0.5 h-4 w-4 rounded-full bg-white duration-200 ease-linear rtl:right-0.5 ltr:left-0.5"></div>
                 </div>
               </label>
             </td>
@@ -202,7 +200,7 @@
                 <Tooltip :text="t('messages.notAuthorized')" :show="!canView">
                   <button
                     :disabled="!canView"
-                    @click="handleViewClick(district.id)"
+                    @click="handleViewClick(assignment.id)"
                     class="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white/90 disabled:text-gray-400 disabled:dark:text-gray-500"
                   >
                     <svg class="fill-current" width="21" height="20" viewBox="0 0 21 20" fill="none">
@@ -214,7 +212,7 @@
                 <Tooltip :text="t('messages.notAuthorized')" :show="!canEdit">
                   <button
                     :disabled="!canEdit"
-                    @click="handleEditClick(district.id)"
+                    @click="handleEditClick(assignment.id)"
                     class="text-gray-500 hover:text-blue-500 dark:text-gray-400 dark:hover:text-blue-300 disabled:text-gray-400 disabled:dark:text-gray-500"
                   >
                     <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none">
@@ -226,11 +224,11 @@
                 <Tooltip :text="t('messages.notAuthorized')" :show="!canDelete">
                   <button
                     :disabled="!canDelete"
-                    @click="handleDeleteClick(district.id)"
+                    @click="handleDeleteClick(assignment.id)"
                     class="text-gray-500 hover:text-error-500 dark:text-gray-400 dark:hover:text-error-500 disabled:text-gray-400 disabled:dark:text-gray-500"
                   >
                     <svg class="fill-current" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.8335 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503V9.25033Z" />
+                      <path fill-rule="evenodd" clip-rule="evenodd" d="M7.04142 4.29199C7.04142 3.04935 8.04878 2.04199 9.29142 2.04199H11.7081C12.9507 2.04199 13.9581 3.04935 13.9581 4.29199V4.54199H16.1252H17.166C17.5802 4.54199 17.916 4.87778 17.916 5.29199C17.916 5.70621 17.5802 6.04199 17.166 6.04199H16.8752V8.74687V13.7469V16.7087C16.8752 17.9513 15.8678 18.9587 14.6252 18.9587H6.37516C5.13252 18.9587 4.12516 17.9513 4.12516 16.7087V13.7469V8.74687V6.04199H3.8335C3.41928 6.04199 3.0835 5.70621 3.0835 5.29199C3.0835 4.87778 3.41928 4.54199 3.8335 4.54199H4.87516H7.04142V4.29199ZM15.3752 13.7469V8.74687V6.04199H13.9581H13.2081H7.79142H7.04142H5.62516V8.74687V13.7469V16.7087C5.62516 17.1229 5.96095 17.4587 6.37516 17.4587H14.6252C15.0394 17.4587 15.3752 17.1229 15.3752 16.7087V13.7469ZM8.8335 4.54199H12.4581V4.29199C12.4581 3.87778 12.1223 3.54199 11.7081 3.54199H9.29142C8.87721 3.54199 8.54142 3.87778 8.54142 4.29199V4.54199ZM8.8335 8.50033C9.24771 8.50033 9.5835 8.83611 9.5835 9.25033V14.2503C9.5835 14.6645 9.24771 15.0003 8.8335 15.0003C8.41928 15.0003 8.0835 14.6645 8.0835 14.2503V9.25033C8.0835 8.83611 8.41928 8.50033 8.8335 8.50033ZM12.9168 9.25033C12.9168 8.83611 12.581 8.50033 12.1668 8.50033C11.7526 8.50033 11.4168 8.83611 11.4168 9.25033V14.2503C11.4168 14.6645 11.7526 15.0003 12.1668 15.0003C12.581 15.0003 12.9168 14.6645 12.9168 14.2503Z" />
                     </svg>
                   </button>
                 </Tooltip>
@@ -240,7 +238,7 @@
 
           <tr v-if="paginatedData.length === 0">
             <td colspan="7" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
-              {{ t('districts.noDistrict') }}
+              {{ t('staff_assignments.noAssignment') }}
             </td>
           </tr>
         </tbody>
@@ -276,7 +274,7 @@
   <DangerAlert
     :isOpen="isDeleteModalOpen"
     :title="t('messages.areYouSure')"
-    :message="t('messages.deleteDistrictConfirmation')"
+    :message="t('messages.deleteAssignmentConfirmation')"
     @close="closeDeleteModal"
     @confirm="confirmDelete"
   />
@@ -294,73 +292,72 @@ import { useNotifications } from '@/composables/useNotifications'
 
 const { hasAnyPermission } = usePermissions()
 
-// تحديث مفاتيح الأذونات إلى districts.*
-const canCreate = computed(() => hasAnyPermission(['districts.create', 'districts.store', 'districts.add']))
-const canView   = computed(() => hasAnyPermission(['districts.view', 'districts.show', 'districts.read']))
-const canEdit   = computed(() => hasAnyPermission(['districts.update', 'districts.edit']))
-const canDelete = computed(() => hasAnyPermission(['districts.delete', 'districts.destroy']))
+// أذونات التعيينات: staff_assignments.*
+const canCreate = computed(() => hasAnyPermission(['staff_assignments.create', 'staff_assignments.store', 'staff_assignments.add']))
+const canView   = computed(() => hasAnyPermission(['staff_assignments.view', 'staff_assignments.show', 'staff_assignments.read']))
+const canEdit   = computed(() => hasAnyPermission(['staff_assignments.update', 'staff_assignments.edit']))
+const canDelete = computed(() => hasAnyPermission(['staff_assignments.delete', 'staff_assignments.destroy']))
 
-const { t, locale } = useI18n()
+const { t } = useI18n()
 const { success, error } = useNotifications()
 
-// استقبل districts بدل governorates
-const props = defineProps({ districts: Object })
+// نستقبل assignments من السيرفر
+const props = defineProps({ assignments: Object })
 
 const search         = ref('')
-const sortColumn     = ref('name_ar')
+const sortColumn     = ref('user_name')
 const sortDirection  = ref('asc')
-const currentPage    = ref(props.districts?.current_page ?? 1)
-const perPage        = ref(props.districts?.per_page ?? 10)
+const currentPage    = ref(props.assignments?.current_page ?? 1)
+const perPage        = ref(props.assignments?.per_page ?? 10)
 const selectAll      = ref(false)
 
-// راوتات districts
-function goToCreate()      { router.visit(route('admin.districts.create')) }
-function goToView(id)      { router.visit(route('admin.districts.show', id)) }
-function goToEdit(id)      { router.visit(route('admin.districts.edit', id)) }
+// Routes لتعيينات المشرفين/المعلمين
+function goToCreate()      { router.visit(route('admin.staff_assignments.create')) }
+function goToView(id)      { router.visit(route('admin.staff_assignments.show', id)) }
+function goToEdit(id)      { router.visit(route('admin.staff_assignments.edit', id)) }
 
 function handleCreateClick(){ if (!canCreate.value) return; goToCreate() }
 function handleViewClick(id){ if (!canView.value)   return; goToView(id) }
 function handleEditClick(id){ if (!canEdit.value)   return; goToEdit(id) }
 
 const isDeleteModalOpen  = ref(false)
-const districtToDeleteId = ref(null)
+const assignmentToDeleteId = ref(null)
 
-function openDeleteModal(id)  { districtToDeleteId.value = id; isDeleteModalOpen.value = true }
+function openDeleteModal(id)  { assignmentToDeleteId.value = id; isDeleteModalOpen.value = true }
 function handleDeleteClick(id){ if (!canDelete.value) return; openDeleteModal(id) }
-function closeDeleteModal()   { isDeleteModalOpen.value = false; districtToDeleteId.value = null }
+function closeDeleteModal()   { isDeleteModalOpen.value = false; assignmentToDeleteId.value = null }
 
 function confirmDelete() {
-  if (districtToDeleteId.value) {
-    router.delete(route('admin.districts.destroy', districtToDeleteId.value), {
-      onSuccess: () => { success(t('districts.districtDeletedSuccessfully')); closeDeleteModal() },
-      onError:   () => { error(t('districts.districtDeletionFailed'));       closeDeleteModal() },
+  if (assignmentToDeleteId.value) {
+    router.delete(route('admin.staff_assignments.destroy', assignmentToDeleteId.value), {
+      onSuccess: () => { success(t('staff_assignments.assignmentDeletedSuccessfully')); closeDeleteModal() },
+      onError:   () => { error(t('staff_assignments.assignmentDeletionFailed'));       closeDeleteModal() },
       preserveScroll: true,
     })
   }
 }
 
-function toggleDistrictStatus(district) {
-  const wasActive = district.is_active
-  district.is_active = !wasActive
+function toggleAssignmentStatus(assignment) {
+  const wasActive = assignment.is_active
+  assignment.is_active = !wasActive
   const url = wasActive
-    ? route('admin.districts.deactivate', { id: district.id })
-    : route('admin.districts.activate',   { id: district.id })
+    ? route('admin.staff_assignments.deactivate', { id: assignment.id })
+    : route('admin.staff_assignments.activate',   { id: assignment.id })
   router.patch(url, {}, {
     preserveState: true,
     preserveScroll: true,
-    onError: () => { district.is_active = wasActive },
+    onError: () => { assignment.is_active = wasActive },
   })
 }
 
 const filteredData = computed(() => {
-  const searchLower = (search.value || '').toLowerCase()
-  return (props.districts?.data || [])
-    .filter((d) => {
-      const nameAr = d.name_ar?.toLowerCase() || ''
-      const nameEn = d.name_en?.toLowerCase() || ''
-      const govAr  = (d.governorate?.name_ar || d.governorate_name_ar || '').toLowerCase()
-      const govEn  = (d.governorate?.name_en || d.governorate_name_en || '').toLowerCase()
-      return nameAr.includes(searchLower) || nameEn.includes(searchLower) || govAr.includes(searchLower) || govEn.includes(searchLower)
+  const q = (search.value || '').toLowerCase()
+  return (props.assignments?.data || [])
+    .filter((a) => {
+      const user   = (a.user_name || '').toLowerCase()
+      const circle = (a.circle_name || '').toLowerCase()
+      const role   = (a.role_in_circle || '').toLowerCase()
+      return user.includes(q) || circle.includes(q) || role.includes(q)
     })
     .sort((a, b) => {
       const modifier = sortDirection.value === 'asc' ? 1 : -1
@@ -374,10 +371,10 @@ const filteredData = computed(() => {
 
 const paginatedData = computed(() => filteredData.value)
 
-const totalEntries = computed(() => props.districts?.total || filteredData.value.length)
-const startEntry   = computed(() => props.districts?.from  || 1)
-const endEntry     = computed(() => props.districts?.to    || filteredData.value.length)
-const totalPages   = computed(() => props.districts?.last_page || 1)
+const totalEntries = computed(() => props.assignments?.total || filteredData.value.length)
+const startEntry   = computed(() => props.assignments?.from  || 1)
+const endEntry     = computed(() => props.assignments?.to    || filteredData.value.length)
+const totalPages   = computed(() => props.assignments?.last_page || 1)
 
 const pagesAroundCurrent = computed(() => {
   const pages = []
@@ -387,10 +384,10 @@ const pagesAroundCurrent = computed(() => {
   return pages
 })
 
-watch(() => props.districts?.current_page, (val) => {
+watch(() => props.assignments?.current_page, (val) => {
   currentPage.value = typeof val === 'number' ? val : 1
 })
-watch(() => props.districts?.per_page, (val) => {
+watch(() => props.assignments?.per_page, (val) => {
   if (typeof val === 'number') perPage.value = val
 })
 
@@ -418,10 +415,10 @@ const sortBy = (column) => {
   else { sortDirection.value = 'asc'; sortColumn.value = column }
 }
 
-const toggleSelectAll = () => { filteredData.value.forEach((d) => { d.selected = selectAll.value }) }
+const toggleSelectAll = () => { filteredData.value.forEach((a) => { a.selected = selectAll.value }) }
 const updateSelectAll = () => {
   const items = filteredData.value
-  selectAll.value = items.length > 0 && items.every((d) => d.selected)
+  selectAll.value = items.length > 0 && items.every((a) => a.selected)
 }
 
 watch(perPage, (val, oldVal) => { if (val !== oldVal) fetchPage(1) })
