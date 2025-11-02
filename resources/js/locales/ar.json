@@ -81,7 +81,8 @@
     "deleteRoleConfirmation": "هل أنت متأكد أنك تريد حذف هذا الدور؟",
     "deleteMosqueConfirmation": "هل أنت متأكد أنك تريد حذف هذا المسجد؟",
     "deleteGuardianConfirmation": "هل أنت متأكد أنك تريد حذف ولي الامر هذا؟",
-    "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟"
+    "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟",
+    "deleteAssignmentConfirmation": "هل أنت متأكد أنك تريد حذف هذا التعيين؟"
   },
   "charts": {
     "lineChart": "مخطط خطي",
@@ -566,7 +567,14 @@
     "addStaffAssignment": "إضافة تعيين موظف",
     "editStaffAssignment": "تعديل تعيين الموظف",
     "showStaffAssignment": "عرض تعيين الموظف",
-    "noStaffAssignment": "لا يوجد تعيين"
+    "noStaffAssignment": "لا يوجد تعيين",
+    "addAssignment": "إضافة تعيين",
+    "userName": "اسم المعلم / المشرف",
+    "circleName": "اسم الحلقة",
+    "roleInCircle": "الدور في الحلقة",
+    "noAssignment": "لا توجد تعيينات",
+    "assignmentDeletedSuccessfully": "تم حذف التعيين بنجاح",
+    "assignmentDeletionFailed": "فشل حذف التعيين"
   },
 
   "daily_study_sessions": {

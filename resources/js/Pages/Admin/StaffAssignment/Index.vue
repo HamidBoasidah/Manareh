@@ -3,7 +3,7 @@
     <PageBreadcrumb :pageTitle="currentPageTitle" />
     <div class="space-y-5 sm:space-y-6">
       <ComponentCard :title="currentPageTitle">
-        <ShowStaffAssignments :staffAssignments="staffAssignments" />
+        <ShowStaffAssignments :assignments="assignments" />
       </ComponentCard>
     </div>
   </AdminLayout>
@@ -21,7 +21,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const currentPageTitle = computed(() => t('menu.staff_assignments'))
 
-const staffAssignments = computed(() => usePage().props.staff_assignments)
+const assignments = computed(() => usePage().props.assignments)
 </script>
 
 <style scoped>
