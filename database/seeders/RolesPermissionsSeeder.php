@@ -100,7 +100,8 @@ class RolesPermissionsSeeder extends Seeder
             // (ج) Manager: (view+create+update) للموارد الجغرافية، و(users/roles/permissions) مشاهدة فقط
             $manager = Role::updateOrCreate(
                 ['name' => 'manager', 'guard_name' => $guard],
-                ['display_name' => ['en' => 'Manager', 'ar' => 'مدير']]
+                // عرض الدور: المشرف التعليمي
+                ['display_name' => ['en' => 'Educational Supervisor', 'ar' => 'مشرف تعليمي']]
             );
             $managerPerms = collect()
                 ->merge($permNames($geoResources, ['view', 'create', 'update']))
@@ -112,7 +113,8 @@ class RolesPermissionsSeeder extends Seeder
             // (د) Editor: (view+update) للموارد الجغرافية
             $editor = Role::updateOrCreate(
                 ['name' => 'editor', 'guard_name' => $guard],
-                ['display_name' => ['en' => 'Editor', 'ar' => 'محرر']]
+                // عرض الدور: معلم
+                ['display_name' => ['en' => 'Teacher', 'ar' => 'معلم']]
             );
             $editorPerms = $permNames($geoResources, ['view', 'update']);
             $editor->syncPermissions($editorPerms->all());
@@ -128,7 +130,8 @@ class RolesPermissionsSeeder extends Seeder
             // (و) Viewer: مشاهدة فقط لكل الموارد التي تدعم "view"
             $viewer = Role::updateOrCreate(
                 ['name' => 'viewer', 'guard_name' => $guard],
-                ['display_name' => ['en' => 'Viewer', 'ar' => 'مشاهد']]
+                // عرض الدور: مشرف تربوي
+                ['display_name' => ['en' => 'Tarbawi Supervisor', 'ar' => 'مشرف تربوي']]
             );
             $viewer->syncPermissions($allViewPerms->all());
         });

@@ -41,7 +41,9 @@
             <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
               {{ t('staff_assignments.endAt') }}
             </label>
-            <p class="text-base text-gray-800 dark:text-white/90">{{ assignment.end_at }}</p>
+            <p class="text-base text-gray-800 dark:text-white/90">
+              {{ assignment.end_at ? assignment.end_at : t('staff_assignments.ongoing') }}
+            </p>
           </div>
 
           <div>
@@ -61,7 +63,7 @@
 
           <div class="md:col-span-2">
             <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
-              {{ t('staff_assignments.notes') }}
+              {{ t('common.notes') }}
             </label>
             <p class="text-base text-gray-800 dark:text-white/90">{{ assignment.notes }}</p>
           </div>
@@ -83,17 +85,71 @@
       >
         {{ t('buttons.edit') }}
       </Link>
+
+      <button
+        type="button"
+        @click="openDeleteModal"
+        :disabled="form.processing"
+        class="bg-error-500 shadow-theme-xs hover:bg-error-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
+      >
+        {{ form.processing ? t('common.loading') : t('staff_assignments.removeAssignment') }}
+      </button>
     </div>
   </div>
+
+  <DangerAlert
+    :isOpen="isDeleteModalOpen"
+    :title="t('messages.areYouSure')"
+    :message="t('messages.deleteAssignmentConfirmation')"
+    @close="closeDeleteModal"
+    @confirm="confirmUnassign"
+  />
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, useForm } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
+import { useNotifications } from '@/composables/useNotifications'
+import { ref } from 'vue'
+import DangerAlert from '@/components/modals/DangerAlert.vue'
 
 const { t } = useI18n()
+const { success, error } = useNotifications()
 
 defineProps({
   assignment: { type: Object, required: true },
 })
+
+// form for unassign action
+const form = useForm({
+  circle_id: null,
+  role: null,
+})
+
+const isDeleteModalOpen = ref(false)
+
+function openDeleteModal() {
+  isDeleteModalOpen.value = true
+}
+
+function closeDeleteModal() {
+  isDeleteModalOpen.value = false
+}
+
+function confirmUnassign() {
+  // set payload
+  form.circle_id = assignment.circle_id
+  form.role = assignment.role_in_circle
+
+  form.post(route('admin.staff_assignments.unassign'), {
+    onSuccess: () => {
+      success(t('staff_assignments.assignmentDeletedSuccessfully'))
+      closeDeleteModal()
+    },
+    onError: () => {
+      error(t('staff_assignments.assignmentDeletionFailed'))
+      closeDeleteModal()
+    }
+  })
+}
 </script>

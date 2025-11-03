@@ -12,7 +12,7 @@ class StaffAssignment extends BaseModel
     protected $fillable = [
         'user_id',
         'circle_id',
-        'role_in_circle',
+        'role_id',
         'start_at',
         'end_at',
         'notes',
@@ -27,5 +27,19 @@ class StaffAssignment extends BaseModel
     public function circle()
     {
         return $this->belongsTo(Circle::class);
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    /**
+     * Backwards-compatible accessor: keep `role_in_circle` attribute available
+     * as the role's name so existing code that expects `role_in_circle` works.
+     */
+    public function getRoleInCircleAttribute()
+    {
+        return $this->role?->name;
     }
 }

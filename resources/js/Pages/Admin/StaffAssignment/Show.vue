@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <PageBreadcrumb :pageTitle="currentPageTitle" />
-    <ShowStaffAssignment :staffAssignment="staffAssignment" />
+    <ShowStaffAssignment :assignment="assignment" />
   </AdminLayout>
 </template>
 
@@ -16,7 +16,7 @@ import { usePage } from '@inertiajs/vue3'
 const { t } = useI18n()
 const currentPageTitle = computed(() => t('staff_assignments.showStaffAssignment'))
 
-const staffAssignment = computed(() => usePage().props.staff_assignment)
+const assignment = computed(() => usePage().props.assignment)
 </script>
 
 <style scoped>

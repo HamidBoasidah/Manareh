@@ -564,17 +564,33 @@
   },
 
   "staff_assignments": {
+    "assignmentInformation": "معلومات التعيين",
     "addStaffAssignment": "إضافة تعيين موظف",
     "editStaffAssignment": "تعديل تعيين الموظف",
     "showStaffAssignment": "عرض تعيين الموظف",
     "noStaffAssignment": "لا يوجد تعيين",
     "addAssignment": "إضافة تعيين",
     "userName": "اسم المعلم / المشرف",
+    "ongoing": "مازال",
     "circleName": "اسم الحلقة",
     "roleInCircle": "الدور في الحلقة",
+    "startAt": "تاريخ البدء",
+    "endAt": "تاريخ الانتهاء",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
     "noAssignment": "لا توجد تعيينات",
     "assignmentDeletedSuccessfully": "تم حذف التعيين بنجاح",
-    "assignmentDeletionFailed": "فشل حذف التعيين"
+    "assignmentDeletionFailed": "فشل حذف التعيين",
+  "removeAssignment": "إزالة التعيين",
+    "selectCircle": "اختر الحلقة",
+    "selectUser": "اختر المستخدم",
+    "selectRole": "اختر الدور",
+    "notes": "ملاحظات التعيين",
+    "currentCircleStatus": "حالة الحلقة الحالية",
+    "currentAssignee": "المعيّن الحالي",
+    "notAssignedYet": "لم يُعيّن بعد",
+    "assignmentCreatedSuccessfully": "تم إنشاء التعيين بنجاح",
+    "assignmentCreationFailed": "فشل إنشاء التعيين"
   },
 
   "daily_study_sessions": {

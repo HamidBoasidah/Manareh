@@ -16,13 +16,9 @@ class RoleRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function paginate(int $perPage = 10, array $with = [])
+    public function paginate($perPage = 10, $with = [])
     {
-        return $this->query()
-            ->with($this->applyDefaultWith($with))
-            ->withCount('permissions')
-            ->latest()
-            ->paginate($perPage);
+        return $this->model->with($with)->withCount('permissions')->paginate($perPage);
     }
 
     public function create(array $attributes)

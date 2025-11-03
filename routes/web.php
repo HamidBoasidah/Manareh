@@ -260,6 +260,11 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.staff_assignments.deactivate')
         ->middleware(RoutePermissions::can('staff_assignments.update'));
 
+    // Unassign staff (end active assignment for a circle+role)
+    Route::post('staff_assignments/unassign', [StaffAssignmentController::class, 'unassign'])
+        ->name('admin.staff_assignments.unassign')
+        ->middleware(RoutePermissions::can('staff_assignments.update'));
+
     // Daily Study Sessions
     Route::resource('daily_study_sessions', DailyStudySessionController::class)
         ->names('admin.daily_study_sessions');

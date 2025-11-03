@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             MosqueSeeder::class,
             CircleClassificationSeeder::class,
             CircleSeeder::class,
+            StaffRolesSeeder::class,
             ProgramSeeder::class,
             PlanSeeder::class,
             AcademicYearSeeder::class,

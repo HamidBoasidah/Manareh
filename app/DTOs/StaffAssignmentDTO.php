@@ -43,11 +43,25 @@ class StaffAssignmentDTO extends BaseDTO
 
     public static function fromModel(StaffAssignment $assignment): self
     {
-        // ensure related user and circle are loaded minimally
+        // ensure related user, circle and role are loaded minimally
         $assignment->loadMissing([
             'user:id,name',
             'circle:id,name',
+            'role:id,name',
         ]);
+
+        // normalize date/time values safely: if model provides a DateTime instance, format it;
+        // otherwise, pass through string/null values as-is to avoid calling methods on scalars.
+        $formatDate = function ($val) {
+            if ($val instanceof \DateTimeInterface) {
+                return $val->format('Y-m-d H:i:s');
+            }
+            if ($val === null) {
+                return null;
+            }
+            // already a string (e.g. 'YYYY-MM-DD') — return as-is
+            return (string) $val;
+        };
 
         return new self(
             $assignment->id,
@@ -55,9 +69,10 @@ class StaffAssignmentDTO extends BaseDTO
             $assignment->user?->name ?? null,
             $assignment->circle_id,
             $assignment->circle?->name ?? null,
-            $assignment->role_in_circle,
-            optional($assignment->start_at)->toDateTimeString(),
-            optional($assignment->end_at)->toDateTimeString(),
+            // expose role_in_circle for backward-compatibility (role name)
+            $assignment->role?->name ?? $assignment->role_in_circle ?? null,
+            $formatDate($assignment->start_at),
+            $formatDate($assignment->end_at),
             $assignment->notes,
             $assignment->is_active,
         );

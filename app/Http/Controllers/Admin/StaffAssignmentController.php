@@ -9,6 +9,9 @@ use App\Http\Requests\UpdateStaffAssignmentRequest;
 use App\Services\StaffAssignmentService;
 use App\DTOs\StaffAssignmentDTO;
 use App\Models\StaffAssignment;
+use App\Models\Circle;
+use App\Models\User;
+use App\Models\Role;
 use Inertia\Inertia;
 
 class StaffAssignmentController extends Controller
@@ -31,9 +34,10 @@ class StaffAssignmentController extends Controller
         return Inertia::render('Admin/StaffAssignment/Index', ['assignments' => $items]);
     }
 
-    public function create()
+    public function create(StaffAssignmentService $service)
     {
-        return Inertia::render('Admin/StaffAssignment/Create');
+        $data = $service->prepareCreateData();
+        return Inertia::render('Admin/StaffAssignment/Create', $data);
     }
 
     public function store(StoreStaffAssignmentRequest $request, StaffAssignmentService $service)
@@ -76,5 +80,25 @@ class StaffAssignmentController extends Controller
     {
         $service->deactivate($id);
         return back()->with('success', 'Assignment deactivated successfully');
+    }
+
+    /**
+     * Unassign the active assignment for a given circle and role (teacher or supervisor).
+     * Expects request input: circle_id, role (role slug)
+     */
+    public function unassign(Request $request, StaffAssignmentService $service)
+    {
+        $data = $request->validate([
+            'circle_id' => 'required|integer|exists:circles,id',
+            'role' => 'required|string',
+        ]);
+
+        $assignment = $service->unassignByCircleAndRole($data['circle_id'], $data['role']);
+
+        if (! $assignment) {
+            return back()->with('error', trans('staff_assignments.noStaffAssignment'));
+        }
+
+        return back()->with('success', trans('staff_assignments.assignmentDeletedSuccessfully'));
     }
 }

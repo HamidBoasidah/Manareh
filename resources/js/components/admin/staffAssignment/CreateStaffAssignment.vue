@@ -105,7 +105,7 @@
             </label>
             <input
               v-model="form.start_at"
-              type="datetime-local"
+              type="date"
               id="start-at"
               autocomplete="off"
               class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -120,7 +120,7 @@
             </label>
             <input
               v-model="form.end_at"
-              type="datetime-local"
+              type="date"
               id="end-at"
               autocomplete="off"
               class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
@@ -153,27 +153,27 @@
         </h2>
       </div>
 
-      <div class="p-4 sm:p-6">
-        <div class="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2">
-          <!-- اسم المعيّن الحالي -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
-              {{ t('staff_assignments.currentAssignee') }}
-            </label>
-            <p class="text-base text-gray-800 dark:text-white/90">
-              {{ currentAssigneeName || t('staff_assignments.notAssignedYet') }}
-            </p>
-          </div>
+        <div class="p-4 sm:p-6">
+          <div class="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2">
+            <!-- صف المعلم -->
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+                {{ t('staff_assignments.currentAssignee') }} — {{ getRoleLabel('teacher') }}
+              </label>
+              <p class="text-base text-gray-800 dark:text-white/90">
+                {{ teacherName || t('staff_assignments.notAssignedYet') }}
+              </p>
+            </div>
 
-          <!-- الدور الحالي في الحلقة -->
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
-              {{ t('staff_assignments.roleInCircle') }}
-            </label>
-            <p class="text-base text-gray-800 dark:text-white/90">{{ currentAssigneeRole || '—' }}</p>
+            <!-- صف المشرف -->
+            <div>
+              <label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+                {{ t('staff_assignments.currentAssignee') }} — {{ getRoleLabel(supervisorRole) }}
+              </label>
+              <p class="text-base text-gray-800 dark:text-white/90">{{ supervisorName || t('staff_assignments.notAssignedYet') }}</p>
+            </div>
           </div>
         </div>
-      </div>
     </div>
 
     <!-- الحالة -->
@@ -263,6 +263,26 @@ const currentAssignment = computed(() => {
 
 const currentAssigneeName = computed(() => currentAssignment.value?.user_name || '')
 const currentAssigneeRole = computed(() => currentAssignment.value?.role_in_circle || '')
+
+// assignments for selected circle (all rows we passed from backend)
+const assignmentsForSelectedCircle = computed(() => {
+  if (!form.circle_id) return []
+  return props.existingAssignments.filter(a => String(a.circle_id) === String(form.circle_id))
+})
+
+// teacher-specific and supervisor-specific entries
+const teacherAssignmentEntry = computed(() => assignmentsForSelectedCircle.value.find(a => a.role_in_circle === 'teacher') || null)
+const supervisorAssignmentEntry = computed(() => assignmentsForSelectedCircle.value.find(a => ['supervisor_edu', 'supervisor_tarbawi'].includes(a.role_in_circle)) || null)
+
+const teacherName = computed(() => teacherAssignmentEntry.value?.user_name || '')
+const supervisorName = computed(() => supervisorAssignmentEntry.value?.user_name || '')
+const supervisorRole = computed(() => supervisorAssignmentEntry.value?.role_in_circle || 'supervisor_edu')
+
+// lookup role label from roles prop (roles: [{value,label}])
+const getRoleLabel = (val) => {
+  const r = props.roles.find(x => x.value === val)
+  return r ? r.label : val
+}
 
 function create() {
   form.post(route('admin.staff_assignments.store'), {
