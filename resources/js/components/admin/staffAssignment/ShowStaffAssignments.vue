@@ -122,9 +122,7 @@
               </div>
             </th>
 
-            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-              <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.toggle') }}</p>
-            </th>
+            
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
               <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.action') }}</p>
             </th>
@@ -179,21 +177,7 @@
               </span>
             </td>
 
-            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <label :for="'toggle-' + assignment.id" class="cursor-pointer">
-                <div class="relative">
-                  <input
-                    type="checkbox"
-                    :id="'toggle-' + assignment.id"
-                    class="sr-only"
-                    :checked="assignment.is_active"
-                    @change="toggleAssignmentStatus(assignment)"
-                  />
-                  <div class="block h-5 w-9 rounded-full" :class="assignment.is_active ? 'bg-brand-500 dark:bg-brand-500' : 'bg-gray-200 dark:bg-white/10'"></div>
-                  <div :class="[assignment.is_active ? 'rtl:translate-x-[-100%] ltr:translate-x-full' : 'translate-x-0']" class="shadow-theme-sm absolute top-0.5 h-4 w-4 rounded-full bg-white duration-200 ease-linear rtl:right-0.5 ltr:left-0.5"></div>
-                </div>
-              </label>
-            </td>
+            
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
               <div class="flex items-center w-full gap-2">
@@ -237,7 +221,7 @@
           </tr>
 
           <tr v-if="paginatedData.length === 0">
-            <td colspan="7" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
+            <td colspan="6" class="px-4 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
               {{ t('staff_assignments.noAssignment') }}
             </td>
           </tr>
@@ -337,18 +321,7 @@ function confirmDelete() {
   }
 }
 
-function toggleAssignmentStatus(assignment) {
-  const wasActive = assignment.is_active
-  assignment.is_active = !wasActive
-  const url = wasActive
-    ? route('admin.staff_assignments.deactivate', { id: assignment.id })
-    : route('admin.staff_assignments.activate',   { id: assignment.id })
-  router.patch(url, {}, {
-    preserveState: true,
-    preserveScroll: true,
-    onError: () => { assignment.is_active = wasActive },
-  })
-}
+// toggleAssignmentStatus removed because the toggle column was removed from the UI
 
 const filteredData = computed(() => {
   const q = (search.value || '').toLowerCase()

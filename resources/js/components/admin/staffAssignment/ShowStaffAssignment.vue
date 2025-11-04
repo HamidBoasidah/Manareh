@@ -88,6 +88,7 @@
 
       <button
         type="button"
+        v-if="!assignment.end_at"
         @click="openDeleteModal"
         :disabled="form.processing"
         class="bg-error-500 shadow-theme-xs hover:bg-error-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"

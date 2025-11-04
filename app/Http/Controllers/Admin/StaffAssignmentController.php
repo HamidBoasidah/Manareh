@@ -52,10 +52,12 @@ class StaffAssignmentController extends Controller
         return Inertia::render('Admin/StaffAssignment/Show', ['assignment' => $dto]);
     }
 
-    public function edit(StaffAssignment $staffAssignment)
+    public function edit(StaffAssignment $staffAssignment, StaffAssignmentService $service)
     {
         $dto = StaffAssignmentDTO::fromModel($staffAssignment)->toArray();
-        return Inertia::render('Admin/StaffAssignment/Edit', ['assignment' => $dto]);
+        $data = $service->prepareCreateData();
+        $data['assignment'] = $dto;
+        return Inertia::render('Admin/StaffAssignment/Edit', $data);
     }
 
     public function update(UpdateStaffAssignmentRequest $request, StaffAssignmentService $service, StaffAssignment $staffAssignment)

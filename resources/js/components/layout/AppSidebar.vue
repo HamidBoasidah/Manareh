@@ -299,25 +299,41 @@ const menuGroups = computed(() =>
             }
           ],
         },
-        // Additional admin sections (scaffolded). Icons are placeholders and can be changed later.
         {
-          icon: GridIcon,
-          name: t('menu.mosques'),
-          path: route('admin.mosques.index'),
-          permission: 'mosques.view',
+          icon: BuildingIcon,
+          name: t('menu.foundationalData'),
+          subItems: [
+            {
+              name: t('menu.mosques'),
+              path: route('admin.mosques.index'),
+              permission: 'mosques.view',
+            },
+            {
+              name: t('menu.circles'),
+              path: route('admin.circles.index'),
+              permission: 'circles.view',
+            },
+            {
+              name: t('menu.programs'),
+              path: route('admin.programs.index'),
+              permission: 'programs.view',
+            },
+            {
+              name: t('menu.activities'),
+              path: route('admin.activities.index'),
+              permission: 'activities.view',
+            }
+          ],
         },
+        // Additional admin sections (scaffolded). Icons are placeholders and can be changed later.
+        
         {
           icon: GridIcon,
           name: t('menu.academic_years'),
           path: route('admin.academic_years.index'),
           permission: 'academic_years.view',
         },
-        {
-          icon: GridIcon,
-          name: t('menu.programs'),
-          path: route('admin.programs.index'),
-          permission: 'programs.view',
-        },
+        
         {
           icon: GridIcon,
           name: t('menu.plans'),
@@ -342,12 +358,7 @@ const menuGroups = computed(() =>
           path: route('admin.guardians.index'),
           permission: 'guardians.view',
         },
-        {
-          icon: GridIcon,
-          name: t('menu.circles'),
-          path: route('admin.circles.index'),
-          permission: 'circles.view',
-        },
+        
         {
           icon: GridIcon,
           name: t('menu.circle_classifications'),
@@ -408,12 +419,7 @@ const menuGroups = computed(() =>
           path: route('admin.nominations.index'),
           permission: 'nominations.view',
         },
-        {
-          icon: GridIcon,
-          name: t('menu.activities'),
-          path: route('admin.activities.index'),
-          permission: 'activities.view',
-        },
+        
         {
           icon: GridIcon,
           name: t('menu.activity_media'),

@@ -7,6 +7,7 @@ use App\Models\Circle;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\StaffAssignment;
+use Illuminate\Validation\ValidationException;
 class StaffAssignmentService
 {
     protected StaffAssignmentRepository $assignments;
@@ -33,11 +34,99 @@ class StaffAssignmentService
 
     public function create(array $attributes)
     {
+        // If frontend provided role_in_circle (slug) but not role_id, resolve it to the DB id
+        if (empty($attributes['role_id']) && !empty($attributes['role_in_circle'])) {
+            $role = Role::where('name', $attributes['role_in_circle'])->first();
+            if ($role) {
+                $attributes['role_id'] = $role->id;
+            }
+        }
+
+        // Keep is_active consistent with end_at: if end_at is set, mark inactive
+        if (array_key_exists('end_at', $attributes)) {
+            $attributes['is_active'] = empty($attributes['end_at']) ? ($attributes['is_active'] ?? true) : false;
+        }
+
+        // Server-side guard: prevent more than one active assignment for the same circle & role
+        // Determine role name (prefer role_in_circle slug, fallback to role relation)
+        $roleName = $attributes['role_in_circle'] ?? null;
+        if (empty($roleName) && !empty($attributes['role_id'])) {
+            $r = Role::find($attributes['role_id']);
+            $roleName = $r?->name ?? null;
+        }
+
+        // Consider this an "open/active" assignment if is_active true and end_at is null/empty
+        $isOpen = (!array_key_exists('is_active', $attributes) || (bool)$attributes['is_active']) && (empty($attributes['end_at']));
+
+        if ($isOpen && $roleName && !empty($attributes['circle_id'])) {
+            $exists = StaffAssignment::query()
+                ->where('circle_id', $attributes['circle_id'])
+                ->where(function ($q) use ($roleName) {
+                    $q->where('role_in_circle', $roleName)
+                      ->orWhereHas('role', function ($qr) use ($roleName) {
+                          $qr->where('name', $roleName);
+                      });
+                })
+                ->where('is_active', 1)
+                ->whereNull('end_at')
+                ->exists();
+
+            if ($exists) {
+                throw ValidationException::withMessages([
+                    'circle_id' => [trans('staff_assignments.roleAlreadyAssigned') ?: 'An active assignment already exists for this role in the selected circle.']
+                ]);
+            }
+        }
+
         return $this->assignments->create($attributes);
     }
 
     public function update($id, array $attributes)
     {
+        // Resolve role_id from role_in_circle if not provided
+        if (empty($attributes['role_id']) && !empty($attributes['role_in_circle'])) {
+            $role = Role::where('name', $attributes['role_in_circle'])->first();
+            if ($role) {
+                $attributes['role_id'] = $role->id;
+            }
+        }
+
+        // Sync is_active with end_at when present
+        if (array_key_exists('end_at', $attributes)) {
+            $attributes['is_active'] = empty($attributes['end_at']) ? ($attributes['is_active'] ?? true) : false;
+        }
+
+        // Prevent updating an assignment that would result in multiple active assignments for the same circle & role
+        $roleName = $attributes['role_in_circle'] ?? null;
+        if (empty($roleName) && !empty($attributes['role_id'])) {
+            $r = Role::find($attributes['role_id']);
+            $roleName = $r?->name ?? null;
+        }
+
+        $isOpen = array_key_exists('is_active', $attributes) ? (bool)$attributes['is_active'] : true;
+        $isEndAtEmpty = !array_key_exists('end_at', $attributes) || empty($attributes['end_at']);
+
+        if ($isOpen && $isEndAtEmpty && $roleName && !empty($attributes['circle_id'])) {
+            $exists = StaffAssignment::query()
+                ->where('circle_id', $attributes['circle_id'])
+                ->where(function ($q) use ($roleName) {
+                    $q->where('role_in_circle', $roleName)
+                      ->orWhereHas('role', function ($qr) use ($roleName) {
+                          $qr->where('name', $roleName);
+                      });
+                })
+                ->where('is_active', 1)
+                ->whereNull('end_at')
+                ->where('id', '!=', $id)
+                ->exists();
+
+            if ($exists) {
+                throw ValidationException::withMessages([
+                    'circle_id' => [trans('staff_assignments.roleAlreadyAssigned') ?: 'An active assignment already exists for this role in the selected circle.']
+                ]);
+            }
+        }
+
         return $this->assignments->update($id, $attributes);
     }
 
@@ -84,6 +173,7 @@ class StaffAssignmentService
             ->get()
             ->map(function ($r) {
                 return [
+                    'id' => $r->id,
                     'value' => $r->name, // slug
                     'label' => $r->display_name ?? $r->name,
                 ];

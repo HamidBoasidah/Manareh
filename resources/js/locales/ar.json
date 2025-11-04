@@ -2,6 +2,7 @@
   "menu": {
     "menu": "القائمة",
     "others": "أخرى",
+    "foundationalData": "البيانات التأسيسية",
     "dashboard": "لوحة التحكم",
     "dashboard_short": "لوحة التحكم",
     "ecommerce": "الإحصائيات",
@@ -590,7 +591,9 @@
     "currentAssignee": "المعيّن الحالي",
     "notAssignedYet": "لم يُعيّن بعد",
     "assignmentCreatedSuccessfully": "تم إنشاء التعيين بنجاح",
-    "assignmentCreationFailed": "فشل إنشاء التعيين"
+  "assignmentCreationFailed": "فشل إنشاء التعيين",
+  "assignmentUpdatedSuccessfully": "تم تحديث التعيين بنجاح",
+    "teacherAlreadyAssigned": "يوجد معلم نشط بالفعل لهذه الحلقة"
   },
 
   "daily_study_sessions": {
@@ -627,8 +630,9 @@
     "session": "الجلسة",
     "deleteDailyStudyConfirmation": "هل أنت متأكد أنك تريد حذف هذه المذاكرة؟",
     "dailyStudyUpdatedSuccessfully": "تم تحديث المذاكرة بنجاح",
-    "dailyStudyUpdateFailed": "فشل تحديث المذاكرة",
-    "points": "النقاط",
+  "dailyStudyUpdateFailed": "فشل تحديث المذاكرة",
+  "points": "النقاط",
+  "pointsSection": "قسم النقاط",
     "hifzSection": "تفاصيل الحفظ",
     "hifzFromSura": "الحفظ من السورة",
     "hifzFromAyah": "الحفظ من الآية",

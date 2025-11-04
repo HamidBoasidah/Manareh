@@ -198,19 +198,6 @@
             <p v-if="form.errors.hifz_pages" class="mt-1 text-sm text-error-500">{{ form.errors.hifz_pages }}</p>
           </div>
 
-          <div>
-            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ t('daily_studies.points') }}
-            </label>
-            <input
-              v-model.number="form.points"
-              type="number"
-              min="0"
-              class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-              :placeholder="t('daily_studies.points')"
-            />
-            <p v-if="form.errors.points" class="mt-1 text-sm text-error-500">{{ form.errors.points }}</p>
-          </div>
         </div>
       </div>
     </div>
@@ -320,6 +307,32 @@
               :placeholder="t('daily_studies.murajaahPages')"
             />
             <p v-if="form.errors.murajaah_pages" class="mt-1 text-sm text-error-500">{{ form.errors.murajaah_pages }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+        <h2 class="text-lg font-medium text-gray-800 dark:text-white">
+          {{ t('daily_studies.pointsSection') }}
+        </h2>
+      </div>
+
+      <div class="p-4 sm:p-6">
+        <div class="grid grid-cols-1 gap-5">
+          <div>
+            <label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+              {{ t('daily_studies.points') }}
+            </label>
+            <input
+              v-model.number="form.points"
+              type="number"
+              min="0"
+              class="h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+              :placeholder="t('daily_studies.points')"
+            />
+            <p v-if="form.errors.points" class="mt-1 text-sm text-error-500">{{ form.errors.points }}</p>
           </div>
         </div>
       </div>

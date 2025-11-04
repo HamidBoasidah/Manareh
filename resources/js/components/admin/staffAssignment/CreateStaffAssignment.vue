@@ -77,7 +77,7 @@
             </label>
             <div class="relative z-20 bg-transparent">
               <select
-                v-model="form.role_in_circle"
+                v-model="selectedRole"
                 id="role-in-circle"
                 class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
                 :class="{ 'text-gray-800 dark:text-white/90': form.role_in_circle }"
@@ -85,7 +85,7 @@
                 <option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                   {{ t('staff_assignments.selectRole') }}
                 </option>
-                <option v-for="r in roles" :key="r.value" :value="r.value" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+                <option v-for="r in roles" :key="r.value" :value="r" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
                   {{ r.label }}
                 </option>
               </select>
@@ -113,20 +113,7 @@
             <p v-if="form.errors.start_at" class="mt-1 text-sm text-error-500">{{ form.errors.start_at }}</p>
           </div>
 
-          <!-- تاريخ الانتهاء -->
-          <div>
-            <label for="end-at" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
-              {{ t('staff_assignments.endAt') }}
-            </label>
-            <input
-              v-model="form.end_at"
-              type="date"
-              id="end-at"
-              autocomplete="off"
-              class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
-            />
-            <p v-if="form.errors.end_at" class="mt-1 text-sm text-error-500">{{ form.errors.end_at }}</p>
-          </div>
+          <!-- end_at removed as requested -->
 
           <!-- ملاحظات -->
           <div class="md:col-span-2">
@@ -225,7 +212,7 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useNotifications } from '@/composables/useNotifications'
 
 const { t } = useI18n()
@@ -244,10 +231,24 @@ const form = useForm({
   circle_id: '',
   user_id: '',
   role_in_circle: '',
+  role_id: '',
   start_at: '',
-  end_at: '',
   notes: '',
   is_active: true,
+})
+
+// selectedRole will be the full role object from props.roles (contains id, value, label)
+const selectedRole = ref(null)
+
+// when selectedRole changes, sync both form.role_in_circle (slug) and form.role_id (db id)
+watch(selectedRole, (val) => {
+  if (!val) {
+    form.role_in_circle = ''
+    form.role_id = ''
+    return
+  }
+  form.role_in_circle = val.value || ''
+  form.role_id = val.id || ''
 })
 
 // حالـة الحلقة الحالية حسب الاختيار

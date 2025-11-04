@@ -19,6 +19,7 @@ class UpdateStaffAssignmentRequest extends FormRequest
             'user_id' => 'sometimes|required|exists:users,id',
             'circle_id' => 'sometimes|required|exists:circles,id',
             'role_in_circle' => 'nullable|string|max:255',
+            'role_id' => 'sometimes|nullable|exists:roles,id',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date',
             'notes' => 'nullable|string',

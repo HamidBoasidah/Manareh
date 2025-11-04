@@ -1,26 +1,331 @@
 <template>
-    <div class="show-staff-assignment">
-        <h1>مرحبًا بك</h1>
-    </div>
+	<form class="space-y-6" @submit.prevent="update">
+		<!-- Assignment info -->
+		<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+			<div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+				<h2 class="text-lg font-medium text-gray-800 dark:text-white">
+					{{ t('staff_assignments.assignmentInformation') }}
+				</h2>
+			</div>
+
+			<div class="p-4 sm:p-6 dark:border-gray-800">
+				<div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+					<!-- Circle select -->
+					<div class="md:col-span-2">
+						<label class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.selectCircle') }}
+						</label>
+						<div class="relative z-20 bg-transparent">
+							<select
+								v-model="form.circle_id"
+								:disabled="isReadOnly"
+								class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+								:class="{ 'text-gray-800 dark:text-white/90': form.circle_id }"
+							>
+								<option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+									{{ t('staff_assignments.selectCircle') }}
+								</option>
+								<option
+									v-for="c in circles"
+									:key="c.id"
+									:value="c.id"
+									class="text-gray-700 dark:bg-gray-900 dark:text-gray-400"
+								>
+									{{ c.name }}
+								</option>
+							</select>
+							<span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+								<svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+									<path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						</div>
+						<p v-if="form.errors.circle_id" class="mt-1 text-sm text-error-500">{{ form.errors.circle_id }}</p>
+					</div>
+
+					<!-- User select -->
+					<div>
+						<label for="user-id" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.selectUser') }}
+						</label>
+						<div class="relative z-20 bg-transparent">
+							<select
+								v-model="form.user_id"
+								:disabled="isReadOnly"
+								id="user-id"
+								class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+								:class="{ 'text-gray-800 dark:text-white/90': form.user_id }"
+							>
+								<option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+									{{ t('staff_assignments.selectUser') }}
+								</option>
+								<option v-for="u in users" :key="u.id" :value="u.id" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+									{{ u.name }}
+								</option>
+							</select>
+							<span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+								<svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+									<path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						</div>
+						<p v-if="form.errors.user_id" class="mt-1 text-sm text-error-500">{{ form.errors.user_id }}</p>
+					</div>
+
+					<!-- Role select -->
+					<div>
+						<label for="role-in-circle" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.selectRole') }}
+						</label>
+						<div class="relative z-20 bg-transparent">
+							<select
+								v-model="selectedRole"
+								:disabled="isReadOnly"
+								id="role-in-circle"
+								class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full appearance-none rounded-lg border border-gray-300 bg-transparent bg-none px-4 py-2.5 pr-11 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+								:class="{ 'text-gray-800 dark:text-white/90': form.role_in_circle }"
+							>
+								<option value="" disabled class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+									{{ t('staff_assignments.selectRole') }}
+								</option>
+								<option v-for="r in roles" :key="r.value" :value="r" class="text-gray-700 dark:bg-gray-900 dark:text-gray-400">
+									{{ r.label }}
+								</option>
+							</select>
+							<span class="pointer-events-none absolute top-1/2 right-4 z-30 -translate-y-1/2 text-gray-700 dark:text-gray-400">
+								<svg class="stroke-current" width="20" height="20" viewBox="0 0 20 20" fill="none">
+									<path d="M4.79175 7.396L10.0001 12.6043L15.2084 7.396" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+								</svg>
+							</span>
+						</div>
+						<p v-if="form.errors.role_in_circle" class="mt-1 text-sm text-error-500">{{ form.errors.role_in_circle }}</p>
+					</div>
+
+					<!-- Start at -->
+					<div>
+						<label for="start-at" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.startAt') }}
+						</label>
+						<input
+							v-model="form.start_at"
+							:disabled="isReadOnly"
+							type="date"
+							id="start-at"
+							autocomplete="off"
+							class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 h-11 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+						/>
+						<p v-if="form.errors.start_at" class="mt-1 text-sm text-error-500">{{ form.errors.start_at }}</p>
+					</div>
+
+					<!-- End at (read-only if present) -->
+					<div v-if="assignment.end_at">
+						<label for="end-at" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.endAt') }}
+						</label>
+						<input
+							:id="'end-at'"
+							type="date"
+							:disabled="true"
+							:value="assignment.end_at"
+							class="dark:bg-dark-900 shadow-theme-xs h-11 w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 dark:border-gray-700 dark:bg-gray-900/40 dark:text-white/90"
+						/>
+					</div>
+
+					<!-- Notes -->
+					<div class="md:col-span-2">
+						<label for="notes" class="mb-1.5 block text-sm font-medium text-gray-700 dark:text-gray-400">
+							{{ t('staff_assignments.notes') }}
+						</label>
+						<textarea
+							v-model="form.notes"
+							:readonly="isReadOnly"
+							id="notes"
+							rows="3"
+							class="dark:bg-dark-900 shadow-theme-xs focus:border-brand-300 focus:ring-brand-500/10 dark:focus:border-brand-800 w-full rounded-lg border border-gray-300 bg-transparent px-4 py-2.5 text-sm text-gray-800 placeholder:text-gray-400 focus:ring-3 focus:outline-hidden dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30"
+						/>
+						<p v-if="form.errors.notes" class="mt-1 text-sm text-error-500">{{ form.errors.notes }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Current circle status -->
+		<div class="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]" v-if="form.circle_id">
+			<div class="border-b border-gray-200 px-6 py-4 dark:border-gray-800">
+				<h2 class="text-lg font-medium text-gray-800 dark:text-white">
+					{{ t('staff_assignments.currentCircleStatus') }}
+				</h2>
+			</div>
+
+			<div class="p-4 sm:p-6">
+				<div class="grid grid-cols-1 gap-x-5 gap-y-6 md:grid-cols-2">
+					<div>
+						<label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+							{{ t('staff_assignments.currentAssignee') }} — {{ getRoleLabel('teacher') }}
+						</label>
+						<p class="text-base text-gray-800 dark:text-white/90">
+							{{ teacherName || t('staff_assignments.notAssignedYet') }}
+						</p>
+					</div>
+
+					<div>
+						<label class="mb-1.5 block text-sm font-medium text-gray-500 dark:text-gray-400">
+							{{ t('staff_assignments.currentAssignee') }} — {{ getRoleLabel(supervisorRole) }}
+						</label>
+						<p class="text-base text-gray-800 dark:text-white/90">{{ supervisorName || t('staff_assignments.notAssignedYet') }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Buttons -->
+		<div class="flex flex-col gap-3 sm:flex-row sm:justify-end">
+			<Link
+				:href="route('admin.staff_assignments.index')"
+				class="shadow-theme-xs inline-flex items-center justify-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 ring-1 ring-gray-300 transition hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-400 dark:ring-gray-700 dark:hover:bg-white/[0.03]"
+			>
+				{{ t('buttons.backToList') }}
+			</Link>
+
+			<button
+				type="button"
+				v-if="!assignment.end_at"
+				@click="openDeleteModal"
+				:disabled="unassignForm.processing"
+				class="bg-error-500 shadow-theme-xs hover:bg-error-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
+			>
+				{{ unassignForm.processing ? t('common.loading') : t('staff_assignments.removeAssignment') }}
+			</button>
+
+			<button
+				type="submit"
+				class="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
+				:class="{ 'cursor-not-allowed opacity-70': form.processing }"
+				:disabled="form.processing"
+				v-if="!isReadOnly"
+			>
+				{{ form.processing ? t('common.loading') : t('buttons.update') }}
+			</button>
+		</div>
+	</form>
+
+	<DangerAlert
+		:isOpen="isDeleteModalOpen"
+		:title="t('messages.areYouSure')"
+		:message="t('messages.deleteAssignmentConfirmation')"
+		@close="closeDeleteModal"
+		@confirm="confirmUnassign"
+	/>
 </template>
 
-<script>
-export default {
-    name: 'ShowStaffAssignment'
+<script setup>
+import { Link, useForm } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
+import { computed, ref, watch } from 'vue'
+import { useNotifications } from '@/composables/useNotifications'
+import DangerAlert from '@/components/modals/DangerAlert.vue'
+
+const { t } = useI18n()
+const { success, error } = useNotifications()
+
+const props = defineProps({
+	circles: { type: Array, required: true },
+	users:   { type: Array, required: true },
+	roles:   { type: Array, required: true },
+	existingAssignments: { type: Array, default: () => [] },
+	assignment: { type: Object, required: true },
+})
+
+const isReadOnly = computed(() => Boolean(props.assignment.end_at))
+
+const form = useForm({
+	_method: 'PUT',
+	circle_id: props.assignment.circle_id ?? '',
+	user_id: props.assignment.user_id ?? '',
+	role_in_circle: props.assignment.role_in_circle ?? '',
+	role_id: props.assignment.role_id ?? '',
+	start_at: props.assignment.start_at ?? '',
+	notes: props.assignment.notes ?? '',
+	is_active: !!props.assignment.is_active,
+})
+
+// selectedRole will be the full role object from props.roles (contains id, value, label)
+const selectedRole = ref(props.roles.find(r => String(r.id) === String(props.assignment.role_id) || r.value === props.assignment.role_in_circle) || null)
+
+// when selectedRole changes, sync both form.role_in_circle (slug) and form.role_id (db id)
+watch(selectedRole, (val) => {
+	if (!val) {
+		form.role_in_circle = ''
+		form.role_id = ''
+		return
+	}
+	form.role_in_circle = val.value || ''
+	form.role_id = val.id || ''
+})
+
+const assignmentsForSelectedCircle = computed(() => {
+	if (!form.circle_id) return []
+	return props.existingAssignments.filter(a => String(a.circle_id) === String(form.circle_id))
+})
+
+const teacherAssignmentEntry = computed(() => assignmentsForSelectedCircle.value.find(a => a.role_in_circle === 'teacher') || null)
+const supervisorAssignmentEntry = computed(() => assignmentsForSelectedCircle.value.find(a => ['supervisor_edu', 'supervisor_tarbawi'].includes(a.role_in_circle)) || null)
+
+const teacherName = computed(() => teacherAssignmentEntry.value?.user_name || '')
+const supervisorName = computed(() => supervisorAssignmentEntry.value?.user_name || '')
+const supervisorRole = computed(() => supervisorAssignmentEntry.value?.role_in_circle || 'supervisor_edu')
+
+const getRoleLabel = (val) => {
+	const r = props.roles.find(x => x.value === val)
+	return r ? r.label : val
+}
+
+function update() {
+    if (isReadOnly.value) {
+        return
+    }
+	form.post(route('admin.staff_assignments.update', props.assignment.id), {
+		onSuccess: () => {
+			success(t('staff_assignments.assignmentUpdatedSuccessfully'))
+		},
+		onError: () => {
+			error(t('staff_assignments.assignmentUpdateFailed'))
+		},
+		preserveScroll: true,
+	})
+}
+
+// unassign (remove assignment) form + modal
+const unassignForm = useForm({
+	circle_id: null,
+	role: null,
+})
+
+const isDeleteModalOpen = ref(false)
+
+function openDeleteModal() {
+	isDeleteModalOpen.value = true
+}
+
+function closeDeleteModal() {
+	isDeleteModalOpen.value = false
+}
+
+function confirmUnassign() {
+	unassignForm.circle_id = props.assignment.circle_id
+	unassignForm.role = props.assignment.role_in_circle
+
+	unassignForm.post(route('admin.staff_assignments.unassign'), {
+		onSuccess: () => {
+			success(t('staff_assignments.assignmentDeletedSuccessfully'))
+			closeDeleteModal()
+			// after removing the assignment, navigate back to the assignments list
+			window.location.href = route('admin.staff_assignments.index')
+		},
+		onError: () => {
+			error(t('staff_assignments.assignmentDeletionFailed'))
+			closeDeleteModal()
+		}
+	})
 }
 </script>
 
-<style scoped>
-.show-staff-assignment {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 2rem;
-}
-h1 {
-    font-size: 1.5rem;
-    color: #333;
-    margin: 0;
-}
-</style>

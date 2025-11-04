@@ -17,6 +17,7 @@ class StoreStaffAssignmentRequest extends FormRequest
             'user_id' => 'required|exists:users,id',
             'circle_id' => 'required|exists:circles,id',
             'role_in_circle' => 'nullable|string|max:255',
+            'role_id' => 'nullable|exists:roles,id',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date',
             'notes' => 'nullable|string',
