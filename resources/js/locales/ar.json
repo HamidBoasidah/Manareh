@@ -84,7 +84,11 @@
     "deleteGuardianConfirmation": "هل أنت متأكد أنك تريد حذف ولي الامر هذا؟",
     "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟",
     "deleteAssignmentConfirmation": "هل أنت متأكد أنك تريد حذف هذا التعيين؟"
+    ,
+    "deleteNominationConfirmation": "هل أنت متأكد أنك تريد حذف هذا الترشيح؟"
   },
+
+  "deleteExamConfirmation": "هل أنت متأكد أنك تريد حذف هذا الاختبار؟",
   "charts": {
     "lineChart": "مخطط خطي",
     "barChart": "مخطط شريطي"
@@ -118,6 +122,7 @@
     "edit": "تعديل",
   "delete": "حذف",
   "backToList": "العودة إلى القائمة",
+    "save": "حفظ",
     "selectAll": "تحديد الكل",
     "all": "الكل",
     "read": "قراءة",
@@ -693,7 +698,17 @@
     "addExam": "إضافة اختبار",
     "editExam": "تعديل الاختبار",
     "showExam": "عرض الاختبار",
-    "noExam": "لا توجد اختبارات"
+    "noExam": "لا توجد اختبارات",
+    "type": "النوع",
+    "part": "الجزء/المرحلة",
+    "date": "التاريخ",
+    "grade": "التقدير",
+    "examDeletedSuccessfully": "تم حذف الاختبار بنجاح",
+    "examDeletionFailed": "فشل حذف الاختبار",
+    "types": {
+      "stage": "المرحلة",
+      "juzz": "الجزء"
+    }
   },
 
   "exam_items": {
@@ -720,10 +735,57 @@
   },
 
   "nominations": {
+    "type": "نوع الترشيح",
+    "nominationInformation": "معلومات الترشيح",
     "addNomination": "إضافة ترشيح",
     "editNomination": "تعديل الترشيح",
     "showNomination": "عرض الترشيح",
-    "noNomination": "لا توجد ترشيحات"
+    "noNomination": "لا توجد ترشيحات",
+    "term" :"الفصل الدراسي",
+    "fields": {
+      "student": "الطالب",
+      "circle": "الحلقة",
+      "academic_year": "العام الدراسي",
+      "status": "الحالة",
+      "term": "الفصل الدراسي",
+      "nominatedBy": "تم الترشيح بواسطة",
+      "notes": "ملاحظات"
+    },
+    "selectStatus": "اختر الحالة",
+    "statuses": {
+      "submitted": "تم التقديم",
+      "approved": "مقبول",
+      "rejected": "مرفوض"
+    },
+    "selectStudent": "اختر الطالب",
+    "selectCircle": "اختر الحلقة",
+    "selectType": "اختر نوع الترشيح",
+    "selectPlan": "اختر الخطة",
+    "selectAcademicYear": "اختر العام الدراسي",
+    "selectTerm": "اختر الفصل",
+    "selectNominator": "اختر المرشح",
+  "selectExamType": "اختر نوع الاختبار",
+  "selectExamPart": "اختر الجزء/المرحلة",
+  "examType": "نوع الاختبار",
+  "examPart": "الجزء/المرحلة",
+    "typePlaceholder": "اختر نوع الترشيح",
+    "types": {
+      "supervisor_nomination": "ترشيح من المشرف",
+      "ideal_student": "الطالب المثالي",
+      "reader_of_month": "قارئ الشهر"
+    },
+    "addedSuccessfully": "تم إضافة الترشيح بنجاح",
+    "createFailed": "فشل إنشاء الترشيح",
+    "updatedSuccessfully": "تم تحديث الترشيح بنجاح",
+    "updateFailed": "فشل تحديث الترشيح",
+    "deletedSuccessfully": "تم حذف الترشيح بنجاح",
+    "deleteFailed": "فشل حذف الترشيح",
+    "nominationDeletedSuccessfully": "تم حذف الترشيح بنجاح",
+    "errors": {
+      "exam_required": "إما اختر اختبارًا موجودًا أو قدّم تفاصيل الاختبار (النوع والجزء).",
+      "part_range_stage": "يجب أن يكون رقم الجزء بين 1 و 10 للاختبارات من نوع المرحلة.",
+      "part_range_juzz": "يجب أن يكون رقم الجزء بين 1 و 30 للاختبارات من نوع الجزء."
+    }
   },
 
   "activities": {

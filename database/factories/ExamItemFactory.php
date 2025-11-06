@@ -16,7 +16,7 @@ class ExamItemFactory extends Factory
             'item_key' => 'item_' . $this->faker->randomNumber(2),
             'max_points' => $this->faker->numberBetween(1,20),
             'score_points' => 0,
-            'notes' => $ar->sentence(),
+            'is_active' => true,
         ];
     }
 }

@@ -15,13 +15,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->string('nomination_type'); // ideal_student / reader_of_month ...
-            $table->string('month_ref')->nullable();
+            $table->enum('nomination_type', ['supervisor_nomination', 'ideal_student', 'reader_of_month'])->comment('supervisor_nomination / ideal_student / reader_of_month');
+            // link to the exam (optional). We use exams as separate entities; nominations can point to an exam.
+            $table->foreignId('exam_id')->nullable()->constrained('exams')->nullOnDelete()->after('nomination_type');
+            // status of nomination: submitted / approved / rejected
+            $table->enum('status', ['submitted', 'approved', 'rejected'])->default('submitted');
+            // link to academic year (optional)
+            $table->foreignId('academic_year_id')->nullable()->constrained('academic_years')->nullOnDelete();
             $table->foreignId('term_id')->nullable()->constrained('terms')->nullOnDelete();
             $table->foreignId('nominated_by')->constrained('users')->cascadeOnDelete();
-            $table->enum('status',['pending','approved','rejected'])->default('pending');
-            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('approved_at')->nullable();
+            
             $table->text('notes')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();

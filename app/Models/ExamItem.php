@@ -14,7 +14,6 @@ class ExamItem extends BaseModel
         'item_key',
         'max_points',
         'score_points',
-        'notes',
         'is_active',
     ];
 

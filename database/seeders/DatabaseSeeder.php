@@ -33,7 +33,11 @@ class DatabaseSeeder extends Seeder
             StaffAssignmentSeeder::class,
             EnrollmentSeeder::class,
             DailyStudySessionSeeder::class,
-            ExamTypeSeeder::class,
+            NominationSeeder::class,
+            // Exam types are now represented as an enum on the `exams` table
+            // and we no longer maintain a separate `exam_types` table.
+            // Disable the old seeder to avoid creating unused records.
+            // ExamTypeSeeder::class,
             ActivitySeeder::class,
             MessageTemplateSeeder::class,
             CertificateTemplateSeeder::class,

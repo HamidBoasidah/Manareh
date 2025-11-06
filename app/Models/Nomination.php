@@ -9,18 +9,31 @@ class Nomination extends BaseModel
 {
     use HasFactory;
 
+    public const STATUS_SUBMITTED = 'submitted';
+    public const STATUS_APPROVED = 'approved';
+    public const STATUS_REJECTED = 'rejected';
+
     protected $fillable = [
         'circle_id',
         'student_id',
+        'exam_id',
         'nomination_type',
-        'month_ref',
+        'exam_type',
+        'exam_part',
+        'academic_year_id',
         'term_id',
         'nominated_by',
         'status',
-        'approved_by',
-        'approved_at',
+        
         'notes',
         'is_active',
+    ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'status' => 'string',
+        'exam_part' => 'integer',
+        'exam_type' => 'string',
     ];
 
     public function circle()
@@ -38,8 +51,19 @@ class Nomination extends BaseModel
         return $this->belongsTo(User::class, 'nominated_by');
     }
 
-    public function approvedBy()
+    public function plan()
     {
-        return $this->belongsTo(User::class, 'approved_by');
+        // kept for backward compatibility
+        return $this->academicYear();
+    }
+
+    public function academicYear()
+    {
+        return $this->belongsTo(\App\Models\AcademicYear::class, 'academic_year_id');
+    }
+
+    public function exam()
+    {
+        return $this->belongsTo(\App\Models\Exam::class, 'exam_id');
     }
 }

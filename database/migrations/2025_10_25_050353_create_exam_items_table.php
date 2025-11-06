@@ -17,7 +17,6 @@ return new class extends Migration
             $table->string('item_key'); // q1..q6 / tajweed1 / tajweed2
             $table->unsignedSmallInteger('max_points');
             $table->unsignedSmallInteger('score_points')->default(0);
-            $table->text('notes')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

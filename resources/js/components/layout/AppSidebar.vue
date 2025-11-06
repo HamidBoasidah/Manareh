@@ -333,7 +333,18 @@ const menuGroups = computed(() =>
           path: route('admin.academic_years.index'),
           permission: 'academic_years.view',
         },
-        
+        {
+          icon: GridIcon,
+          name: t('menu.exams'),
+          path: route('admin.exams.index'),
+          permission: 'exams.view',
+        },
+        {
+          icon: GridIcon,
+          name: t('menu.nominations'),
+          path: route('admin.nominations.index'),
+          permission: 'nominations.view',
+        },
         {
           icon: GridIcon,
           name: t('menu.plans'),
@@ -397,29 +408,16 @@ const menuGroups = computed(() =>
         },
         {
           icon: GridIcon,
-          name: t('menu.exams'),
-          path: route('admin.exams.index'),
-          permission: 'exams.view',
-        },
-        {
-          icon: GridIcon,
           name: t('menu.exam_items'),
           path: route('admin.exam_items.index'),
           permission: 'exam_items.view',
         },
-        {
-          icon: GridIcon,
-          name: t('menu.exam_types'),
-          path: route('admin.exam_types.index'),
-          permission: 'exam_types.view',
-        },
-        {
-          icon: GridIcon,
-          name: t('menu.nominations'),
-          path: route('admin.nominations.index'),
-          permission: 'nominations.view',
-        },
-        
+        // {
+        //   icon: GridIcon,
+        //   name: t('menu.exam_types'),
+        //   path: route('admin.exam_types.index'),
+        //   permission: 'exam_types.view',
+        // },
         {
           icon: GridIcon,
           name: t('menu.activity_media'),

@@ -18,7 +18,6 @@ class StoreExamItemRequest extends FormRequest
             'item_key' => 'required|string|max:255',
             'max_points' => 'nullable|integer',
             'score_points' => 'nullable|integer',
-            'notes' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'created_by' => 'nullable|exists:users,id',
             'updated_by' => 'nullable|exists:users,id',

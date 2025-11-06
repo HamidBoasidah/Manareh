@@ -33,7 +33,9 @@ class NominationController extends Controller
 
     public function create()
     {
-        return Inertia::render('Admin/Nomination/Create');
+        $service = app()->make(\App\Services\NominationService::class);
+        $data = $service->prepareCreateData();
+        return Inertia::render('Admin/Nomination/Create', $data);
     }
 
     public function store(StoreNominationRequest $request, NominationService $service)
@@ -50,8 +52,11 @@ class NominationController extends Controller
 
     public function edit(Nomination $nomination)
     {
+        $service = app()->make(\App\Services\NominationService::class);
+        $data = $service->prepareCreateData();
         $dto = NominationDTO::fromModel($nomination)->toArray();
-        return Inertia::render('Admin/Nomination/Edit', ['nomination' => $dto]);
+        $data['nomination'] = $dto;
+        return Inertia::render('Admin/Nomination/Edit', $data);
     }
 
     public function update(UpdateNominationRequest $request, NominationService $service, Nomination $nomination)

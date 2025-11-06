@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('exam_type_id')->constrained('exam_types')->cascadeOnDelete();
+            // replaced exam_type_id foreign key with an enum since there are only two fixed types
+            $table->enum('exam_type', ['stage', 'juzz'])->default('stage');
             $table->date('exam_date_g');
             $table->string('exam_date_h')->nullable();
             $table->unsignedTinyInteger('juzz')->nullable(); // 1..30
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->index(['student_id','exam_date_g']);
-            $table->index(['circle_id','exam_type_id']);
+            $table->index(['circle_id','exam_type']);
             $table->timestamps();
         });
     }

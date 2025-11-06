@@ -12,7 +12,53 @@
   "deleteActivityConfirmation": "Are you sure you want to delete this activity?",
   "deleteCircleConfirmation": "Are you sure you want to delete this circle?",
   "deleteStudentConfirmation": "Are you sure you want to delete this student?",
-  "deleteTermConfirmation": "Are you sure you want to delete this term?"
+    "deleteTermConfirmation": "Are you sure you want to delete this term?",
+    "deleteNominationConfirmation": "Are you sure you want to delete this nomination?"
+  },
+  "nominations": {
+    "addNomination": "Add Nomination",
+    "editNomination": "Edit Nomination",
+    "showNomination": "Show Nomination",
+    "noNominations": "No nominations",
+    "type": "Type",
+    "fields": {
+      "status": "Status",
+      "student": "Student",
+      "circle": "Circle",
+      "academic_year": "Academic Year",
+      "term": "Term",
+      "nominatedBy": "Nominated By",
+      "notes": "Notes"
+    },
+    "selectStatus": "Select status",
+    "statuses": {
+      "submitted": "Submitted",
+      "approved": "Approved",
+      "rejected": "Rejected"
+    },
+    "types": {
+      "supervisor_nomination": "Supervisor nomination",
+      "ideal_student": "Ideal student",
+      "reader_of_month": "Reader of the month"
+    },
+    "examType": "Exam type",
+    "examPart": "Exam part",
+    "selectExamType": "Select exam type",
+    "selectExamPart": "Select exam part",
+    "nominationDeletedSuccessfully": "Nomination deleted successfully",
+    "nominationDeletionFailed": "Failed to delete nomination",
+    "errors": {
+      "exam_required": "Either select an existing exam or provide exam details (type and part).",
+      "part_range_stage": "The exam part must be between 1 and 10 for stage exams.",
+      "part_range_juzz": "The exam part must be between 1 and 30 for juzz exams."
+    }
+  },
+
+  "exams": {
+    "types": {
+      "stage": "Stage",
+      "juzz": "Juzz"
+    }
   },
   "menu": {
     "menu": "Menu",
