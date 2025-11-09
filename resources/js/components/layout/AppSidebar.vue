@@ -396,12 +396,6 @@ const menuGroups = computed(() =>
         },
         {
           icon: GridIcon,
-          name: t('menu.student_attendances'),
-          path: route('admin.student_attendances.index'),
-          permission: 'student_attendances.view',
-        },
-        {
-          icon: GridIcon,
           name: t('menu.teacher_attendances'),
           path: route('admin.teacher_attendances.index'),
           permission: 'teacher_attendances.view',

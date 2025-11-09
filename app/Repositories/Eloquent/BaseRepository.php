@@ -48,6 +48,23 @@ abstract class BaseRepository implements BaseRepositoryInterface
         return $this->model->newQuery();
     }
 
+    /**
+     * Return the underlying model instance.
+     * Useful for callers that need model metadata (table name, etc.).
+     */
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
+    /**
+     * Return model table name.
+     */
+    public function getTable(): string
+    {
+        return $this->model->getTable();
+    }
+
     public function builder(array $with = []): Builder
     {
         return $this->applyWith($this->query(), $with);
@@ -80,14 +97,86 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function create(array $attributes)
     {
         $attributes = $this->handleFileUploads($attributes);
-        return $this->model->create($attributes);
+
+        // Extract any related file arrays (e.g. 'media' => ['path1','path2'])
+        $relatedFiles = [];
+        foreach ($attributes as $key => $value) {
+            if (is_array($value) && method_exists($this->model, $key)) {
+                $relatedFiles[$key] = $value;
+                unset($attributes[$key]);
+            }
+        }
+
+        $record = $this->model->create($attributes);
+
+        // Create related hasMany records for stored files (best-effort)
+        foreach ($relatedFiles as $relation => $paths) {
+            try {
+                if (method_exists($record, $relation)) {
+                    $relationObj = $record->$relation();
+                    // only handle HasMany-like relations
+                    if ($relationObj instanceof \Illuminate\Database\Eloquent\Relations\HasMany) {
+                        $relatedModel = $relationObj->getRelated();
+                        $fileColumn = $this->detectFileColumn($relatedModel);
+                        $rows = array_map(function ($p) use ($fileColumn) {
+                            return [$fileColumn => $p];
+                        }, $paths);
+                        // createMany may fail if timestamps/fillable mismatch; use create per row as fallback
+                        try {
+                            $relationObj->createMany($rows);
+                        } catch (\Throwable $e) {
+                            foreach ($rows as $r) {
+                                $relationObj->create($r);
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // swallow to avoid breaking generic repository behavior
+            }
+        }
+
+        return $record;
     }
 
     public function update(int|string $id, array $attributes)
     {
         $record = $this->findOrFail($id);
         $attributes = $this->handleFileUploads($attributes, $record);
+
+        // Collect related files to attach after update
+        $relatedFiles = [];
+        foreach ($attributes as $key => $value) {
+            if (is_array($value) && method_exists($record, $key)) {
+                $relatedFiles[$key] = $value;
+                unset($attributes[$key]);
+            }
+        }
+
         $record->update($attributes);
+
+        // Attach related files as hasMany records
+        foreach ($relatedFiles as $relation => $paths) {
+            try {
+                if (method_exists($record, $relation)) {
+                    $relationObj = $record->$relation();
+                    if ($relationObj instanceof \Illuminate\Database\Eloquent\Relations\HasMany) {
+                        $relatedModel = $relationObj->getRelated();
+                        $fileColumn = $this->detectFileColumn($relatedModel);
+                        foreach ($paths as $p) {
+                            try {
+                                $relationObj->create([$fileColumn => $p]);
+                            } catch (\Throwable $e) {
+                                // ignore single failures
+                            }
+                        }
+                    }
+                }
+            } catch (\Throwable $e) {
+                // ignore
+            }
+        }
+
         return $record;
     }
 
@@ -120,19 +209,72 @@ abstract class BaseRepository implements BaseRepositoryInterface
      */
     protected function handleFileUploads(array $attributes, ?Model $record = null): array
     {
+        // Use the shared FileStorageService so storage logic is centralized.
+        $storage = null;
+        try {
+            $storage = app()->make(\App\Services\FileStorageService::class);
+        } catch (\Throwable $_) {
+            $storage = null;
+        }
+
         foreach ($attributes as $key => &$value) {
+            // Single file
             if ($value instanceof UploadedFile) {
-                // في حالة التحديث، احذف الملف القديم إذا كان موجودًا
+                // delete old file if present (on update)
                 if ($record && $record->{$key} && Storage::disk('public')->exists($record->{$key})) {
                     Storage::disk('public')->delete($record->{$key});
                 }
+                if ($storage) {
+                    $paths = $storage->storeFiles([$value], $this->model->getTable());
+                    $value = $paths[0] ?? null;
+                } else {
+                    $path = $value->store($this->model->getTable(), 'public');
+                    $value = $path; // replace file object with stored path
+                }
+                continue;
+            }
 
-                // قم بتخزين الملف الجديد في مجلد يعتمد على اسم جدول النموذج
-                $path = $value->store($this->model->getTable(), 'public');
-                $value = $path; // استبدل كائن الملف بالمسار
+            // Multiple files (array of UploadedFile)
+            if (is_array($value)) {
+                // if a storage service is available, batch store; otherwise store inline
+                $paths = [];
+                $uploadedItems = [];
+                foreach ($value as $item) {
+                    if ($item instanceof UploadedFile) {
+                        $uploadedItems[] = $item;
+                    } elseif (is_string($item)) {
+                        $paths[] = $item;
+                    }
+                }
+
+                if ($storage && !empty($uploadedItems)) {
+                    $stored = $storage->storeFiles($uploadedItems, $this->model->getTable());
+                    $paths = array_merge($paths, $stored);
+                } else {
+                    foreach ($uploadedItems as $it) {
+                        $paths[] = $it->store($this->model->getTable(), 'public');
+                    }
+                }
+
+                $value = $paths; // replace array of files with array of stored paths
             }
         }
 
         return $attributes;
+    }
+
+    /**
+     * Attempt to detect the most likely file column on a related model.
+     * Common candidates: file_url, path, file_path, url
+     */
+    protected function detectFileColumn(Model $model): string
+    {
+        $candidates = ['file_url', 'path', 'file_path', 'url'];
+        $fillable = $model->getFillable();
+        foreach ($candidates as $c) {
+            if (in_array($c, $fillable)) return $c;
+        }
+        // fallback to first fillable or 'file_url'
+        return $fillable[0] ?? 'file_url';
     }
 }

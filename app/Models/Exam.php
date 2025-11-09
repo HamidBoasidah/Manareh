@@ -10,6 +10,7 @@ class Exam extends BaseModel
     use HasFactory;
 
     protected $fillable = [
+        'nomination_id',
         'circle_id',
         'student_id',
         'exam_type',
@@ -45,5 +46,10 @@ class Exam extends BaseModel
     public function examItems()
     {
         return $this->hasMany(\App\Models\ExamItem::class);
+    }
+
+    public function nomination()
+    {
+        return $this->belongsTo(\App\Models\Nomination::class);
     }
 }

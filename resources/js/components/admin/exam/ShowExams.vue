@@ -80,9 +80,13 @@
             <!-- grade column removed -->
 
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
-              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('is_active')">
-                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('common.status') }}</p>
+              <div class="flex items-center justify-between w-full cursor-pointer" @click="sortBy('nomination_type')">
+                <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('nominations.type') || 'نوع الترشيح' }}</p>
               </div>
+            </th>
+
+            <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
+              <p class="font-medium text-gray-700 text-theme-xs dark:text-gray-400">{{ t('nominations.nominatedBy') || 'المرشح' }}</p>
             </th>
 
             <th class="px-4 py-3 text-start border border-gray-100 dark:border-gray-800">
@@ -135,7 +139,11 @@
             <!-- grade column removed -->
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
-              <span class="inline-flex items-center justify-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium" :class="{ 'bg-green-50 text-green-600 dark:bg-green-500/15 dark:text-green-500': exam.is_active, 'bg-error-50 text-error-600 dark:bg-error-500/15 dark:text-error-500': !exam.is_active }">{{ exam.is_active ? t('common.active') : t('common.inactive') }}</span>
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ t('nominations.types.' + (exam.nomination_type || '') ) || exam.nomination_type || '—' }}</p>
+            </td>
+
+            <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">
+              <p class="text-gray-700 text-theme-sm dark:text-gray-400">{{ exam.nominated_by ?? '—' }}</p>
             </td>
 
             <td class="px-4 py-3 border border-gray-100 dark:border-gray-800">

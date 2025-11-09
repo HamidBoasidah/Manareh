@@ -21,8 +21,12 @@ class UpdateExamRequest extends FormRequest
             'exam_date_h' => 'nullable|string',
             'juzz' => 'nullable|integer|min:1|max:30',
             'stage' => 'nullable|integer|min:1|max:10',
-            'total_points' => 'nullable|integer|min:0',
+            'total_points' => 'nullable|numeric|min:0',
             'total_grade' => 'nullable|string',
+            // allow bulk updating of exam items from the frontend
+            'items' => 'sometimes|array',
+            'items.*.id' => 'required_with:items|integer|exists:exam_items,id',
+            'items.*.score_points' => 'required_with:items|numeric|min:0',
             'remarks' => 'nullable|string',
             'is_active' => 'nullable|boolean',
             'created_by' => 'nullable|exists:users,id',

@@ -10,6 +10,7 @@ class TeacherAttendanceRepository extends BaseRepository
     protected array $defaultWith = [
         'circle:id,name',
         'user:id,name',
+        'recordedBy:id,name',
     ];
 
     public function __construct(TeacherAttendance $model)

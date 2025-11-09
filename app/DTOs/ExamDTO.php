@@ -21,6 +21,8 @@ class ExamDTO extends BaseDTO
     public $total_grade;
     public $remarks;
     public $is_active;
+    public $nomination_type;
+    public $nominated_by_name;
     public $created_at;
     public $items;
 
@@ -39,7 +41,10 @@ class ExamDTO extends BaseDTO
         $total_grade = null,
         $remarks = null,
         $is_active = true,
-        $created_at = null
+        $nomination_type = null,
+        $nominated_by_name = null,
+        $created_at = null,
+        $items = null
     ) {
         $this->id = $id;
         $this->circle_id = $circle_id;
@@ -55,7 +60,10 @@ class ExamDTO extends BaseDTO
         $this->total_grade = $total_grade;
         $this->remarks = $remarks;
         $this->is_active = $is_active;
+        $this->nomination_type = $nomination_type;
+        $this->nominated_by_name = $nominated_by_name;
         $this->created_at = $created_at;
+        $this->items = $items;
     }
 
     public static function fromModel(Exam $exam): self
@@ -64,6 +72,8 @@ class ExamDTO extends BaseDTO
             'circle:id,name',
             'student:id,user_id',
             'student.user:id,name',
+            'nomination',
+            'nomination.nominatedBy:id,name',
         ]);
 
         // ensure items are loaded
@@ -83,6 +93,9 @@ class ExamDTO extends BaseDTO
             }, $exam->examItems->all());
         }
 
+        $nominationType = $exam->nomination?->nomination_type ?? null;
+        $nominatedByName = $exam->nomination?->nominatedBy?->name ?? null;
+
         return new self(
             $exam->id,
             $exam->circle_id ?? null,
@@ -98,6 +111,8 @@ class ExamDTO extends BaseDTO
             $exam->total_grade ?? null,
             $exam->remarks ?? null,
             $exam->is_active ?? null,
+            $nominationType,
+            $nominatedByName,
             $format($exam->created_at),
             $items
         );
@@ -120,6 +135,8 @@ class ExamDTO extends BaseDTO
             'total_grade' => $this->total_grade,
             'remarks' => $this->remarks,
             'is_active' => $this->is_active,
+            'nomination_type' => $this->nomination_type,
+            'nominated_by' => $this->nominated_by_name,
             'created_at' => $this->created_at,
             'items' => $this->items,
         ];
@@ -138,6 +155,8 @@ class ExamDTO extends BaseDTO
             'exam_date_h' => $this->exam_date_h,
             'total_grade' => $this->total_grade,
             'is_active' => $this->is_active,
+            'nomination_type' => $this->nomination_type,
+            'nominated_by' => $this->nominated_by_name,
         ];
     }
 }

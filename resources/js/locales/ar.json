@@ -68,6 +68,7 @@
     "viewAllNotifications": "عرض جميع الإشعارات",
     "daysLeft": "أيام متبقية",
     "areYouSure": "هل أنت متأكد؟",
+    "savedSuccessfully": "تم حفظ الاختبار",
     "deleteConfirmation": "هل أنت متأكد أنك تريد حذف هذا المستخدم؟",
     "notAuthorizedDelete": "أنت غير مخول لتنفيذ عملية الحذف.",
     "notAuthorized": "أنت غير مخول لتنفيذ هذا الإجراء.",
@@ -85,7 +86,8 @@
     "deleteCircleClassificationConfirmation": "هل أنت متأكد أنك تريد حذف هذا تصنيف الحلقة؟",
     "deleteAssignmentConfirmation": "هل أنت متأكد أنك تريد حذف هذا التعيين؟"
     ,
-    "deleteNominationConfirmation": "هل أنت متأكد أنك تريد حذف هذا الترشيح؟"
+    "deleteNominationConfirmation": "هل أنت متأكد أنك تريد حذف هذا الترشيح؟",
+    "deleteExamConfirmation": "هل أنت متأكد أنك تريد حذف هذا الاختبار؟"
   },
 
   "deleteExamConfirmation": "هل أنت متأكد أنك تريد حذف هذا الاختبار؟",
@@ -112,10 +114,12 @@
     "action": "الإجراء",
     "address": "العنوان",
     "notes" : "ملاحظات",
+  "remarks": "ملاحظات",
     "type": "النوع",
     "attachment": "المرفق",
     "clickToUpload": "اضغط للرفع",
     "orDragDrop": "أو اسحب وأسقط SVG, PNG, JPG أو GIF (الحد الأقصى 800x400px)",
+  "chooseFiles": "اختر الملفات",
     "cancel": "إلغاء",
     "create": "إنشاء",
     "update" : "تحديث",
@@ -701,10 +705,14 @@
     "noExam": "لا توجد اختبارات",
     "type": "النوع",
     "part": "الجزء/المرحلة",
+    "total_points": "مجموع النقاط",
+    "total_grade": "التقدير العام",
     "date": "التاريخ",
     "grade": "التقدير",
     "examDeletedSuccessfully": "تم حذف الاختبار بنجاح",
-    "examDeletionFailed": "فشل حذف الاختبار",
+  "examDeletionFailed": "فشل حذف الاختبار",
+  "examUpdatedSuccessfully": "تم تحديث الاختبار بنجاح",
+  "examUpdateFailed": "فشل تحديث الاختبار",
     "types": {
       "stage": "المرحلة",
       "juzz": "الجزء"
@@ -716,6 +724,22 @@
     "editExamItem": "تعديل بند الاختبار",
     "showExamItem": "عرض بند الاختبار",
     "noExamItem": "لا توجد بنود"
+    ,
+    "q1": "سؤال 1",
+    "q2": "سؤال 2",
+    "q3": "سؤال 3",
+    "q4": "سؤال 4",
+    "q5": "سؤال 5",
+    "q6": "سؤال 6",
+    "t1": "تجويد 1",
+    "t2": "تجويد 2"
+  },
+  "grades": {
+    "fail": "راسب",
+    "acceptable": "مقبول",
+    "good": "جيد",
+    "very_good": "جيد جدا",
+    "excellent": "ممتاز"
   },
 
   "exam_types": {
@@ -741,6 +765,7 @@
     "editNomination": "تعديل الترشيح",
     "showNomination": "عرض الترشيح",
     "noNomination": "لا توجد ترشيحات",
+    "nominatedBy": "تم الترشيح بواسطة",
     "term" :"الفصل الدراسي",
     "fields": {
       "student": "الطالب",
@@ -791,11 +816,14 @@
   "activities": {
     "activityInformation": "معلومات النشاط",
     "title": "العنوان",
+    "media": "الوسائط",
     "place": "المكان",
     "activityDate": "تاريخ النشاط",
     "description": "الوصف",
     "mosqueName": "اسم المسجد",
     "selectMosque": "اختر المسجد",
+    "uploadImages": "رفع الصور",
+    "maxFilesInfo": "الحد الأقصى 8 صور، كل صورة حتى 5 ميغابايت",
     "addActivity": "إضافة نشاط",
     "editActivity": "تعديل النشاط",
     "showActivity": "عرض النشاط",

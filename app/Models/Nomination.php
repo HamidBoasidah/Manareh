@@ -16,7 +16,7 @@ class Nomination extends BaseModel
     protected $fillable = [
         'circle_id',
         'student_id',
-        'exam_id',
+        // exam_id removed: exam now stores nomination_id for the one-to-one relation
         'nomination_type',
         'exam_type',
         'exam_part',
@@ -64,6 +64,7 @@ class Nomination extends BaseModel
 
     public function exam()
     {
-        return $this->belongsTo(\App\Models\Exam::class, 'exam_id');
+        // One-to-one: a nomination has one exam (exam.nomination_id)
+        return $this->hasOne(\App\Models\Exam::class, 'nomination_id');
     }
 }

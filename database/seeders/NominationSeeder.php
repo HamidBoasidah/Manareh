@@ -85,13 +85,19 @@ class NominationSeeder extends Seeder
                 } catch (\Throwable $e) {
                     // ignore seeder-level failures for items so seeding can continue
                 }
-                $attributes['exam_id'] = $exam->id;
+                // we'll link the exam to the nomination after the nomination is created
             }
 
             // Use the factory to make a model (so default attributes like timestamps etc. are applied),
             // but pass concrete foreign keys to avoid creating related models that might be incomplete.
             $nom = Nomination::factory()->make($attributes);
             $nom->save();
+
+            // If we created an exam above for this nomination, link it via exams.nomination_id
+            if (isset($exam) && $exam instanceof \App\Models\Exam) {
+                $exam->nomination_id = $nom->id;
+                $exam->save();
+            }
         }
     }
 }

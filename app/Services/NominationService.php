@@ -93,15 +93,28 @@ class NominationService
                 }
             }
 
-            // attach exam_id to nomination attributes if created
-            if ($examId) {
-                $attributes['exam_id'] = $examId;
-            }
+            // We'll create the nomination below; after nomination exists we'll attach nomination_id to the exam.
 
             // remove transient exam_type/exam_part keys so they don't cause DB errors (nominations table doesn't store them)
             unset($attributes['exam_type'], $attributes['exam_part']);
 
-            return $this->nominations->create($attributes);
+            // create the nomination record
+            $nomination = $this->nominations->create($attributes);
+
+            // if we created an exam earlier, or an existing exam_id was provided, attach it to the nomination
+            if (!empty($examId)) {
+                if (isset($exam) && $exam instanceof Exam) {
+                    $target = $exam;
+                } else {
+                    $target = Exam::find($examId);
+                }
+                if ($target) {
+                    $target->nomination_id = $nomination->id;
+                    $target->save();
+                }
+            }
+
+            return $nomination;
         });
     }
 
@@ -110,7 +123,8 @@ class NominationService
         return DB::transaction(function () use ($id, $attributes) {
             $nomination = $this->nominations->findOrFail($id);
 
-            $examId = $attributes['exam_id'] ?? $nomination->exam_id ?? null;
+            // prefer explicit exam_id provided, otherwise use the existing linked exam (if any)
+            $examId = $attributes['exam_id'] ?? ($nomination->exam?->id ?? null);
 
             // If nomination is supervisor and exam details provided, create or update exam
             if (($attributes['nomination_type'] ?? $nomination->nomination_type) === 'supervisor_nomination') {
@@ -169,15 +183,29 @@ class NominationService
                         throw $e;
                     }
                     $examId = $exam->id;
-                    $attributes['exam_id'] = $examId;
+                    // link exam back to nomination
+                    $exam->nomination_id = $nomination->id;
+                    $exam->save();
                 }
             } else {
                 // if nomination is no longer supervisor and had an exam linked, we may choose to keep or nullify exam_id
                 // For now, keep existing exam_id unless explicitly set to null in attributes
             }
 
-            // remove transient exam_type/exam_part keys
-            unset($attributes['exam_type'], $attributes['exam_part']);
+            // remove transient exam_type/exam_part/exam_id keys before updating nomination record
+            unset($attributes['exam_type'], $attributes['exam_part'], $attributes['exam_id']);
+
+            // ensure exam (existing or newly created) is linked to this nomination
+            if (!empty($examId)) {
+                $target = Exam::find($examId);
+                if (isset($exam) && $exam instanceof Exam) {
+                    $target = $exam;
+                }
+                if ($target) {
+                    $target->nomination_id = $nomination->id;
+                    $target->save();
+                }
+            }
 
             return $this->nominations->update($id, $attributes);
         });

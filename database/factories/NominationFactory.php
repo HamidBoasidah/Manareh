@@ -22,7 +22,6 @@ class NominationFactory extends Factory
         return [
             'circle_id' => Circle::factory(),
             'student_id' => Student::factory(),
-            'exam_id' => null,
             'nomination_type' => $this->faker->randomElement(['supervisor_nomination','ideal_student','reader_of_month']),
             'academic_year_id' => AcademicYear::factory(),
             'term_id' => Term::factory(),

@@ -20,6 +20,8 @@ class StoreActivityRequest extends FormRequest
             'activity_date_g' => 'nullable|date',
             'activity_date_h' => 'nullable|string|max:50',
             'place' => 'nullable|string|max:255',
+            'media' => 'nullable|array',
+            'media.*' => 'file|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'created_by' => 'nullable|exists:users,id',
             'is_active' => 'nullable|boolean',
             'updated_by' => 'nullable|exists:users,id',

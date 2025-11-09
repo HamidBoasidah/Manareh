@@ -16,8 +16,7 @@ return new class extends Migration
             $table->foreignId('circle_id')->constrained()->cascadeOnDelete();
             $table->foreignId('student_id')->constrained()->cascadeOnDelete();
             $table->enum('nomination_type', ['supervisor_nomination', 'ideal_student', 'reader_of_month'])->comment('supervisor_nomination / ideal_student / reader_of_month');
-            // link to the exam (optional). We use exams as separate entities; nominations can point to an exam.
-            $table->foreignId('exam_id')->nullable()->constrained('exams')->nullOnDelete()->after('nomination_type');
+            // Note: nominations do not hold exam_id anymore. Exam will hold nomination_id (one-to-one).
             // status of nomination: submitted / approved / rejected
             $table->enum('status', ['submitted', 'approved', 'rejected'])->default('submitted');
             // link to academic year (optional)

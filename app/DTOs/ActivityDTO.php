@@ -15,6 +15,7 @@ class ActivityDTO extends BaseDTO
     public $place;
     public $is_active;
     public $mosque_name;
+    public $media;
 
     public function __construct(
         $id,
@@ -37,11 +38,12 @@ class ActivityDTO extends BaseDTO
         $this->place = $place;
         $this->is_active = $is_active;
         $this->mosque_name = $mosque_name;
+        $this->media = [];
     }
 
     public static function fromModel(Activity $m): self
     {
-        return new self(
+        $dto = new self(
             $m->id,
             $m->mosque_id ?? null,
             $m->title ?? null,
@@ -52,6 +54,22 @@ class ActivityDTO extends BaseDTO
             $m->is_active ?? null,
             optional($m->mosque)->name
         );
+
+        // include related media if loaded or available
+        try {
+            $dto->media = $m->media()->orderBy('id')->get()->map(function ($mm) {
+                return [
+                    'id' => $mm->id,
+                    'file_url' => $mm->file_url,
+                    'caption' => $mm->caption,
+                    'is_active' => (bool) $mm->is_active,
+                ];
+            })->toArray();
+        } catch (\Throwable $_) {
+            $dto->media = [];
+        }
+
+        return $dto;
     }
 
     public function toArray(): array
@@ -66,6 +84,7 @@ class ActivityDTO extends BaseDTO
             'place' => $this->place,
             'is_active' => $this->is_active,
             'mosque_name' => $this->mosque_name,
+            'media' => $this->media,
         ];
     }
 
