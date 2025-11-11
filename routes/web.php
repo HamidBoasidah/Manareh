@@ -461,6 +461,10 @@ Route::middleware(['auth'])->group(function () {
     // تعليم كل الرسائل كمقروءة
     Route::post('inbox/read-all', [InboxController::class, 'markAllAsRead'])
         ->name('user.inbox.read_all');
+
+    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
+    ->name('notifications.read');
+
     
 });
 
