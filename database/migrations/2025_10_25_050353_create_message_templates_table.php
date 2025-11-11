@@ -38,6 +38,8 @@ return new class extends Migration
             // نص القالب مع المتغيرات (placeholders)
             $table->text('body');
 
+            $table->text('description')->nullable();
+
             // تفعيل/تعطيل القالب بدون حذفه
             $table->boolean('is_active')->default(true);
 
