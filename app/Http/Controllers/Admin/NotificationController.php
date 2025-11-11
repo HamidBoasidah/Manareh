@@ -66,6 +66,14 @@ class NotificationController extends Controller
         return redirect()->route('admin.notifications.index');
     }
 
+    public function markAsRead(Notification $notification, NotificationService $service)
+    {
+        $service->markAsRead($notification->id, auth()->id());
+    
+        return back(); // أو return response()->noContent();
+    }
+
+
     public function activate(NotificationService $service, $id)
     {
         $service->activate($id);
