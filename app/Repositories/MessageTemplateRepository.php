@@ -4,14 +4,11 @@ namespace App\Repositories;
 
 use App\Models\MessageTemplate;
 use App\Repositories\Eloquent\BaseRepository;
-use Illuminate\Database\Eloquent\Builder;
 
 class MessageTemplateRepository extends BaseRepository
 {
     protected array $defaultWith = [
-        'mosque:id,name',
-        'creator:id,name',
-        'updater:id,name',
+        'mosque:id,name'
     ];
 
     public function __construct(MessageTemplate $model)
@@ -19,42 +16,38 @@ class MessageTemplateRepository extends BaseRepository
         parent::__construct($model);
     }
 
-    public function paginateWithFilters(array $filters = [], int $perPage = 15)
+    /**
+     * 🔹 البحث عن قالب حسب الكود والمسجد واللغة.
+     */
+    public function findByCode(string $code, int $mosqueId, ?string $locale = 'ar')
     {
-        $query = $this->builder();
+        return $this->model
+            ->where('code', $code)
+            ->where('mosque_id', $mosqueId)
+            ->where('locale', $locale)
+            ->where('is_active', true)
+            ->first();
+    }
 
-        if (!empty($filters['mosque_id'])) {
-            $query->where('mosque_id', $filters['mosque_id']);
-        }
+    /**
+     * 🔹 البحث عن جميع القوالب لمسجد معين.
+     */
+    public function findByMosque(int $mosqueId)
+    {
+        return $this->model
+            ->where('mosque_id', $mosqueId)
+            ->orderBy('code')
+            ->get();
+    }
 
-        if (!empty($filters['channel'])) {
-            $query->where('channel', $filters['channel']);
-        }
-
-        if (!empty($filters['locale'])) {
-            $query->where('locale', $filters['locale']);
-        }
-
-        if (array_key_exists('is_active', $filters) && $filters['is_active'] !== null && $filters['is_active'] !== '') {
-            $query->where('is_active', filter_var($filters['is_active'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false);
-        }
-
-        if (!empty($filters['search'])) {
-            $search = trim((string) $filters['search']);
-
-            $query->where(function (Builder $q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                    ->orWhere('code', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%");
-            });
-        }
-
-    $allowedSorts = ['code', 'name', 'channel', 'locale', 'updated_at', 'created_at'];
-    $sort = in_array($filters['sort'] ?? '', $allowedSorts, true) ? $filters['sort'] : 'updated_at';
-    $direction = strtolower($filters['direction'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
-
-    $query->orderBy($sort, $direction);
-
-        return $query->paginate($perPage)->withQueryString();
+    /**
+     * 🔹 البحث عن القوالب المفعّلة فقط.
+     */
+    public function active()
+    {
+        return $this->model
+            ->where('is_active', true)
+            ->orderBy('id', 'desc')
+            ->get();
     }
 }
