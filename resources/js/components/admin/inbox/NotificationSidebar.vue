@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="xl:w-1/4 w-full flex flex-col rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] h-full"
-  >
+  <div class="xl:w-1/4 w-full flex flex-col rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] h-full">
     <!-- Header بسيط -->
     <div class="px-4 pt-4 pb-3 sm:px-5 sm:pt-5 border-b border-gray-200 dark:border-gray-800">
       <h3 class="font-semibold text-gray-800 text-lg dark:text-white/90">
@@ -38,7 +36,7 @@ defineProps({
     required: true,
   },
   selectedId: {
-    type: Number,
+    type: [Number, String],
     default: null,
   },
 })

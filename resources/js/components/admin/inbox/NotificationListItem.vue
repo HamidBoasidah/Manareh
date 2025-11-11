@@ -25,9 +25,7 @@
     </div>
 
     <!-- نص مختصر: أول سطرين فقط -->
-    <p
-      class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2"
-    >
+    <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
       {{ notification.short_body || notification.body }}
     </p>
 
