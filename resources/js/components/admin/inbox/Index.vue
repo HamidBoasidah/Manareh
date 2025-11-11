@@ -1,14 +1,14 @@
 <template>
   <div class="flex flex-col gap-4 h-[calc(100vh-120px)]">
     <div class="flex flex-col xl:flex-row gap-4 h-full">
-      <!-- Sidebar -->
+      <!-- قائمة الإشعارات المختصرة -->
       <notification-sidebar
-        :notifications="notifications.data || notifications"
+        :notifications="list"
         :selected-id="selectedId"
         @select="handleSelect"
       />
 
-      <!-- Detail box -->
+      <!-- عرض الإشعار الكامل -->
       <notification-box :notification="selectedNotification" />
     </div>
   </div>
@@ -16,37 +16,48 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import NotificationSidebar from '@/components/admin/inbox/NotificationSidebar.vue'
-import NotificationBox from '@/components/admin/inbox/NotificationBox.vue'
+import NotificationSidebar from '@/Components/Inbox/NotificationSidebar.vue'
+import NotificationBox from '@/Components/Inbox/NotificationBox.vue'
 
 const props = defineProps({
+  // لو انت مرجع PaginatedResponse من لارافل
   notifications: {
-    type: Object,
+    type: [Object, Array],
     required: true,
   },
 })
 
-const list = computed(() => props.notifications.data || props.notifications || [])
+const list = computed(() =>
+  Array.isArray(props.notifications)
+    ? props.notifications
+    : (props.notifications.data || [])
+)
 
-const selectedId = ref(list.value.length ? list.value[0].id : null)
+// أول إشعار افتراضيًا
+const selectedId = ref(list.value[0]?.id ?? null)
 
+// الإشعار المحدد حاليًا
 const selectedNotification = computed(() =>
   list.value.find((n) => n.id === selectedId.value) || null
 )
 
+// لو القائمة تغيرت (pagination / reload)
 watch(
-  () => props.notifications,
-  (val) => {
-    const arr = val.data || val || []
-    if (!arr.length) {
+  () => list.value,
+  (items) => {
+    if (!items.length) {
       selectedId.value = null
-    } else if (!arr.find((n) => n.id === selectedId.value)) {
-      selectedId.value = arr[0].id
+      return
     }
-  }
+    if (!items.find((n) => n.id === selectedId.value)) {
+      selectedId.value = items[0].id
+    }
+  },
+  { immediate: true }
 )
 
 const handleSelect = (id) => {
   selectedId.value = id
+  // هنا تقدر تستدعي API لعمل mark-as-read لو حابب
 }
 </script>
