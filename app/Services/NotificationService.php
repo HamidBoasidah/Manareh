@@ -2,22 +2,24 @@
 
 namespace App\Services;
 
+use App\Models\Notification;
 use App\Repositories\NotificationRepository;
+use App\Services\MessageTemplateService;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use RuntimeException;
 
 class NotificationService
 {
     protected NotificationRepository $notifications;
+    protected MessageTemplateService $templates;
 
-    public function __construct(NotificationRepository $notifications)
-    {
+    public function __construct(
+        NotificationRepository $notifications,
+        MessageTemplateService $templates
+    ) {
         $this->notifications = $notifications;
+        $this->templates = $templates;
     }
-
-    /* --------------------------------
-     * CRUD عام (لو حبيت تستخدمه إداريًا)
-     * -------------------------------- */
 
     public function all(array $with = [])
     {
@@ -36,7 +38,32 @@ class NotificationService
 
     public function create(array $attributes)
     {
-        return $this->notifications->create($attributes);
+        return DB::transaction(function () use ($attributes) {
+            // إذا كان عندنا code للقالب نستخدمه لتوليد نص الإشعار
+            if (isset($attributes['template_code']) && isset($attributes['mosque_id'])) {
+                $payload = $attributes['payload'] ?? [];
+                $locale = $attributes['locale'] ?? 'ar';
+                $templateData = $this->templates->renderTemplate(
+                    $attributes['template_code'],
+                    $attributes['mosque_id'],
+                    $payload,
+                    $locale
+                );
+
+                if (! $templateData) {
+                    throw new RuntimeException("Template not found for code: {$attributes['template_code']}");
+                }
+
+                $attributes['subject'] = $templateData['subject'];
+                $attributes['body'] = $templateData['body'];
+
+                // استرجع ID القالب نفسه
+                $template = $this->templates->findByCode($attributes['template_code'], $attributes['mosque_id']);
+                $attributes['template_id'] = $template?->id;
+            }
+
+            return $this->notifications->create($attributes);
+        });
     }
 
     public function update($id, array $attributes)
@@ -59,67 +86,25 @@ class NotificationService
         return $this->notifications->deactivate($id);
     }
 
-    /* --------------------------------
-     * دوال خاصة بصندوق الوارد
-     * -------------------------------- */
-
     /**
-     * إرجاع Inbox المستخدم (قناة inbox فقط)
-     * مع ترتيب الأحدث أولاً.
+     * 🔹 واجهة مختصرة: إنشاء إشعار من كود القالب مباشرة.
+     *
+     * @param string $templateCode مثال: 'STUDENT_ADDED_TO_CIRCLE'
+     * @param string $recipientType مثال: 'student'
+     * @param int $recipientId
+     * @param int $mosqueId
+     * @param array $payload بيانات المتغيرات
      */
-    public function inboxForUser(int $userId, int $perPage = 15, array $with = [])
+    public function sendUsingTemplate(string $templateCode, string $recipientType, int $recipientId, int $mosqueId, array $payload = [])
     {
-        $query = $this->notifications
-            ->builder($with)
-            ->where('user_id', $userId)
-            ->where('channel', 'inbox')
-            ->orderByDesc('created_at');
-
-        return $query->paginate($perPage);
-    }
-
-    /**
-     * عدد الرسائل غير المقروءة للمستخدم في قناة inbox.
-     */
-    public function unreadCountForUser(int $userId): int
-    {
-        return $this->notifications
-            ->builder()
-            ->where('user_id', $userId)
-            ->where('channel', 'inbox')
-            ->whereNull('read_at')
-            ->count();
-    }
-
-    /**
-     * تعليم رسالة واحدة كمقروءة.
-     */
-    public function markAsRead(int $id)
-    {
-        return DB::transaction(function () use ($id) {
-            $notification = $this->notifications->findOrFail($id);
-
-            if (is_null($notification->read_at)) {
-                $notification->read_at = Carbon::now();
-                $notification->save();
-            }
-
-            return $notification;
-        });
-    }
-
-    /**
-     * تعليم جميع رسائل المستخدم كمقروءة في inbox.
-     */
-    public function markAllAsReadForUser(int $userId): int
-    {
-        return DB::transaction(function () use ($userId) {
-            return $this->notifications
-                ->builder()
-                ->where('user_id', $userId)
-                ->where('channel', 'inbox')
-                ->whereNull('read_at')
-                ->update(['read_at' => Carbon::now()]);
-        });
+        return $this->create([
+            'recipient_type' => $recipientType,
+            'recipient_id'   => $recipientId,
+            'mosque_id'      => $mosqueId,
+            'template_code'  => $templateCode,
+            'payload'        => $payload,
+            'channel'        => 'inbox',
+            'status'         => 'queued',
+        ]);
     }
 }
