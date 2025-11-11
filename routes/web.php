@@ -35,6 +35,7 @@ use App\Http\Controllers\Admin\MessageTemplateController;
 use App\Http\Controllers\Admin\CertificateTemplateController;
 use App\Http\Controllers\Admin\CertificateIssuedController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\User\InboxController;
 use App\Support\RoutePermissions;
 use App\Http\Controllers\LocaleController;
 
@@ -444,6 +445,22 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('notifications/{id}/deactivate', [NotificationController::class, 'deactivate'])
         ->name('admin.notifications.deactivate')
         ->middleware(RoutePermissions::can('notifications.update'));
+
+        // Inbox - قائمة الرسائل
+    Route::get('inbox', [InboxController::class, 'index'])
+        ->name('user.inbox.index');
+    
+    // Inbox - عرض رسالة واحدة (Master/Detail)
+    Route::get('inbox/{id}', [InboxController::class, 'show'])
+        ->name('user.inbox.show');
+    
+    // تعليم رسالة كمقروءة (مثلاً طلب AJAX/Inertia)
+    Route::post('inbox/{id}/read', [InboxController::class, 'markAsRead'])
+        ->name('user.inbox.read');
+    
+    // تعليم كل الرسائل كمقروءة
+    Route::post('inbox/read-all', [InboxController::class, 'markAllAsRead'])
+        ->name('user.inbox.read_all');
     
 });
 
