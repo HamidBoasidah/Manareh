@@ -13,25 +13,46 @@ return new class extends Migration
     {
         Schema::create('message_templates', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('mosque_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('code');
-            $table->string('name');
-            $table->string('channel', 50)->default('in_app');
-            $table->string('locale', 10)->default(config('app.locale', 'ar'));
-            $table->string('subject')->nullable();
-            $table->text('description')->nullable();
-            $table->longText('body');
-            $table->json('variables')->nullable();
-            $table->json('sample_payload')->nullable();
-            $table->json('extras')->nullable();
-            $table->boolean('is_active')->default(true);
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamps();
-            $table->softDeletes();
 
-            $table->unique(['mosque_id', 'code', 'locale', 'channel'], 'message_templates_code_unique');
-            $table->index(['channel', 'locale']);
+            // NULL = قالب عام على مستوى النظام
+            // قيمة = قالب مخصص لمسجد معيّن
+            $table->foreignId('mosque_id')
+                ->nullable()
+                ->constrained()
+                ->nullOnDelete();
+
+            // كود ثابت يُستخدم من النظام للربط مع الأحداث
+            // مثل: STUDENT_ADDED_TO_CIRCLE, EXAM_RESULT_PUBLISHED ...
+            $table->string('code');
+
+            // قناة الإرسال (الآن غالباً inbox، لكن جاهز للتوسع)
+            $table->enum('channel', ['inbox', 'sms', 'whatsapp', 'email'])
+                ->default('inbox');
+
+            // لدعم تعدد اللغات في نفس الكود (ar, en, ...)
+            $table->string('locale', 10)->default('ar');
+
+            // عنوان الرسالة داخل الـ Inbox (يمكن يكون NULL لبعض القنوات)
+            $table->string('subject')->nullable();
+
+            // نص القالب مع المتغيرات (placeholders)
+            $table->text('body');
+
+            // تفعيل/تعطيل القالب بدون حذفه
+            $table->boolean('is_active')->default(true);
+
+            // لتعليم القوالب الأساسية المزروعة بالـ seeder (اختياري للاستخدام في اللوحة)
+            $table->boolean('is_core')->default(false);
+
+            $table->softDeletes();
+            $table->timestamps();
+
+            // منع تكرار نفس القالب في نفس النطاق:
+            // لكل (mosque_id + code + channel + locale) قالب واحد
+            $table->unique(
+                ['mosque_id', 'code', 'channel', 'locale'],
+                'uq_message_templates_scope'
+            );
         });
     }
 
