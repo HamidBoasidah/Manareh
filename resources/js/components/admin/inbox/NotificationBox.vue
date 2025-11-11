@@ -3,33 +3,29 @@
     class="flex-1 flex flex-col h-full rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]"
   >
     <!-- Header -->
-    <div
-      class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800"
-    >
-      <div class="flex flex-col">
-        <h4 class="text-base font-semibold text-gray-800 dark:text-white/90">
-          {{ notification?.subject || 'تفاصيل الإشعار' }}
-        </h4>
-        <p
-          v-if="notification"
-          class="mt-1 text-xs text-gray-500 dark:text-gray-400"
-        >
+    <div class="px-5 py-4 border-b border-gray-200 dark:border-gray-800">
+      <h4 class="text-base font-semibold text-gray-800 dark:text-white/90">
+        {{ notification?.subject || 'تفاصيل الإشعار' }}
+      </h4>
+
+      <div v-if="notification" class="mt-1 flex items-center gap-3 text-xs">
+        <span class="text-gray-500 dark:text-gray-400">
           {{ notification.created_at_human || notification.created_at }}
+        </span>
+        <span
+          class="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full"
+          :class="
+            notification.is_read
+              ? 'bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-gray-300'
+              : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300'
+          "
+        >
           <span
-            class="inline-flex items-center gap-1 ml-3 text-[10px] px-2 py-0.5 rounded-full"
-            :class="
-              notification.is_read
-                ? 'bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-gray-300'
-                : 'bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-300'
-            "
-          >
-            <span
-              class="w-1.5 h-1.5 rounded-full"
-              :class="notification.is_read ? 'bg-gray-400' : 'bg-brand-500'"
-            ></span>
-            {{ notification.is_read ? 'مقروء' : 'غير مقروء' }}
-          </span>
-        </p>
+            class="w-1.5 h-1.5 rounded-full"
+            :class="notification.is_read ? 'bg-gray-400' : 'bg-brand-500'"
+          ></span>
+          {{ notification.is_read ? 'مقروء' : 'غير مقروء' }}
+        </span>
       </div>
     </div>
 
@@ -40,10 +36,10 @@
           {{ notification.body }}
         </p>
 
-        <!-- عرض بيانات إضافية من payload إن وجدت -->
+        <!-- إظهار payload إن وجد -->
         <div
           v-if="notification.payload && Object.keys(notification.payload).length"
-          class="mt-3 text-[11px] text-gray-500 dark:text-gray-400 border-t border-gray-100 dark:border-white/5 pt-2 space-y-0.5"
+          class="pt-3 mt-2 text-[11px] text-gray-500 border-t border-gray-100 dark:border-white/5 dark:text-gray-400 space-y-0.5"
         >
           <div
             v-for="(value, key) in notification.payload"
@@ -73,8 +69,5 @@ const props = defineProps({
   },
 })
 
-const formatKey = (key) => {
-  // بسيط: تقدر تخصصه لتعريب المفاتيح
-  return key.replace(/_/g, ' ')
-}
+const formatKey = (key) => key.replace(/_/g, ' ')
 </script>
