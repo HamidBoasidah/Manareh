@@ -2,157 +2,76 @@
 
 namespace Database\Seeders;
 
+use App\Models\MessageTemplate;
+use App\Models\Mosque;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
 
-class MessageTemplatesSeeder extends Seeder
+class MessageTemplateSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $now = Carbon::now();
-
+        // قائمة القوالب الأساسية
         $templates = [
-            // 📘 Enrollment
             [
-                'mosque_id' => null,
                 'code' => 'STUDENT_ADDED_TO_CIRCLE',
                 'channel' => 'inbox',
                 'locale' => 'ar',
-                'subject' => 'تم تسجيلك في الحلقة',
-                'body' => "مرحبًا {student_name} 🌿،\n\nتم تسجيلك بنجاح في حلقة: {circle_name} في مسجد {mosque_name}. نرجو لك وقتًا مباركًا ومثمرًا مع معلمك {teacher_name}.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'subject' => 'تم إضافتك إلى {circle_name}',
+                'body' => 'مرحبًا {student_name}، تم إضافتك إلى الحلقة "{circle_name}" بإشراف {teacher_name}.',
+                'description' => 'إشعار عند إضافة الطالب إلى حلقة جديدة.',
             ],
-
             [
-                'mosque_id' => null,
-                'code' => 'STUDENT_LEFT_CIRCLE',
-                'channel' => 'inbox',
-                'locale' => 'ar',
-                'subject' => 'تم إنهاء ارتباطك بالحلقة',
-                'body' => "عزيزي {student_name}،\n\nنُعلمك بأنه تم إنهاء ارتباطك بحلقة {circle_name} في مسجد {mosque_name}. نسأل الله لك التوفيق في مسيرتك القرآنية القادمة.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-
-            // 👨‍🏫 Staff
-            [
-                'mosque_id' => null,
-                'code' => 'TEACHER_ASSIGNED_TO_CIRCLE',
-                'channel' => 'inbox',
-                'locale' => 'ar',
-                'subject' => 'تم تكليفك بالتدريس في الحلقة',
-                'body' => "الأستاذ {teacher_name}،\n\nتم تكليفك بتدريس حلقة {circle_name} في مسجد {mosque_name}. نرجو لك التوفيق في أداء رسالتك التعليمية المباركة.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-
-            [
-                'mosque_id' => null,
-                'code' => 'SUPERVISOR_ASSIGNED_TO_CIRCLE',
-                'channel' => 'inbox',
-                'locale' => 'ar',
-                'subject' => 'تم تعيينك مشرفًا على الحلقة',
-                'body' => "الأستاذ {supervisor_name}،\n\nتم تعيينك مشرفًا على حلقة {circle_name} في مسجد {mosque_name}. نأمل أن تسهم جهودك في تطوير الأداء التربوي والتعليمي.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-
-            // 📅 Attendance
-            [
-                'mosque_id' => null,
                 'code' => 'STUDENT_ABSENT_TODAY',
                 'channel' => 'inbox',
                 'locale' => 'ar',
-                'subject' => 'غياب الطالب عن الحلقة',
-                'body' => "تنبيه ⚠️\n\nالطالب {student_name} غاب عن حلقة {circle_name} بتاريخ {date_g}.\nيرجى متابعة سبب الغياب واتخاذ الإجراء المناسب.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'subject' => 'غيابك اليوم عن الحلقة',
+                'body' => 'عزيزي {student_name}، لوحِظ غيابك اليوم ({date_g}) عن الحلقة "{circle_name}". نأمل التواصل مع المعلم {teacher_name}.',
+                'description' => 'إشعار عند تسجيل غياب الطالب في الجلسة اليومية.',
             ],
-
-            // 🏅 Nomination
             [
-                'mosque_id' => null,
-                'code' => 'STUDENT_NOMINATED_READER_MONTH',
+                'code' => 'STUDENT_NOMINATED_READER_OF_MONTH',
                 'channel' => 'inbox',
                 'locale' => 'ar',
-                'subject' => 'ترشيحك لقارئ الشهر',
-                'body' => "مبارك 🎉\n\nتم ترشيحك يا {student_name} كقارئ الشهر في حلقة {circle_name}.\nنرجو لك مزيدًا من التفوق والإتقان في تلاوة كتاب الله.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'subject' => 'ترشيحك كقارئ الشهر 🎉',
+                'body' => 'مبارك يا {student_name}! تم ترشيحك من قبل المشرف {supervisor_name} لتكون قارئ الشهر في "{circle_name}".',
+                'description' => 'يُرسل عند ترشيح الطالب لجائزة قارئ الشهر.',
             ],
-
             [
-                'mosque_id' => null,
-                'code' => 'NOMINATION_APPROVED',
+                'code' => 'STUDENT_EXAM_INVITATION',
                 'channel' => 'inbox',
                 'locale' => 'ar',
-                'subject' => 'تم اعتماد الترشيح',
-                'body' => "تهانينا 🎉\n\nتم اعتماد ترشيح {student_name} في فئة {nomination_type} من قِبل المشرف {supervisor_name}.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'subject' => 'تم ترشيحك لاختبار {exam_type}',
+                'body' => 'عزيزي {student_name}، تم ترشيحك لأداء اختبار {exam_type} بتاريخ {exam_date_g}. الرجاء الحضور في الموعد المحدد.',
+                'description' => 'إشعار ترشيح الطالب للاختبار.',
             ],
-
-            // 🧮 Exams
             [
-                'mosque_id' => null,
-                'code' => 'EXAM_ASSIGNED',
-                'channel' => 'inbox',
-                'locale' => 'ar',
-                'subject' => 'تم تحديد موعد اختبارك',
-                'body' => "تنبيه 📘\n\nتم تحديد موعد اختبارك في حلقة {circle_name} بتاريخ {exam_date_g} ({exam_type}).\nالاختبار سيشمل الجزء {juzz_number}.\nيرجى الاستعداد وفق خطة المعلم.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-
-            [
-                'mosque_id' => null,
-                'code' => 'EXAM_RESULT_PUBLISHED',
+                'code' => 'STUDENT_EXAM_RESULT',
                 'channel' => 'inbox',
                 'locale' => 'ar',
                 'subject' => 'نتيجة اختبارك متاحة الآن',
-                'body' => "النتيجة 📊\n\nعزيزي {student_name}، نتيجتك في اختبار {exam_type} الذي أجري بتاريخ {exam_date_g} هي {total_points} نقطة، والتقدير {total_grade}.\nملاحظات المعلم: {remarks}.",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
-            ],
-
-            // 🕌 General / System
-            [
-                'mosque_id' => null,
-                'code' => 'SYSTEM_ANNOUNCEMENT',
-                'channel' => 'inbox',
-                'locale' => 'ar',
-                'subject' => 'إعلان عام',
-                'body' => "📢 إعلان إداري:\n\n{message_body}",
-                'is_active' => true,
-                'is_core' => true,
-                'created_at' => $now,
-                'updated_at' => $now,
+                'body' => 'مرحبًا {student_name}، نتيجتك في اختبار {exam_type} هي {total_points} درجة ({total_grade}).',
+                'description' => 'يُرسل بعد تسجيل نتيجة الاختبار للطالب.',
             ],
         ];
 
-        DB::table('message_templates')->insert($templates);
+        // تكرار لكل مسجد
+        Mosque::all()->each(function ($mosque) use ($templates) {
+            foreach ($templates as $tpl) {
+                MessageTemplate::firstOrCreate(
+                    [
+                        'mosque_id' => $mosque->id,
+                        'code' => $tpl['code'],
+                    ],
+                    [
+                        'channel' => $tpl['channel'],
+                        'locale' => $tpl['locale'],
+                        'subject' => $tpl['subject'],
+                        'body' => $tpl['body'],
+                        'description' => $tpl['description'],
+                        'is_active' => true,
+                    ]
+                );
+            }
+        });
     }
 }
