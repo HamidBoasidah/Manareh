@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Notification;
 use App\Repositories\NotificationRepository;
 use App\Services\MessageTemplateService;
 use Illuminate\Support\Facades\DB;
@@ -38,32 +37,7 @@ class NotificationService
 
     public function create(array $attributes)
     {
-        return DB::transaction(function () use ($attributes) {
-            // إذا كان عندنا code للقالب نستخدمه لتوليد نص الإشعار
-            if (isset($attributes['template_code']) && isset($attributes['mosque_id'])) {
-                $payload = $attributes['payload'] ?? [];
-                $locale = $attributes['locale'] ?? 'ar';
-                $templateData = $this->templates->renderTemplate(
-                    $attributes['template_code'],
-                    $attributes['mosque_id'],
-                    $payload,
-                    $locale
-                );
-
-                if (! $templateData) {
-                    throw new RuntimeException("Template not found for code: {$attributes['template_code']}");
-                }
-
-                $attributes['subject'] = $templateData['subject'];
-                $attributes['body'] = $templateData['body'];
-
-                // استرجع ID القالب نفسه
-                $template = $this->templates->findByCode($attributes['template_code'], $attributes['mosque_id']);
-                $attributes['template_id'] = $template?->id;
-            }
-
-            return $this->notifications->create($attributes);
-        });
+        return $this->notifications->create($attributes);
     }
 
     public function update($id, array $attributes)
@@ -87,24 +61,95 @@ class NotificationService
     }
 
     /**
-     * 🔹 واجهة مختصرة: إنشاء إشعار من كود القالب مباشرة.
+     * إنشاء إشعار باستخدام قالب.
      *
-     * @param string $templateCode مثال: 'STUDENT_ADDED_TO_CIRCLE'
-     * @param string $recipientType مثال: 'student'
-     * @param int $recipientId
-     * @param int $mosqueId
-     * @param array $payload بيانات المتغيرات
+     * @param string $templateCode كود القالب (مثال: STUDENT_ADDED_TO_CIRCLE)
+     * @param int    $userId      صاحب صندوق الوارد (users.id)
+     * @param string $recipientType نوع الكيان (student/guardian/user...) اختياري
+     * @param int    $recipientId   id الكيان (students.id مثلاً) اختياري
+     * @param int    $mosqueId      المسجد المرتبط بالقالب
+     * @param array  $payload       بيانات المتغيرات
+     * @param string $locale        اللغة (افتراضي ar)
      */
-    public function sendUsingTemplate(string $templateCode, string $recipientType, int $recipientId, int $mosqueId, array $payload = [])
+    public function sendUsingTemplate(
+        string $templateCode,
+        int $userId,
+        ?string $recipientType,
+        ?int $recipientId,
+        int $mosqueId,
+        array $payload = [],
+        string $locale = 'ar'
+    ) {
+        return DB::transaction(function () use (
+            $templateCode,
+            $userId,
+            $recipientType,
+            $recipientId,
+            $mosqueId,
+            $payload,
+            $locale
+        ) {
+            $template = $this->templates->findByCode($templateCode, $mosqueId, $locale);
+
+            if (! $template || ! $template->is_active) {
+                throw new RuntimeException("Message template not found or inactive: {$templateCode}");
+            }
+
+            $subject = $template->renderSubject($payload);
+            $body    = $template->renderBody($payload);
+
+            return $this->notifications->create([
+                'user_id'        => $userId,
+                'recipient_type' => $recipientType,
+                'recipient_id'   => $recipientId,
+                'channel'        => $template->channel ?? 'inbox',
+                'template_id'    => $template->id,
+                'subject'        => $subject,
+                'body'           => $body,
+                'payload'        => $payload,
+                'status'         => 'sent',
+                'sent_at'        => now(),
+                'is_active'      => true,
+            ]);
+        });
+    }
+
+    /* صندوق الوارد للمستخدم (للاستخدام في InboxController) */
+
+    public function inboxForUser(int $userId, int $perPage = 15, array $with = [])
     {
-        return $this->create([
-            'recipient_type' => $recipientType,
-            'recipient_id'   => $recipientId,
-            'mosque_id'      => $mosqueId,
-            'template_code'  => $templateCode,
-            'payload'        => $payload,
-            'channel'        => 'inbox',
-            'status'         => 'queued',
-        ]);
+        return $this->notifications->builder($with)
+            ->where('user_id', $userId)
+            ->where('channel', 'inbox')
+            ->orderByDesc('created_at')
+            ->paginate($perPage);
+    }
+
+    public function unreadCountForUser(int $userId): int
+    {
+        return $this->notifications->builder()
+            ->where('user_id', $userId)
+            ->where('channel', 'inbox')
+            ->whereNull('read_at')
+            ->count();
+    }
+
+    public function markAsRead(int $id)
+    {
+        $n = $this->notifications->findOrFail($id);
+        if (is_null($n->read_at)) {
+            $n->read_at = now();
+            $n->save();
+        }
+        return $n;
+    }
+
+    public function markAllAsReadForUser(int $userId): int
+    {
+        return $this->notifications->builder()
+            ->where('user_id', $userId)
+            ->where('channel', 'inbox')
+            ->whereNull('read_at')
+            ->update(['read_at' => now()]);
     }
 }
