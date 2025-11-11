@@ -24,19 +24,21 @@
       ></span>
     </div>
 
-    <!-- نص مختصر: أول سطرين فقط -->
-    <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
-      {{ notification.short_body || notification.body }}
-    </p>
+    <!-- اختياري: معاينة قصيرة (مخفية افتراضيًا) -->
+    <template v-if="showPreview">
+      <p class="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+        {{ notification.short_body || truncate(notification.body, 120) }}
+      </p>
 
-    <span class="text-[10px] text-gray-400">
-      {{ notification.created_at_human || notification.created_at }}
-    </span>
+      <span class="text-[10px] text-gray-400">
+        {{ notification.created_at_human || notification.created_at }}
+      </span>
+    </template>
   </div>
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   notification: {
     type: Object,
     required: true,
@@ -45,5 +47,18 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  // show a short preview under the title (default false -> only title + dot)
+  showPreview: {
+    type: Boolean,
+    default: false,
+  },
 })
+
+const { showPreview } = props
+
+const truncate = (text = '', max = 100) => {
+  if (!text) return ''
+  if (text.length <= max) return text
+  return text.slice(0, max).trim() + '...'
+}
 </script>
