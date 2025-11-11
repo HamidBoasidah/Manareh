@@ -9,7 +9,7 @@
       />
 
       <!-- عرض الإشعار الكامل -->
-      <notification-box :notification="selectedNotification" />
+      <!-- <notification-box :notification="selectedNotification" />-->
     </div>
   </div>
 </template>
@@ -66,33 +66,32 @@ const selectedNotification = computed(() =>
   list.value.find((n) => n.id === selectedId.value) || null
 )
 
+const markAsRead = async (notification) => {
+  if (!notification || notification.is_read) return
+
+  // optimistic update
+  notification.is_read = true
+
+  try {
+    // Use axios to send a straightforward POST; pass param as object to Ziggy
+    await window.axios.post(route('user.inbox.read', { id: notification.id }))
+  } catch (err) {
+    // revert optimistic change on error
+    notification.is_read = false
+
+    // if forbidden, show console hint (user may not own this notification)
+    if (err.response && err.response.status === 403) {
+      console.warn('Mark as read forbidden for notification', notification.id)
+    } else {
+      console.error('Failed to mark as read', err)
+    }
+  }
+}
+
 const handleSelect = (id) => {
   selectedId.value = id
 
-  // Fetch full notification details (AJAX). The controller will return JSON
-  // when Accept: application/json, and will mark the notification as read.
-  // Merge the returned payload into the local list so the detail box shows full body.
-  try {
-    window.axios
-      .get(route('user.inbox.show', id), { headers: { Accept: 'application/json' } })
-      .then((resp) => {
-        const payload = resp.data
-        if (!payload) return
-
-        // Merge into the list (replace or augment the existing summary item)
-        const idx = list.value.findIndex((i) => i.id === payload.id)
-        if (idx !== -1) {
-          list.value.splice(idx, 1, { ...list.value[idx], ...payload })
-        } else {
-          // if not present (edge-case), push it
-          list.value.unshift(payload)
-        }
-      })
-      .catch(() => {
-        // ignore silently; the UX still selects the item
-      })
-  } catch (e) {
-    // ignore
-  }
+  const target = list.value.find((n) => n.id === id)
+  markAsRead(target)
 }
 </script>
