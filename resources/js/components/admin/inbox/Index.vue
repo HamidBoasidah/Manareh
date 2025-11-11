@@ -16,8 +16,8 @@
 
 <script setup>
 import { computed, ref, watch } from 'vue'
-import NotificationSidebar from '@/Components/Inbox/NotificationSidebar.vue'
-import NotificationBox from '@/Components/Inbox/NotificationBox.vue'
+import NotificationSidebar from '@/components/admin/inbox/NotificationSidebar.vue'
+import NotificationBox from '@/components/admin/inbox/NotificationBox.vue'
 
 const props = defineProps({
   notifications: {
