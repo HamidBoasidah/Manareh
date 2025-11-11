@@ -8,47 +8,58 @@ class MessageTemplateDTO extends BaseDTO
 {
     public $id;
     public $mosque_id;
-    public $mosque_name;
     public $code;
-    public $name;
     public $channel;
     public $locale;
     public $subject;
-    public $description;
     public $body;
-    public $variables;
-    public $sample_payload;
-    public $extras;
+    public $description;
     public $is_active;
-    public $created_at;
-    public $updated_at;
-    public $created_by_name;
-    public $updated_by_name;
+    public $rendered_subject;
+    public $rendered_body;
 
-    public static function fromModel(MessageTemplate $m): self
+    public function __construct(
+        $id,
+        $mosque_id = null,
+        $code = null,
+        $channel = null,
+        $locale = null,
+        $subject = null,
+        $body = null,
+        $description = null,
+        $is_active = null,
+        $rendered_subject = null,
+        $rendered_body = null
+    ) {
+        $this->id = $id;
+        $this->mosque_id = $mosque_id;
+        $this->code = $code;
+        $this->channel = $channel;
+        $this->locale = $locale;
+        $this->subject = $subject;
+        $this->body = $body;
+        $this->description = $description;
+        $this->is_active = $is_active;
+        $this->rendered_subject = $rendered_subject;
+        $this->rendered_body = $rendered_body;
+    }
+
+    public static function fromModel(MessageTemplate $m, array $payload = []): self
     {
-        $dto = new self();
-
-        $dto->id = $m->id;
-        $dto->mosque_id = $m->mosque_id;
-        $dto->mosque_name = optional($m->mosque)->name;
-        $dto->code = $m->code;
-        $dto->name = $m->name;
-        $dto->channel = $m->channel;
-        $dto->locale = $m->locale;
-        $dto->subject = $m->subject;
-        $dto->description = $m->description;
-        $dto->body = $m->body;
-        $dto->variables = $m->variables ?? [];
-        $dto->sample_payload = $m->sample_payload ?? [];
-        $dto->extras = $m->extras ?? [];
-        $dto->is_active = (bool) $m->is_active;
-        $dto->created_at = optional($m->created_at)->toDateTimeString();
-        $dto->updated_at = optional($m->updated_at)->toDateTimeString();
-        $dto->created_by_name = optional($m->creator)->name;
-        $dto->updated_by_name = optional($m->updater)->name;
-
-        return $dto;
+        return new self(
+            $m->id,
+            $m->mosque_id,
+            $m->code,
+            $m->channel,
+            $m->locale ?? 'ar',
+            $m->subject,
+            $m->body,
+            $m->description,
+            $m->is_active,
+            // ✅ معاينة النصوص بعد استبدال المتغيرات
+            $m->renderSubject($payload),
+            $m->renderBody($payload)
+        );
     }
 
     public function toArray(): array
@@ -56,22 +67,15 @@ class MessageTemplateDTO extends BaseDTO
         return [
             'id' => $this->id,
             'mosque_id' => $this->mosque_id,
-            'mosque_name' => $this->mosque_name,
             'code' => $this->code,
-            'name' => $this->name,
             'channel' => $this->channel,
             'locale' => $this->locale,
             'subject' => $this->subject,
-            'description' => $this->description,
             'body' => $this->body,
-            'variables' => $this->variables,
-            'sample_payload' => $this->sample_payload,
-            'extras' => $this->extras,
+            'description' => $this->description,
             'is_active' => $this->is_active,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'created_by_name' => $this->created_by_name,
-            'updated_by_name' => $this->updated_by_name,
+            'rendered_subject' => $this->rendered_subject,
+            'rendered_body' => $this->rendered_body,
         ];
     }
 
@@ -79,13 +83,11 @@ class MessageTemplateDTO extends BaseDTO
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
             'code' => $this->code,
             'channel' => $this->channel,
             'locale' => $this->locale,
-            'is_active' => $this->is_active ?? null,
-            'updated_at' => $this->updated_at,
-            'variables_count' => is_array($this->variables) ? count($this->variables) : 0,
+            'subject' => $this->subject,
+            'is_active' => $this->is_active,
         ];
     }
 }
