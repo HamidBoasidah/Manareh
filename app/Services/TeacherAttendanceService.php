@@ -23,6 +23,11 @@ class TeacherAttendanceService
         return $this->attendances->paginate($perPage, $with);
     }
 
+    public function paginateWithFilters(int $perPage = 15, array $filters = [], array $with = [])
+    {
+        return $this->attendances->paginateWithFilters($perPage, $filters, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->attendances->findOrFail($id, $with);

@@ -13,7 +13,8 @@
   "deleteCircleConfirmation": "Are you sure you want to delete this circle?",
   "deleteStudentConfirmation": "Are you sure you want to delete this student?",
     "deleteTermConfirmation": "Are you sure you want to delete this term?",
-    "deleteNominationConfirmation": "Are you sure you want to delete this nomination?"
+    "deleteNominationConfirmation": "Are you sure you want to delete this nomination?",
+    "deleteTeacherAttendanceConfirmation": "Are you sure you want to delete this attendance record?"
   },
   "nominations": {
     "addNomination": "Add Nomination",
@@ -88,9 +89,10 @@
     "videos": "Videos",
     "auth": "Authentication",
     "signin": "Signin",
-    "signup": "Signup",
-    "activityLog": "Activity Log",
-    "quran_suras": "Quran Suras"
+  "signup": "Signup",
+  "activityLog": "Activity Log",
+  "quran_suras": "Quran Suras",
+  "message_templates": "Message Templates"
   },
   "pages": {
     "welcomeLoggedIn": "You're logged in!",
@@ -453,6 +455,89 @@
       "termDeletedSuccessfully": "Term deleted successfully",
       "termDeletionFailed": "Failed to delete term"
     }
+  ,"message_templates": {
+    "basicInformation": "Template Details",
+    "addMessageTemplate": "Add Message Template",
+    "editMessageTemplate": "Edit Message Template",
+    "showMessageTemplate": "Show Message Template",
+    "noMessageTemplate": "No message templates",
+    "sections": {
+      "variables": "Variables",
+      "extras": "Extras",
+      "bodyPreview": "Body Preview"
+    },
+    "fields": {
+      "name": "Name",
+      "code": "Code",
+      "codePlaceholder": "Unique code, e.g. welcome_student",
+      "channel": "Channel",
+      "locale": "Locale",
+      "mosque": "Mosque",
+      "globalTemplate": "All mosques",
+      "subject": "Subject",
+      "subjectPlaceholder": "Optional subject for email or push channels",
+      "description": "Description",
+      "descriptionPlaceholder": "Internal description for admins",
+      "body": "Body",
+      "bodyPlaceholder": "Write the message body using placeholders like {{ student_name }}",
+      "isActive": "Active",
+      "variablesCount": "Variables",
+      "updatedAt": "Updated at",
+      "status": "Status",
+      "variableKey": "Key",
+      "variableLabel": "Display label",
+      "variableLabelPlaceholder": "Student name",
+      "variableType": "Type",
+      "variableRequired": "Required?",
+      "requiredCheckbox": "Required",
+      "variableDescription": "Description",
+      "sampleValue": "Sample value",
+      "sampleValuePlaceholder": "Example value shown in previews",
+      "ctaLabel": "CTA label",
+      "ctaLabelPlaceholder": "View details",
+      "ctaUrl": "CTA URL"
+    },
+    "filters": {
+      "allChannels": "All channels",
+      "allLocales": "All locales",
+      "allStatuses": "All statuses"
+    },
+    "actions": {
+      "createTemplate": "Create template",
+      "detectPlaceholders": "Detect placeholders",
+      "addVariable": "Add variable"
+    },
+    "empty": {
+      "noTemplates": "No templates found",
+      "noVariables": "No variables configured yet"
+    },
+    "help": {
+      "bodyVariables": "Wrap placeholders with {{ }}. Example: {{ student_name }}"
+    },
+    "notifications": {
+      "created": "Template created successfully",
+      "updated": "Template updated successfully",
+      "deleted": "Template deleted successfully",
+      "activated": "Template activated successfully",
+      "deactivated": "Template deactivated successfully",
+      "genericError": "Something went wrong. Please try again.",
+      "deleteConfirmation": "This action will permanently delete the template."
+    },
+    "channels": {
+      "in_app": "In-app",
+      "sms": "SMS",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "variableTypes": {
+      "string": "Short text",
+      "text": "Long text",
+      "number": "Number",
+      "date": "Date",
+      "time": "Time",
+      "datetime": "Date & Time"
+    }
+  }
   ,"datatable": {
     "show": "Show",
     "entries": "entries",
@@ -532,5 +617,41 @@
     "activityUpdateFailed": "Failed to update activity",
     "activityDeletedSuccessfully": "Activity deleted successfully",
     "activityDeletionFailed": "Failed to delete activity"
+  }
+  ,"teacher_attendances": {
+    "addTeacherAttendance": "Add Teacher Attendance",
+    "editTeacherAttendance": "Edit Teacher Attendance",
+    "showTeacherAttendance": "Show Teacher Attendance",
+    "teacherAttendanceInformation": "Teacher Attendance Information",
+    "teacher": "Teacher",
+    "selectTeacher": "Select a teacher",
+    "role": "Role",
+    "circle": "Circle",
+    "selectCircle": "Select a circle",
+    "dateG": "Attendance Date (Gregorian)",
+    "dateH": "Attendance Date (Hijri)",
+    "status": "Status",
+    "selectStatus": "Select status",
+    "notes": "Notes",
+    "recordedBy": "Recorded By",
+    "selectRecorder": "Select recorder",
+    "recordedAt": "Recorded At",
+    "noTeacherAttendance": "No teacher attendance records",
+    "teacherAttendanceCreatedSuccessfully": "Teacher attendance created successfully",
+    "teacherAttendanceCreationFailed": "Failed to create teacher attendance",
+    "teacherAttendanceUpdatedSuccessfully": "Teacher attendance updated successfully",
+    "teacherAttendanceUpdateFailed": "Failed to update teacher attendance",
+    "teacherAttendanceDeletedSuccessfully": "Teacher attendance deleted successfully",
+    "teacherAttendanceDeletionFailed": "Failed to delete teacher attendance",
+    "statusLabels": {
+      "present": "Present",
+      "absent": "Absent",
+      "excused": "Excused",
+      "late_in": "Late Arrival",
+      "early_out": "Early Checkout",
+      "half_day": "Half Day",
+      "on_leave": "On Leave",
+      "sick": "Sick"
+    }
   }
 }

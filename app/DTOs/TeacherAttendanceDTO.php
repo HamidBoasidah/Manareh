@@ -57,8 +57,53 @@ class TeacherAttendanceDTO extends BaseDTO
         $recordedBy = $m->recordedBy;
 
         $role = null;
-        if ($user && method_exists($user, 'getRoleNames')) {
-            $role = $user->getRoleNames()->first();
+        if ($user) {
+            $roles = collect($user->roles ?? []);
+            if ($roles->isNotEmpty()) {
+                $priority = [
+                    'teacher',
+                    'supervisor_edu',
+                    'supervisor_tarbawi',
+                    'manager',
+                    'admin',
+                    'editor',
+                    'viewer',
+                    'student',
+                ];
+
+                $selectedRole = null;
+                foreach ($priority as $priorityName) {
+                    $match = $roles->firstWhere('name', $priorityName);
+                    if ($match) {
+                        $selectedRole = $match;
+                        break;
+                    }
+                }
+
+                if (!$selectedRole) {
+                    $selectedRole = $roles->first();
+                }
+
+                if ($selectedRole) {
+                    $locale = app()->getLocale();
+                    if (method_exists($selectedRole, 'getTranslation')) {
+                        $role = $selectedRole->getTranslation('display_name', $locale);
+                    }
+
+                    if (!$role) {
+                        $displayName = $selectedRole->display_name ?? null;
+                        if (is_array($displayName)) {
+                            $role = $displayName[$locale] ?? reset($displayName);
+                        } else {
+                            $role = $displayName;
+                        }
+                    }
+
+                    if (!$role) {
+                        $role = ucfirst(str_replace('_', ' ', $selectedRole->name));
+                    }
+                }
+            }
         }
 
         return new self(

@@ -3,3 +3,25 @@
 - [x] Update EnrollmentSeeder to enroll only half of the students and respect new schema.
 - [ ] Adjust EnrollmentSeeder so each circle gets 22 students and remaining students stay free.
 - [ ] Document/verify seeding steps for the user after changes.
+
+## Teacher Attendance UI
+- [x] Review existing district components for structure (Create/Edit/Show/List).
+- [x] Draft component requirements for teacher attendance (fields, props, localization keys).
+- [x] Scaffold `CreateTeacherAttendance.vue` mirroring district create layout with attendance-specific fields.
+- [x] Scaffold `EditTeacherAttendance.vue` reusing create form & wiring update submission.
+- [x] Scaffold `ShowTeacherAttendance.vue` to display attendance details (status, circle, teacher, recorded_by).
+- [x] Scaffold `ShowTeacherAttendances.vue` listing view with filters, pagination, and actions.
+- [ ] Wire teacher attendance index search/sort params through the backend service.
+- [ ] QA teacher attendance flows (create/edit/toggle/delete) once backend endpoints are confirmed.
+
+## Teacher Attendance Role Display Fix
+- [x] Eager load user roles with display names for attendance listings.
+- [x] Map user roles to the active locale before returning DTO data.
+- [ ] Update frontend card UI to render localized role labels.
+- [x] Smoke-check (lint/tests) after adjustments.
+
+## Teacher Attendance Calendar Filters
+- [x] Add month/year selector above attendance cards.
+- [x] Render localized weekday buttons for the active month with today's date highlighted.
+- [x] Filter the visible cards by the selected day while keeping selections consistent.
+- [x] Verify lint/tests after UI update.

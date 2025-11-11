@@ -9,6 +9,8 @@ use App\Http\Requests\UpdateTeacherAttendanceRequest;
 use App\Services\TeacherAttendanceService;
 use App\DTOs\TeacherAttendanceDTO;
 use App\Models\TeacherAttendance;
+use App\Models\Circle;
+use App\Models\User;
 use Inertia\Inertia;
 
 class TeacherAttendanceController extends Controller
@@ -23,17 +25,38 @@ class TeacherAttendanceController extends Controller
 
     public function index(Request $request, TeacherAttendanceService $service)
     {
-        $perPage = $request->input('per_page', 10);
-        $items = $service->paginate($perPage);
+        $perPage = (int) $request->input('per_page', 12);
+        $perPage = in_array($perPage, [12, 24, 48], true) ? $perPage : 12;
+
+        $filters = collect($request->only([
+            'search',
+            'sort',
+            'direction',
+            'selected_date',
+            'month',
+        ]))->filter(function ($value) {
+            if (is_string($value)) {
+                return trim($value) !== '';
+            }
+            return !is_null($value);
+        })->map(function ($value) {
+            return is_string($value) ? trim($value) : $value;
+        })->toArray();
+
+        $items = $service->paginateWithFilters($perPage, $filters);
         $items->getCollection()->transform(function ($m) {
             return TeacherAttendanceDTO::fromModel($m)->toIndexArray();
         });
-        return Inertia::render('Admin/TeacherAttendance/Index', ['attendances' => $items]);
+
+        return Inertia::render('Admin/TeacherAttendance/Index', [
+            'teacher_attendances' => $items,
+            'filters' => $filters,
+        ]);
     }
 
     public function create()
     {
-        return Inertia::render('Admin/TeacherAttendance/Create');
+        return Inertia::render('Admin/TeacherAttendance/Create', $this->formOptions());
     }
 
     public function store(StoreTeacherAttendanceRequest $request, TeacherAttendanceService $service)
@@ -45,13 +68,16 @@ class TeacherAttendanceController extends Controller
     public function show(TeacherAttendance $teacherAttendance)
     {
         $dto = TeacherAttendanceDTO::fromModel($teacherAttendance)->toArray();
-        return Inertia::render('Admin/TeacherAttendance/Show', ['attendance' => $dto]);
+        return Inertia::render('Admin/TeacherAttendance/Show', ['teacher_attendance' => $dto]);
     }
 
     public function edit(TeacherAttendance $teacherAttendance)
     {
         $dto = TeacherAttendanceDTO::fromModel($teacherAttendance)->toArray();
-        return Inertia::render('Admin/TeacherAttendance/Edit', ['attendance' => $dto]);
+        return Inertia::render('Admin/TeacherAttendance/Edit', array_merge(
+            ['teacher_attendance' => $dto],
+            $this->formOptions()
+        ));
     }
 
     public function update(UpdateTeacherAttendanceRequest $request, TeacherAttendanceService $service, TeacherAttendance $teacherAttendance)
@@ -76,5 +102,30 @@ class TeacherAttendanceController extends Controller
     {
         $service->deactivate($id);
         return back()->with('success', 'Attendance deactivated successfully');
+    }
+
+    protected function formOptions(): array
+    {
+        $circles = Circle::query()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        $teachers = User::query()
+            ->select(['id', 'name'])
+            ->role('teacher')
+            ->orderBy('name')
+            ->get();
+
+        $recorders = User::query()
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        return [
+            'circles' => $circles,
+            'teachers' => $teachers,
+            'recorders' => $recorders,
+        ];
     }
 }

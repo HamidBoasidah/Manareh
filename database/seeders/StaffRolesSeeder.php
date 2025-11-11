@@ -11,8 +11,8 @@ class StaffRolesSeeder extends Seeder
     {
         $roles = [
             'teacher' => ['en' => 'Teacher', 'ar' => 'معلم'],
-            'supervisor_edu' => ['en' => 'Educational Supervisor', 'ar' => 'مشرف تربوي (تعليمي)'],
-            'supervisor_tarbawi' => ['en' => 'Tarbawi Supervisor', 'ar' => 'مشرف تربوي (تربوي)'],
+            'supervisor_edu' => ['en' => 'Educational Supervisor', 'ar' => 'مشرف (تعليمي)'],
+            'supervisor_tarbawi' => ['en' => 'Tarbawi Supervisor', 'ar' => 'مشرف (تربوي)'],
         ];
 
         foreach ($roles as $name => $display) {

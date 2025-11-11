@@ -87,6 +87,7 @@
     "deleteAssignmentConfirmation": "هل أنت متأكد أنك تريد حذف هذا التعيين؟"
     ,
     "deleteNominationConfirmation": "هل أنت متأكد أنك تريد حذف هذا الترشيح؟",
+    "deleteTeacherAttendanceConfirmation": "هل أنت متأكد أنك تريد حذف سجل الحضور هذا؟",
     "deleteExamConfirmation": "هل أنت متأكد أنك تريد حذف هذا الاختبار؟"
   },
 
@@ -475,6 +476,90 @@
     "termDeletionFailed": "فشل حذف الفصل الدراسي"
   },
 
+  "message_templates": {
+    "basicInformation": "معلومات القالب",
+    "addMessageTemplate": "إضافة قالب رسالة",
+    "editMessageTemplate": "تعديل قالب الرسالة",
+    "showMessageTemplate": "عرض قالب الرسالة",
+    "noMessageTemplate": "لا توجد قوالب",
+    "sections": {
+      "variables": "المتغيرات",
+      "extras": "إعدادات إضافية",
+      "bodyPreview": "معاينة النص"
+    },
+    "fields": {
+      "name": "الاسم",
+      "code": "الرمز",
+      "codePlaceholder": "رمز فريد مثل welcome_student",
+      "channel": "القناة",
+      "locale": "اللغة",
+      "mosque": "المسجد",
+      "globalTemplate": "قالب عام",
+      "subject": "الموضوع",
+      "subjectPlaceholder": "موضوع اختياري لقنوات البريد أو الإشعارات",
+      "description": "الوصف",
+      "descriptionPlaceholder": "وصف داخلي للمسؤولين",
+      "body": "النص",
+      "bodyPlaceholder": "اكتب المحتوى مستخدمًا متغيرات مثل {{ student_name }}",
+      "isActive": "الحالة",
+      "variablesCount": "عدد المتغيرات",
+      "updatedAt": "آخر تحديث",
+      "status": "الحالة",
+      "variableKey": "المفتاح",
+      "variableLabel": "الاسم الظاهر",
+      "variableLabelPlaceholder": "اسم الطالب",
+      "variableType": "النوع",
+      "variableRequired": "إلزامي؟",
+      "requiredCheckbox": "إلزامي",
+      "variableDescription": "الوصف",
+      "sampleValue": "قيمة مثال",
+      "sampleValuePlaceholder": "قيمة توضيحية تظهر في المعاينات",
+      "ctaLabel": "نص زر الإجراء",
+      "ctaLabelPlaceholder": "عرض التفاصيل",
+      "ctaUrl": "رابط زر الإجراء"
+    },
+    "filters": {
+      "allChannels": "كل القنوات",
+      "allLocales": "كل اللغات",
+      "allStatuses": "جميع الحالات"
+    },
+    "actions": {
+      "createTemplate": "إضافة قالب",
+      "detectPlaceholders": "استخراج المتغيرات",
+      "addVariable": "إضافة متغير"
+    },
+    "empty": {
+      "noTemplates": "لا توجد قوالب",
+      "noVariables": "لم يتم إضافة متغيرات بعد"
+    },
+    "help": {
+      "bodyVariables": "ضع المتغيرات بين {{ }}. مثال: {{ student_name }}"
+    },
+    "notifications": {
+      "created": "تم إنشاء القالب بنجاح",
+      "updated": "تم تحديث القالب بنجاح",
+      "deleted": "تم حذف القالب بنجاح",
+      "activated": "تم تفعيل القالب بنجاح",
+      "deactivated": "تم تعطيل القالب بنجاح",
+      "genericError": "حدث خطأ ما، يرجى المحاولة مرة أخرى.",
+      "deleteConfirmation": "سيتم حذف هذا القالب نهائيًا."
+    },
+    "channels": {
+      "in_app": "داخل النظام",
+      "sms": "رسالة نصية",
+      "whatsapp": "واتساب",
+      "email": "البريد الإلكتروني"
+    },
+    "variableTypes": {
+      "string": "نص قصير",
+      "text": "نص طويل",
+      "number": "رقم",
+      "date": "تاريخ",
+      "time": "وقت",
+      "datetime": "تاريخ ووقت"
+    }
+  },
+
   "students": {
     "studentInformation": "معلومات الطالب",
     "studentName": "اسم الطالب",
@@ -695,7 +780,37 @@
     "addTeacherAttendance": "إضافة حضور معلم",
     "editTeacherAttendance": "تعديل حضور المعلم",
     "showTeacherAttendance": "عرض حضور المعلم",
-    "noTeacherAttendance": "لا توجد بيانات حضور"
+    "teacherAttendanceInformation": "معلومات حضور المعلم",
+    "teacher": "المعلم",
+    "selectTeacher": "اختر المعلم",
+    "role": "الدور",
+    "circle": "الحلقة",
+    "selectCircle": "اختر الحلقة",
+    "dateG": "تاريخ الحضور (ميلادي)",
+    "dateH": "تاريخ الحضور (هجري)",
+    "status": "الحالة",
+    "selectStatus": "اختر الحالة",
+    "notes": "ملاحظات",
+    "recordedBy": "سجل بواسطة",
+    "selectRecorder": "اختر المسجل",
+    "recordedAt": "تاريخ التسجيل",
+    "noTeacherAttendance": "لا توجد سجلات حضور للمعلمين",
+    "teacherAttendanceCreatedSuccessfully": "تم إنشاء سجل حضور المعلم بنجاح",
+    "teacherAttendanceCreationFailed": "فشل إنشاء سجل حضور المعلم",
+    "teacherAttendanceUpdatedSuccessfully": "تم تحديث سجل حضور المعلم بنجاح",
+    "teacherAttendanceUpdateFailed": "فشل تحديث سجل حضور المعلم",
+    "teacherAttendanceDeletedSuccessfully": "تم حذف سجل حضور المعلم بنجاح",
+    "teacherAttendanceDeletionFailed": "فشل حذف سجل حضور المعلم",
+    "statusLabels": {
+      "present": "حاضر",
+      "absent": "غائب",
+      "excused": "معذور",
+      "late_in": "تأخر في الحضور",
+      "early_out": "انصراف مبكر",
+      "half_day": "نصف يوم",
+      "on_leave": "إجازة",
+      "sick": "مريض"
+    }
   },
 
   "exams": {
@@ -841,13 +956,6 @@
     "editActivityMedia": "تعديل وسائط النشاط",
     "showActivityMedia": "عرض وسائط النشاط",
     "noActivityMedia": "لا توجد وسائط"
-  },
-
-  "message_templates": {
-    "addMessageTemplate": "إضافة قالب رسالة",
-    "editMessageTemplate": "تعديل قالب الرسالة",
-    "showMessageTemplate": "عرض قالب الرسالة",
-    "noMessageTemplate": "لا توجد قوالب"
   },
 
   "notifications": {

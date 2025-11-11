@@ -31,6 +31,7 @@ class DatabaseSeeder extends Seeder
             GuardianSeeder::class,
             StudentSeeder::class,
             StaffAssignmentSeeder::class,
+            TeacherAttendanceSeeder::class,
             EnrollmentSeeder::class,
             DailyStudySessionSeeder::class,
             NominationSeeder::class,
