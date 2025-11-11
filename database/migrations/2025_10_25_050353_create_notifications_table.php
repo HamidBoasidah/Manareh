@@ -13,19 +13,57 @@ return new class extends Migration
     {
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
-            $table->string('recipient_type'); // student/guardian/user
-            $table->unsignedBigInteger('recipient_id');
-            $table->enum('channel', ['inbox','sms','whatsapp','email'])->default('inbox');
-            $table->foreignId('template_id')->nullable()->constrained('message_templates')->nullOnDelete();
-            $table->json('payload')->nullable(); // {student_id, circle_id, date, status, ...}
-            $table->string('status')->default('queued'); // queued/sent/failed
+
+            // المستلم الأساسي داخل النظام (صاحب صندوق الوارد)
+            $table->foreignId('user_id')
+                ->constrained('users')
+                ->cascadeOnDelete();
+
+            // مرونة إضافية (اختياري): إن احتجت تربط الإشعار بكائن آخر بشكل بوليمورفيك
+            // مثل student/guardian/... بدون إلزام الواجهة باستخدامه
+            $table->string('recipient_type')->nullable(); // student/guardian/...
+            $table->unsignedBigInteger('recipient_id')->nullable();
+
+            // قناة الإرسال
+            $table->enum('channel', ['inbox', 'sms', 'whatsapp', 'email'])
+                ->default('inbox');
+
+            // مرجع للقالب المستخدم (إن وجد)
+            $table->foreignId('template_id')
+                ->nullable()
+                ->constrained('message_templates')
+                ->nullOnDelete();
+
+            // نص العنوان والمحتوى النهائي بعد استبدال المتغيرات (ما يُعرض فعلاً للمستخدم)
+            $table->string('subject')->nullable();
+            $table->text('body')->nullable();
+
+            // بيانات إضافية للربط (IDs، روابط، معلومات...) تستخدمها الواجهة أو التقارير
+            $table->json('payload')->nullable();
+
+            // حالة الإشعار:
+            // queued = بانتظار الإرسال (مفيد لـ SMS/Email)
+            // sent   = تم إنشاؤه/إرساله
+            // failed = فشل في قناة خارجية
+            $table->string('status', 20)->default('queued');
+
+            // وقت الإرسال الفعلي (لقنوات خارجية أو لتوثيق إنشاء inbox)
             $table->timestamp('sent_at')->nullable();
+
+            // وقت القراءة (Inbox): NULL = غير مقروء
+            $table->timestamp('read_at')->nullable();
+
+            // في حال فشل الإرسال لقنوات خارجية
             $table->text('error')->nullable();
+
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();
 
-            $table->index(['recipient_type','recipient_id','status'], 'idx_notify_recipient');
+            // فهارس مهمة لصندوق الوارد
+            $table->index(['user_id', 'channel', 'status'], 'idx_notifications_user_channel_status');
+            $table->index(['user_id', 'channel', 'read_at'], 'idx_notifications_user_read');
+            $table->index(['recipient_type', 'recipient_id'], 'idx_notifications_poly_recipient');
         });
     }
 
