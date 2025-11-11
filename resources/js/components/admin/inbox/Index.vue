@@ -58,6 +58,17 @@ watch(
 
 const handleSelect = (id) => {
   selectedId.value = id
-  // هنا تقدر تستدعي API لعمل mark-as-read لو حابب
+
+  const n = list.value.find((x) => x.id === id)
+  if (n && !n.is_read) {
+    // تحديث فوري في الواجهة (optimistic UI)
+    n.is_read = true
+
+    // طلب لتعليم الإشعار كمقروء في الباك
+    router.post(route('notifications.read', id), {}, {
+      preserveScroll: true,
+      preserveState: true,
+    })
+  }
 }
 </script>
