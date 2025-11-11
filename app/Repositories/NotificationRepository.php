@@ -15,14 +15,4 @@ class NotificationRepository extends BaseRepository
     {
         parent::__construct($model);
     }
-
-    public function unreadForUser(string $type, int $id)
-    {
-        return $this->model
-            ->where('recipient_type', $type)
-            ->where('recipient_id', $id)
-            ->where('status', 'queued')
-            ->latest()
-            ->get();
-    }
 }
