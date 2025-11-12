@@ -91,26 +91,7 @@ const markAsRead = async (notification) => {
 const handleSelect = (id) => {
   selectedId.value = id
 
-  // Fetch full notification details via JSON endpoint and merge into list
-  window.axios
-    .get(route('user.inbox.show', { id }), { headers: { Accept: 'application/json' } })
-    .then((resp) => {
-      const payload = resp.data
-      if (!payload) return
-
-      const idx = list.value.findIndex((i) => i.id === payload.id)
-      if (idx !== -1) {
-        list.value.splice(idx, 1, { ...list.value[idx], ...payload })
-      } else {
-        list.value.unshift(payload)
-      }
-    })
-    .catch((err) => {
-      // If JSON fetch failed, fall back to marking as read via the dedicated endpoint
-      const target = list.value.find((n) => n.id === id)
-      markAsRead(target)
-      // optionally log
-      console.warn('Could not fetch full notification via JSON, fallback to markAsRead', err)
-    })
+  const target = list.value.find((n) => n.id === id)
+  markAsRead(target)
 }
 </script>

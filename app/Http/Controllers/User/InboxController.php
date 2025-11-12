@@ -52,18 +52,7 @@ class InboxController extends Controller
             abort(403);
         }
 
-        // If request expects JSON (AJAX master/detail), mark as read and return JSON payload.
-        if ($request->wantsJson()) {
-            if (is_null($notification->read_at)) {
-                $service->markAsRead($notification->id);
-                $notification->refresh();
-            }
-
-            $dto = NotificationDTO::fromModel($notification)->toArray();
-            return response()->json($dto);
-        }
-
-        // Default: render Inertia page (navigating to /inbox/{id}).
+        // تعليم كمقروء
         if (is_null($notification->read_at)) {
             $service->markAsRead($notification->id);
             $notification->refresh();
