@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\BaseModel;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Notification extends BaseModel
 {
@@ -30,71 +29,33 @@ class Notification extends BaseModel
         'payload' => 'array',
         'sent_at' => 'datetime',
         'read_at' => 'datetime',
-        'is_active' => 'boolean',
     ];
-
-    /* -----------------------------------------------------------------
-     | العلاقات (Relationships)
-     |------------------------------------------------------------------ */
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function template()
     {
         return $this->belongsTo(MessageTemplate::class, 'template_id');
     }
 
-    /* -----------------------------------------------------------------
-     | Accessors / Virtual Attributes
-     |------------------------------------------------------------------ */
-
-    // ✅ هل تمت قراءة الإشعار؟
-    protected function isRead(): Attribute
+    // هل الإشعار مقروء؟
+    public function getIsReadAttribute(): bool
     {
-        return Attribute::get(fn () => ! is_null($this->read_at));
+        return ! is_null($this->read_at);
     }
 
-    // ✉️ ملخص أولي من الرسالة (للقائمة اليسرى في البريد)
-    protected function shortBody(): Attribute
+    // نص مختصر للقائمة الجانبية
+    public function getShortBodyAttribute(): string
     {
-        return Attribute::get(function () {
-            $text = strip_tags($this->body ?? '');
-            return mb_strimwidth($text, 0, 80, '...');
-        });
+        $text = strip_tags((string) $this->body);
+        return mb_strlen($text) > 80
+            ? mb_substr($text, 0, 80) . '...'
+            : $text;
     }
 
-    // 💬 وصف نصي للحالة
-    protected function statusLabel(): Attribute
+    // صيغة الوقت (تستفيد منها بالـ DTO إن حبيت)
+    public function getCreatedAtHumanAttribute(): string
     {
-        return Attribute::get(function () {
-            return match ($this->status) {
-                'queued' => 'قيد الانتظار',
-                'sent'   => 'تم الإرسال',
-                'failed' => 'فشل الإرسال',
-                default  => ucfirst($this->status),
-            };
-        });
-    }
-
-    /* -----------------------------------------------------------------
-     | Scopes (لاستخدامها لاحقًا في الواجهة)
-     |------------------------------------------------------------------ */
-
-    public function scopeUnread($q)
-    {
-        return $q->whereNull('read_at');
-    }
-
-    public function scopeRead($q)
-    {
-        return $q->whereNotNull('read_at');
-    }
-
-    public function scopeInbox($q)
-    {
-        return $q->where('channel', 'inbox');
+        return $this->created_at
+            ? $this->created_at->diffForHumans()
+            : '';
     }
 }

@@ -134,15 +134,23 @@ class NotificationService
             ->count();
     }
 
-    public function markAsRead(int $id)
+    public function markAsRead(int $id, int $userId)
     {
         $n = $this->notifications->findOrFail($id);
+    
+        // تأكد أن الإشعار يخص هذا المستخدم
+        if ($n->user_id !== $userId) {
+            abort(403);
+        }
+    
         if (is_null($n->read_at)) {
             $n->read_at = now();
             $n->save();
         }
+    
         return $n;
     }
+
 
     public function markAllAsReadForUser(int $userId): int
     {
