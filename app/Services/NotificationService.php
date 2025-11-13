@@ -2,162 +2,180 @@
 
 namespace App\Services;
 
+use App\DTOs\NotificationDTO;
+use App\Models\Notification;
 use App\Repositories\NotificationRepository;
-use App\Services\MessageTemplateService;
-use Illuminate\Support\Facades\DB;
-use RuntimeException;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Log;
 
 class NotificationService
 {
-    protected NotificationRepository $notifications;
-    protected MessageTemplateService $templates;
-
     public function __construct(
-        NotificationRepository $notifications,
-        MessageTemplateService $templates
+        protected NotificationRepository $notifications,
+        protected MessageTemplateService $templates,
     ) {
-        $this->notifications = $notifications;
-        $this->templates = $templates;
     }
 
-    public function all(array $with = [])
+    public function paginateForUser(int $userId, int $perPage = 15): LengthAwarePaginator
     {
-        return $this->notifications->all($with);
+        $paginator = $this->notifications->paginateForUser($userId, $perPage);
+
+        return $this->mapPaginator($paginator, fn (Notification $notification) => NotificationDTO::fromModel($notification)->toIndexArray());
     }
 
-    public function paginate(int $perPage = 15, array $with = [])
+    public function getForUser(int $userId, int $notificationId): NotificationDTO
     {
-        return $this->notifications->paginate($perPage, $with);
+        $notification = $this->notifications->findForUser($userId, $notificationId);
+        return NotificationDTO::fromModel($notification);
     }
 
-    public function find($id, array $with = [])
+    public function markAsRead(int $userId, int $notificationId): void
     {
-        return $this->notifications->findOrFail($id, $with);
+        $this->notifications->markAsRead($userId, [$notificationId]);
     }
 
-    public function create(array $attributes)
+    public function markAsUnread(int $userId, int $notificationId): void
     {
-        return $this->notifications->create($attributes);
+        $this->notifications->markAsUnread($userId, [$notificationId]);
     }
 
-    public function update($id, array $attributes)
+    public function markAllAsRead(int $userId): void
     {
-        return $this->notifications->update($id, $attributes);
+        $this->notifications->markAllAsRead($userId);
     }
 
-    public function delete($id)
+    public function markAllAsUnread(int $userId): void
     {
-        return $this->notifications->delete($id);
+        $this->notifications->markAllAsUnread($userId);
     }
 
-    public function activate($id)
+    public function paginateForAdmin(int $perPage = 15, array $filters = []): LengthAwarePaginator
     {
-        return $this->notifications->activate($id);
-    }
+        $query = $this->notifications->builder();
 
-    public function deactivate($id)
-    {
-        return $this->notifications->deactivate($id);
-    }
+        if ($userId = $filters['user_id'] ?? null) {
+            $query->where('user_id', $userId);
+        }
 
-    /**
-     * إنشاء إشعار باستخدام قالب.
-     *
-     * @param string $templateCode كود القالب (مثال: STUDENT_ADDED_TO_CIRCLE)
-     * @param int    $userId      صاحب صندوق الوارد (users.id)
-     * @param string $recipientType نوع الكيان (student/guardian/user...) اختياري
-     * @param int    $recipientId   id الكيان (students.id مثلاً) اختياري
-     * @param int    $mosqueId      المسجد المرتبط بالقالب
-     * @param array  $payload       بيانات المتغيرات
-     * @param string $locale        اللغة (افتراضي ar)
-     */
-    public function sendUsingTemplate(
-        string $templateCode,
-        int $userId,
-        ?string $recipientType,
-        ?int $recipientId,
-        int $mosqueId,
-        array $payload = [],
-        string $locale = 'ar'
-    ) {
-        return DB::transaction(function () use (
-            $templateCode,
-            $userId,
-            $recipientType,
-            $recipientId,
-            $mosqueId,
-            $payload,
-            $locale
-        ) {
-            $template = $this->templates->findByCode($templateCode, $mosqueId, $locale);
+        if ($channel = $filters['channel'] ?? null) {
+            $query->where('channel', $channel);
+        }
 
-            if (! $template || ! $template->is_active) {
-                throw new RuntimeException("Message template not found or inactive: {$templateCode}");
-            }
+        if ($status = $filters['status'] ?? null) {
+            $query->where('status', $status);
+        }
 
-            $subject = $template->renderSubject($payload);
-            $body    = $template->renderBody($payload);
+        if (! empty($filters['unread_only'])) {
+            $query->whereNull('read_at');
+        }
 
-            return $this->notifications->create([
-                'user_id'        => $userId,
-                'recipient_type' => $recipientType,
-                'recipient_id'   => $recipientId,
-                'channel'        => $template->channel ?? 'inbox',
-                'template_id'    => $template->id,
-                'subject'        => $subject,
-                'body'           => $body,
-                'payload'        => $payload,
-                'status'         => 'sent',
-                'sent_at'        => now(),
-                'is_active'      => true,
-            ]);
+        $paginator = $query->paginate($perPage);
+
+        return $this->mapPaginator($paginator, function (Notification $notification) {
+            $base = NotificationDTO::fromModel($notification)->toIndexArray();
+            $base['user'] = [
+                'id' => $notification->user?->id,
+                'name' => $notification->user?->name,
+            ];
+
+            return $base;
         });
     }
 
-    /* صندوق الوارد للمستخدم (للاستخدام في InboxController) */
-
-    public function inboxForUser(int $userId, int $perPage = 15, array $with = [])
+    public function getById(int $notificationId): array
     {
-        return $this->notifications->builder($with)
-            ->where('user_id', $userId)
-            ->where('channel', 'inbox')
-            ->orderByDesc('created_at')
-            ->paginate($perPage);
+        $notification = $this->notifications->findOrFail($notificationId, ['user:id,name']);
+        $dto = NotificationDTO::fromModel($notification)->toArray();
+        $dto['user'] = [
+            'id' => $notification->user?->id,
+            'name' => $notification->user?->name,
+        ];
+
+        return $dto;
     }
 
-    public function unreadCountForUser(int $userId): int
+    public function delete(int $notificationId): void
     {
-        return $this->notifications->builder()
-            ->where('user_id', $userId)
-            ->where('channel', 'inbox')
-            ->whereNull('read_at')
-            ->count();
+        $this->notifications->delete($notificationId);
     }
 
-    public function markAsRead(int $id, int $userId)
+    public function createManual(array $attributes): NotificationDTO
     {
-        $n = $this->notifications->findOrFail($id);
-    
-        // تأكد أن الإشعار يخص هذا المستخدم
-        if ($n->user_id !== $userId) {
-            abort(403);
+        $notification = $this->notifications->createNotification($attributes);
+        $notification->loadMissing(['template', 'user:id,name']);
+
+        return NotificationDTO::fromModel($notification);
+    }
+
+    public function createFromTemplate(
+        int $userId,
+        string $templateCode,
+        ?int $mosqueId,
+        array $placeholders = [],
+        array $payload = [],
+        string $channel = 'inbox',
+        ?string $locale = 'ar'
+    ): ?NotificationDTO {
+        $rendered = $this->templates->renderTemplate($templateCode, $mosqueId, $placeholders, $locale, $channel);
+
+        if (! $rendered) {
+            Log::warning('Missing message template', [
+                'code' => $templateCode,
+                'mosque_id' => $mosqueId,
+                'channel' => $channel,
+                'locale' => $locale,
+            ]);
+
+            $rendered = [
+                'subject' => $this->fallbackSubject($templateCode),
+                'body' => $this->fallbackBody($templateCode, $placeholders),
+                'template' => null,
+            ];
         }
-    
-        if (is_null($n->read_at)) {
-            $n->read_at = now();
-            $n->save();
+
+        $data = [
+            'user_id' => $userId,
+            'template_id' => $rendered['template']?->id,
+            'channel' => $channel,
+            'subject' => $rendered['subject'],
+            'body' => $rendered['body'],
+            'payload' => $payload,
+            'status' => 'sent',
+            'sent_at' => now(),
+        ];
+
+        $notification = $this->notifications->createNotification($data);
+
+        if ($rendered['template']) {
+            $notification->setRelation('template', $rendered['template']);
         }
-    
-        return $n;
+
+        $notification->loadMissing('user:id,name');
+
+        return NotificationDTO::fromModel($notification);
     }
 
-
-    public function markAllAsReadForUser(int $userId): int
+    private function fallbackSubject(string $templateCode): string
     {
-        return $this->notifications->builder()
-            ->where('user_id', $userId)
-            ->where('channel', 'inbox')
-            ->whereNull('read_at')
-            ->update(['read_at' => now()]);
+        return 'إشعار النظام: ' . $templateCode;
+    }
+
+    private function fallbackBody(string $templateCode, array $placeholders): string
+    {
+        $lines = ['لا يوجد قالب مسجل لهذا الإشعار (' . $templateCode . ').'];
+
+        if (! empty($placeholders)) {
+            $lines[] = json_encode($placeholders, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        return implode("\n\n", $lines);
+    }
+
+    private function mapPaginator(LengthAwarePaginator $paginator, callable $callback): LengthAwarePaginator
+    {
+        $collection = $paginator->getCollection()->map($callback);
+        $paginator->setCollection($collection);
+
+        return $paginator;
     }
 }

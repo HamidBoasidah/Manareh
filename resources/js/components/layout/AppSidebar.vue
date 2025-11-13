@@ -341,6 +341,12 @@ const menuGroups = computed(() =>
         },
         {
           icon: GridIcon,
+          name: t('menu.notifications'),
+          path: route('admin.notifications.index'),
+          permission: 'notifications.view',
+        },
+        {
+          icon: GridIcon,
           name: t('menu.nominations'),
           path: route('admin.nominations.index'),
           permission: 'nominations.view',
@@ -417,18 +423,6 @@ const menuGroups = computed(() =>
           name: t('menu.activity_media'),
           path: route('admin.activity_media.index'),
           permission: 'activity_media.view',
-        },
-        {
-          icon: GridIcon,
-          name: t('menu.message_templates'),
-          path: route('admin.message_templates.index'),
-          permission: 'message_templates.view',
-        },
-        {
-          icon: GridIcon,
-          name: t('menu.notifications'),
-          path: route('admin.notifications.index'),
-          permission: 'notifications.view',
         },
         {
           icon: GridIcon,

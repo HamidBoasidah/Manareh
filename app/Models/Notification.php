@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\BaseModel;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Notification extends BaseModel
 {
@@ -29,33 +30,35 @@ class Notification extends BaseModel
         'payload' => 'array',
         'sent_at' => 'datetime',
         'read_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
-    public function template()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function template(): BelongsTo
     {
         return $this->belongsTo(MessageTemplate::class, 'template_id');
     }
 
-    // هل الإشعار مقروء؟
-    public function getIsReadAttribute(): bool
+    public function recipient(): MorphTo
     {
-        return ! is_null($this->read_at);
+        return $this->morphTo();
     }
 
-    // نص مختصر للقائمة الجانبية
-    public function getShortBodyAttribute(): string
+    public function markAsRead(): void
     {
-        $text = strip_tags((string) $this->body);
-        return mb_strlen($text) > 80
-            ? mb_substr($text, 0, 80) . '...'
-            : $text;
+        if (! $this->read_at) {
+            $this->forceFill(['read_at' => now()])->save();
+        }
     }
 
-    // صيغة الوقت (تستفيد منها بالـ DTO إن حبيت)
-    public function getCreatedAtHumanAttribute(): string
+    public function markAsUnread(): void
     {
-        return $this->created_at
-            ? $this->created_at->diffForHumans()
-            : '';
+        if ($this->read_at) {
+            $this->forceFill(['read_at' => null])->save();
+        }
     }
 }

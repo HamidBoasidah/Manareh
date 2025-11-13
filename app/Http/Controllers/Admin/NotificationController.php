@@ -3,86 +3,88 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreNotificationRequest;
-use App\Http\Requests\UpdateNotificationRequest;
 use App\Services\NotificationService;
-use App\DTOs\NotificationDTO;
-use App\Models\Notification;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class NotificationController extends Controller
 {
-    public function __construct()
+    public function __construct(private NotificationService $notifications)
     {
         $this->middleware('permission:notifications.view')->only(['index', 'show']);
-        $this->middleware('permission:notifications.create')->only(['create', 'store']);
-        $this->middleware('permission:notifications.update')->only(['edit', 'update']);
+        $this->middleware('permission:notifications.update')->only(['markRead', 'markUnread', 'markAllRead']);
         $this->middleware('permission:notifications.delete')->only(['destroy']);
     }
 
-    public function index(Request $request, NotificationService $service)
+    public function index(Request $request): Response
     {
-        $perPage = $request->input('per_page', 10);
-        $items = $service->paginate($perPage);
-        $items->getCollection()->transform(function ($m) {
-            return NotificationDTO::fromModel($m)->toIndexArray();
-        });
-        return Inertia::render('Admin/Notification/Index', ['notifications' => $items]);
+        $filters = $request->only(['user_id', 'channel', 'status']);
+        $filters['unread_only'] = $request->boolean('unread_only');
+        $perPage = (int) $request->integer('per_page', 20);
+
+        $notifications = $this->notifications->paginateForAdmin($perPage, $filters);
+
+        return Inertia::render('Admin/Notification/Index', [
+            'notifications' => $notifications,
+            'filters' => $filters,
+            'per_page' => $perPage,
+        ]);
     }
 
-    public function create()
+    public function show(int $notificationId): JsonResponse
     {
-        return Inertia::render('Admin/Notification/Create');
+        $notification = $this->notifications->getById($notificationId);
+
+        return response()->json($notification);
     }
 
-    public function store(StoreNotificationRequest $request, NotificationService $service)
+    public function destroy(int $notificationId): JsonResponse
     {
-        $service->create($request->validated());
-        return redirect()->route('admin.notifications.index');
+        $this->notifications->delete($notificationId);
+
+        return response()->json(null, 204);
     }
 
-    public function show(Notification $notification)
+    public function markRead(Request $request, int $notificationId): JsonResponse
     {
-        $dto = NotificationDTO::fromModel($notification)->toArray();
-        return Inertia::render('Admin/Notification/Show', ['notification' => $dto]);
+        $notification = $this->notifications->getById($notificationId);
+        $userId = (int) ($notification['user']['id'] ?? 0);
+        $updated = false;
+
+        if ($userId > 0 && $request->user()?->id === $userId) {
+            $this->notifications->markAsRead($userId, $notificationId);
+            $updated = true;
+        }
+
+        return response()->json(['updated' => $updated]);
     }
 
-    public function edit(Notification $notification)
+    public function markUnread(Request $request, int $notificationId): JsonResponse
     {
-        $dto = NotificationDTO::fromModel($notification)->toArray();
-        return Inertia::render('Admin/Notification/Edit', ['notification' => $dto]);
+        $notification = $this->notifications->getById($notificationId);
+        $userId = (int) ($notification['user']['id'] ?? 0);
+        $updated = false;
+
+        if ($userId > 0 && $request->user()?->id === $userId) {
+            $this->notifications->markAsUnread($userId, $notificationId);
+            $updated = true;
+        }
+
+        return response()->json(['updated' => $updated]);
     }
 
-    public function update(UpdateNotificationRequest $request, NotificationService $service, Notification $notification)
+    public function markAllRead(Request $request): JsonResponse
     {
-        $service->update($notification->id, $request->validated());
-        return redirect()->route('admin.notifications.index');
-    }
+        $userId = (int) $request->integer('user_id');
+        $updated = false;
 
-    public function destroy(NotificationService $service, Notification $notification)
-    {
-        $service->delete($notification->id);
-        return redirect()->route('admin.notifications.index');
-    }
+        if ($userId > 0 && $request->user()?->id === $userId) {
+            $this->notifications->markAllAsRead($userId);
+            $updated = true;
+        }
 
-    public function markAsRead(Notification $notification, NotificationService $service)
-    {
-        $service->markAsRead($notification->id, auth()->id());
-    
-        return back(); // أو return response()->noContent();
-    }
-
-
-    public function activate(NotificationService $service, $id)
-    {
-        $service->activate($id);
-        return back()->with('success', 'Notification activated successfully');
-    }
-
-    public function deactivate(NotificationService $service, $id)
-    {
-        $service->deactivate($id);
-        return back()->with('success', 'Notification deactivated successfully');
+        return response()->json(['updated' => $updated]);
     }
 }

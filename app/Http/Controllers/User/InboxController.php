@@ -4,92 +4,63 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Services\NotificationService;
-use App\DTOs\NotificationDTO;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class InboxController extends Controller
 {
-    public function __construct()
+    public function __construct(private NotificationService $notifications)
     {
-        // تأكد أن المستخدم مسجّل دخول
         $this->middleware('auth');
     }
 
-    /**
-     * عرض قائمة الرسائل (البريد الوارد) للمستخدم الحالي.
-     */
-    public function index(Request $request, NotificationService $service)
+    public function index(Request $request): JsonResponse
     {
-        $user = $request->user();
-        $perPage = (int) $request->input('per_page', 15);
+        $userId = (int) $request->user()->id;
+        $perPage = (int) $request->integer('per_page', 15);
 
-        $items = $service->inboxForUser($user->id, $perPage, ['template']);
+        $paginator = $this->notifications->paginateForUser($userId, $perPage);
 
-        $items->getCollection()->transform(function ($m) {
-            return NotificationDTO::fromModel($m)->toIndexArray();
-        });
-
-        $unreadCount = $service->unreadCountForUser($user->id);
-
-        return Inertia::render('User/Inbox/Index', [
-            'notifications' => $items,
-            'unread_count'  => $unreadCount,
-        ]);
+        return response()->json($paginator);
     }
 
-    /**
-     * عرض رسالة واحدة (مع تعليمها مقروءة).
-     */
-    public function show(Request $request, NotificationService $service, int $id)
+    public function show(Request $request, int $notificationId): JsonResponse
     {
-        $user = $request->user();
+        $userId = (int) $request->user()->id;
+        $notification = $this->notifications->getForUser($userId, $notificationId);
 
-        $notification = $service->find($id, ['template']);
-
-        // ضمان أن الإشعار يخص هذا المستخدم
-        if ($notification->user_id !== $user->id) {
-            abort(403);
-        }
-
-        // تعليم كمقروء
-        if (is_null($notification->read_at)) {
-            $service->markAsRead($notification->id);
-            $notification->refresh();
-        }
-
-        $dto = NotificationDTO::fromModel($notification)->toArray();
-
-        return Inertia::render('User/Inbox/Show', [
-            'notification' => $dto,
-        ]);
+        return response()->json($notification->toArray());
     }
 
-    /**
-     * تعليم رسالة كمقروءة بدون فتح صفحة منفصلة (Ajax من الواجهة).
-     */
-    public function markAsRead(Request $request, NotificationService $service, int $id)
+    public function markRead(Request $request, int $notificationId): JsonResponse
     {
-        $user = $request->user();
-        $notification = $service->find($id);
+        $userId = (int) $request->user()->id;
+        $this->notifications->markAsRead($userId, $notificationId);
 
-        if ($notification->user_id !== $user->id) {
-            abort(403);
-        }
-
-        $service->markAsRead($notification->id);
-
-        return back();
+    return response()->noContent();
     }
 
-    /**
-     * تعليم جميع رسائل المستخدم كمقروءة.
-     */
-    public function markAllAsRead(Request $request, NotificationService $service)
+    public function markUnread(Request $request, int $notificationId): JsonResponse
     {
-        $user = $request->user();
-        $service->markAllAsReadForUser($user->id);
+        $userId = (int) $request->user()->id;
+        $this->notifications->markAsUnread($userId, $notificationId);
 
-        return back();
+    return response()->noContent();
+    }
+
+    public function markAllRead(Request $request): JsonResponse
+    {
+        $userId = (int) $request->user()->id;
+        $this->notifications->markAllAsRead($userId);
+
+    return response()->noContent();
+    }
+
+    public function markAllUnread(Request $request): JsonResponse
+    {
+        $userId = (int) $request->user()->id;
+        $this->notifications->markAllAsUnread($userId);
+
+    return response()->noContent();
     }
 }

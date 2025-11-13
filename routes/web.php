@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Admin\NotificationController as AdminNotificationController;
 use App\Http\Controllers\Admin\ProgramController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\AcademicYearController;
@@ -31,12 +32,10 @@ use App\Http\Controllers\Admin\ExamTypeController;
 use App\Http\Controllers\Admin\NominationController;
 use App\Http\Controllers\Admin\ActivityController;
 use App\Http\Controllers\Admin\ActivityMediaController;
-use App\Http\Controllers\Admin\MessageTemplateController;
 use App\Http\Controllers\Admin\CertificateTemplateController;
 use App\Http\Controllers\Admin\CertificateIssuedController;
-use App\Http\Controllers\Admin\NotificationController;
-use App\Http\Controllers\User\InboxController;
 use App\Support\RoutePermissions;
+use App\Http\Controllers\User\InboxController;
 use App\Http\Controllers\LocaleController;
 
 
@@ -119,6 +118,20 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('activitylogs', ActivityLogController::class)
         ->only(['index', 'show' , 'destroy'])
         ->names('admin.activitylogs');
+
+    // Notifications (admin)
+    Route::get('admin/notifications', [AdminNotificationController::class, 'index'])
+        ->name('admin.notifications.index');
+    Route::get('admin/notifications/{notification}', [AdminNotificationController::class, 'show'])
+        ->name('admin.notifications.show');
+    Route::delete('admin/notifications/{notification}', [AdminNotificationController::class, 'destroy'])
+        ->name('admin.notifications.destroy');
+    Route::post('admin/notifications/{notification}/mark-read', [AdminNotificationController::class, 'markRead'])
+        ->name('admin.notifications.mark-read');
+    Route::post('admin/notifications/{notification}/mark-unread', [AdminNotificationController::class, 'markUnread'])
+        ->name('admin.notifications.mark-unread');
+    Route::post('admin/notifications/mark-all-read', [AdminNotificationController::class, 'markAllRead'])
+        ->name('admin.notifications.mark-all-read');
 
     // Mosques
     Route::resource('mosques', MosqueController::class)
@@ -398,18 +411,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.activity_media.deactivate')
         ->middleware(RoutePermissions::can('activity_media.update'));
 
-    // Message Templates
-    Route::resource('message_templates', MessageTemplateController::class)
-        ->names('admin.message_templates');
-
-    Route::patch('message_templates/{id}/activate', [MessageTemplateController::class, 'activate'])
-        ->name('admin.message_templates.activate')
-        ->middleware(RoutePermissions::can('message_templates.update'));
-
-    Route::patch('message_templates/{id}/deactivate', [MessageTemplateController::class, 'deactivate'])
-        ->name('admin.message_templates.deactivate')
-        ->middleware(RoutePermissions::can('message_templates.update'));
-
     // Certificate Templates
     Route::resource('certificate_templates', CertificateTemplateController::class)
         ->names('admin.certificate_templates');
@@ -434,37 +435,6 @@ Route::middleware(['auth'])->group(function () {
         ->name('admin.certificate_issued.deactivate')
         ->middleware(RoutePermissions::can('certificate_issued.update'));
 
-    // Notifications
-    Route::resource('notifications', NotificationController::class)
-        ->names('admin.notifications');
-
-    Route::patch('notifications/{id}/activate', [NotificationController::class, 'activate'])
-        ->name('admin.notifications.activate')
-        ->middleware(RoutePermissions::can('notifications.update'));
-
-    Route::patch('notifications/{id}/deactivate', [NotificationController::class, 'deactivate'])
-        ->name('admin.notifications.deactivate')
-        ->middleware(RoutePermissions::can('notifications.update'));
-
-        // Inbox - قائمة الرسائل
-    Route::get('inbox', [InboxController::class, 'index'])
-        ->name('user.inbox.index');
-    
-    // Inbox - عرض رسالة واحدة (Master/Detail)
-    Route::get('inbox/{id}', [InboxController::class, 'show'])
-        ->name('user.inbox.show');
-    
-    // تعليم رسالة كمقروءة (مثلاً طلب AJAX/Inertia)
-    Route::post('inbox/{id}/read', [InboxController::class, 'markAsRead'])
-        ->name('user.inbox.read');
-    
-    // تعليم كل الرسائل كمقروءة
-    Route::post('inbox/read-all', [InboxController::class, 'markAllAsRead'])
-        ->name('user.inbox.read_all');
-
-    Route::post('/notifications/{notification}/read', [NotificationController::class, 'markAsRead'])
-    ->name('notifications.read');
-
     
 });
 
@@ -473,3 +443,13 @@ Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login');
 Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/locale', LocaleController::class)->name('locale.set')->middleware('throttle:10,1');
+
+// User inbox routes (JSON)
+Route::middleware(['auth'])->prefix('notifications')->name('notifications.')->group(function () {
+    Route::get('/', [InboxController::class, 'index'])->name('index');
+    Route::get('{notification}', [InboxController::class, 'show'])->name('show');
+    Route::post('{notification}/read', [InboxController::class, 'markRead'])->name('read');
+    Route::post('{notification}/unread', [InboxController::class, 'markUnread'])->name('unread');
+    Route::post('mark-all-read', [InboxController::class, 'markAllRead'])->name('markAllRead');
+    Route::post('mark-all-unread', [InboxController::class, 'markAllUnread'])->name('markAllUnread');
+});

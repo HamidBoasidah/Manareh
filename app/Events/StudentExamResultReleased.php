@@ -2,18 +2,44 @@
 
 namespace App\Events;
 
-use App\Models\Exam;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
+use App\Models\Circle;
+use App\Models\Student;
 
-class StudentExamResultReleased
+class StudentExamResultReleased extends AbstractNotificationEvent
 {
-    use Dispatchable, SerializesModels;
+    public function __construct(
+        Student $student,
+        ?Circle $circle,
+        string $examType,
+        float|int $totalPoints,
+        string $totalGrade,
+        ?string $examDateG = null,
+        array $extraPayload = []
+    ) {
+        $student->loadMissing('user:id,name');
+        $circle?->loadMissing('mosque:id,name');
 
-    public Exam $exam;
+        $payload = array_merge([
+            'student_id' => $student->id,
+            'circle_id' => $circle?->id,
+            'exam_type' => $examType,
+            'total_points' => $totalPoints,
+            'total_grade' => $totalGrade,
+            'exam_date_g' => $examDateG,
+        ], $extraPayload);
 
-    public function __construct(Exam $exam)
-    {
-        $this->exam = $exam;
+        parent::__construct(
+            userId: $student->user_id,
+            templateCode: 'STUDENT_EXAM_RESULT',
+            variables: [
+                'student_name' => $student->user?->name ?? '-',
+                'exam_type' => $examType,
+                'total_points' => $totalPoints,
+                'total_grade' => $totalGrade,
+                'exam_date_g' => $examDateG ?? '-',
+            ],
+            payload: $payload,
+            mosqueId: $circle?->mosque_id,
+        );
     }
 }

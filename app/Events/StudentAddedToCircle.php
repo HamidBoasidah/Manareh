@@ -2,24 +2,34 @@
 
 namespace App\Events;
 
-use App\Models\Student;
 use App\Models\Circle;
+use App\Models\Student;
 use App\Models\User;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class StudentAddedToCircle
+class StudentAddedToCircle extends AbstractNotificationEvent
 {
-    use Dispatchable, SerializesModels;
-
-    public Student $student;
-    public Circle $circle;
-    public User $teacher;
-
-    public function __construct(Student $student, Circle $circle, User $teacher)
+    public function __construct(Student $student, Circle $circle, ?User $teacher = null)
     {
-        $this->student = $student;
-        $this->circle  = $circle;
-        $this->teacher = $teacher;
+        $student->loadMissing('user:id,name');
+        $circle->loadMissing('mosque:id,name');
+
+        $studentName = $student->user?->name ?? '-';
+        $teacherName = $teacher?->name ?? '-';
+
+        parent::__construct(
+            userId: $student->user_id,
+            templateCode: 'STUDENT_ADDED_TO_CIRCLE',
+            variables: [
+                'student_name' => $studentName,
+                'circle_name' => $circle->name,
+                'teacher_name' => $teacherName,
+            ],
+            payload: [
+                'student_id' => $student->id,
+                'circle_id' => $circle->id,
+                'teacher_id' => $teacher?->id,
+            ],
+            mosqueId: $circle->mosque_id,
+        );
     }
 }

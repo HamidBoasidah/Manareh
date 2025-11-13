@@ -32,34 +32,23 @@
     <!-- Body -->
     <div class="flex-1 p-5 overflow-auto custom-scrollbar">
       <div v-if="notification" class="space-y-3">
-        <div v-if="loading" class="space-y-4 animate-pulse">
-          <div class="h-4 rounded bg-gray-200/70 dark:bg-white/10"></div>
-          <div class="h-4 rounded bg-gray-200/60 dark:bg-white/10"></div>
-          <div class="h-4 rounded bg-gray-200/50 dark:bg-white/10 w-3/4"></div>
-        </div>
+        <p class="text-sm leading-relaxed text-gray-800 whitespace-pre-line dark:text-white/90">
+          {{ notification.body }}
+        </p>
 
-        <template v-else>
-          <p v-if="notification.body" class="text-sm leading-relaxed text-gray-800 whitespace-pre-line dark:text-white/90">
-            {{ notification.body }}
-          </p>
-          <p v-else class="text-sm text-gray-400 dark:text-gray-500">
-            تفاصيل هذا الإشعار غير متاحة حاليًا.
-          </p>
-
-          <!-- إظهار payload إن وجد -->
+        <!-- إظهار payload إن وجد -->
+        <div
+          v-if="notification.payload && Object.keys(notification.payload).length"
+          class="pt-3 mt-2 text-[11px] text-gray-500 border-t border-gray-100 dark:border-white/5 dark:text-gray-400 space-y-0.5"
+        >
           <div
-            v-if="hasPayload"
-            class="pt-3 mt-2 text-[11px] text-gray-500 border-t border-gray-100 dark:border-white/5 dark:text-gray-400 space-y-0.5"
+            v-for="(value, key) in notification.payload"
+            :key="key"
           >
-            <div
-              v-for="(value, key) in notification.payload"
-              :key="key"
-            >
-              <span class="font-semibold">{{ formatKey(key) }}:</span>
-              <span class="ml-1">{{ value }}</span>
-            </div>
+            <span class="font-semibold">{{ formatKey(key) }}:</span>
+            <span class="ml-1">{{ value }}</span>
           </div>
-        </template>
+        </div>
       </div>
 
       <div
@@ -73,22 +62,11 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-
 const props = defineProps({
   notification: {
     type: Object,
     default: null,
   },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-})
-
-const hasPayload = computed(() => {
-  const payload = props.notification?.payload
-  return payload && Object.keys(payload).length > 0
 })
 
 const formatKey = (key) => key.replace(/_/g, ' ')

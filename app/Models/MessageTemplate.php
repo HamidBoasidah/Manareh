@@ -3,8 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\BaseModel;
-use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class MessageTemplate extends BaseModel
 {
@@ -14,57 +13,47 @@ class MessageTemplate extends BaseModel
         'mosque_id',
         'code',
         'channel',
+        'locale',
         'subject',
         'body',
-        'locale',        // ✅ جديد
-        'description',   // ✅ جديد
+        'description',
         'is_active',
+        'is_core',
     ];
 
     protected $casts = [
         'is_active' => 'boolean',
+        'is_core'   => 'boolean',
     ];
 
-    /*-----------------------------------------
-     | العلاقات (Relationships)
-     *----------------------------------------*/
-    public function mosque()
+    public function mosque(): BelongsTo
     {
         return $this->belongsTo(Mosque::class);
     }
 
-    /*-----------------------------------------
-     | الدوال المساعدة
-     *----------------------------------------*/
-
-    /**
-     * 🔄 استبدال المتغيرات في النص باستخدام payload.
-     * مثال:
-     * body = "تم إضافتك إلى الحلقة {circle_name}"
-     * payload = ['circle_name' => 'حلقة النور']
-     */
-    public function renderBody(array $payload = []): string
+    public function renderSubject(array $variables = []): ?string
     {
-        $body = $this->body ?? '';
-
-        foreach ($payload as $key => $value) {
-            $body = Str::replace('{' . $key . '}', e($value), $body);
-        }
-
-        return $body;
+        return $this->subject ? $this->replacePlaceholders($this->subject, $variables) : null;
     }
 
-    /**
-     * نفس الفكرة لكن للعنوان (subject)
-     */
-    public function renderSubject(array $payload = []): string
+    public function renderBody(array $variables = []): ?string
     {
-        $subject = $this->subject ?? '';
+        return $this->body ? $this->replacePlaceholders($this->body, $variables) : null;
+    }
 
-        foreach ($payload as $key => $value) {
-            $subject = Str::replace('{' . $key . '}', e($value), $subject);
+    private function replacePlaceholders(string $content, array $variables): string
+    {
+        if (empty($variables)) {
+            return $content;
         }
 
-        return $subject;
+        $replacements = [];
+        foreach ($variables as $key => $value) {
+            $replacements['{' . $key . '}'] = is_scalar($value) || $value === null
+                ? (string) ($value ?? '')
+                : json_encode($value, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        return strtr($content, $replacements);
     }
 }

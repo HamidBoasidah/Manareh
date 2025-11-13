@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Repositories\MessageTemplateRepository;
-use Illuminate\Support\Arr;
 
 class MessageTemplateService
 {
@@ -57,17 +56,23 @@ class MessageTemplateService
     /**
      * 🔹 الحصول على القالب عبر كوده وكود المسجد.
      */
-    public function findByCode(string $code, int $mosqueId, ?string $locale = 'ar')
+    public function findByCode(string $code, ?int $mosqueId, ?string $locale = 'ar', string $channel = 'inbox', bool $withFallback = true)
     {
-        return $this->templates->findByCode($code, $mosqueId, $locale);
+        $template = $this->templates->findByCode($code, $mosqueId, $locale, $channel);
+
+        if (! $template && $withFallback && $mosqueId !== null) {
+            $template = $this->templates->findByCode($code, null, $locale, $channel);
+        }
+
+        return $template;
     }
 
     /**
      * 🔹 توليد نص القالب بعد استبدال المتغيرات.
      */
-    public function renderTemplate(string $code, int $mosqueId, array $payload = [], ?string $locale = 'ar')
+    public function renderTemplate(string $code, ?int $mosqueId, array $payload = [], ?string $locale = 'ar', string $channel = 'inbox')
     {
-        $template = $this->findByCode($code, $mosqueId, $locale);
+        $template = $this->findByCode($code, $mosqueId, $locale, $channel);
         if (! $template) {
             return null;
         }
@@ -75,6 +80,7 @@ class MessageTemplateService
         return [
             'subject' => $template->renderSubject($payload),
             'body'    => $template->renderBody($payload),
+            'template' => $template,
         ];
     }
 }

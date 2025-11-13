@@ -14,6 +14,7 @@ use App\Repositories\MosqueRepository;
 use App\Repositories\DailyStudySessionRepository;
 use App\Repositories\DailyStudyRepository;
 use App\Repositories\MessageTemplateRepository;
+use App\Repositories\NotificationRepository;
 // Models
 use App\Models\User;
 use App\Models\Area;
@@ -24,6 +25,7 @@ use App\Models\DailyStudySession;
 use App\Models\Nomination;
 use App\Models\DailyStudy;
 use App\Models\MessageTemplate;
+use App\Models\Notification;
 use App\Models\Exam;
 
 // Services
@@ -36,6 +38,7 @@ use App\Services\DailyStudySessionService;
 use App\Services\DailyStudyService;
 use App\Services\NominationService;
 use App\Services\MessageTemplateService;
+use App\Services\NotificationService;
 
 
 class RepositoryServiceProvider extends ServiceProvider
@@ -51,6 +54,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DailyStudyRepository::class, fn($app) => new DailyStudyRepository($app->make(DailyStudy::class)));
         $this->app->bind(NominationRepository::class, fn($app) => new NominationRepository($app->make(Nomination::class)));
         $this->app->bind(MessageTemplateRepository::class, fn($app) => new MessageTemplateRepository($app->make(MessageTemplate::class)));
+    $this->app->bind(NotificationRepository::class, fn($app) => new NotificationRepository($app->make(Notification::class)));
         $this->app->bind(ExamRepository::class, fn($app) => new ExamRepository($app->make(Exam::class)));
         
 
@@ -67,6 +71,10 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(DailyStudyService::class, fn($app) => new DailyStudyService($app->make(DailyStudyRepository::class)));
         $this->app->bind(NominationService::class, fn($app) => new NominationService($app->make(NominationRepository::class)));
         $this->app->bind(MessageTemplateService::class, fn($app) => new MessageTemplateService($app->make(MessageTemplateRepository::class)));
+        $this->app->bind(NotificationService::class, fn($app) => new NotificationService(
+            $app->make(NotificationRepository::class),
+            $app->make(MessageTemplateService::class)
+        ));
         $this->app->bind(\App\Services\ExamService::class, fn($app) => new \App\Services\ExamService($app->make(ExamRepository::class)));
     }
 }

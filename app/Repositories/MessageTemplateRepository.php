@@ -4,50 +4,41 @@ namespace App\Repositories;
 
 use App\Models\MessageTemplate;
 use App\Repositories\Eloquent\BaseRepository;
+use Illuminate\Database\Eloquent\Builder;
 
 class MessageTemplateRepository extends BaseRepository
 {
-    protected array $defaultWith = [
-        'mosque:id,name'
-    ];
-
     public function __construct(MessageTemplate $model)
     {
         parent::__construct($model);
     }
 
-    /**
-     * 🔹 البحث عن قالب حسب الكود والمسجد واللغة.
-     */
-    public function findByCode(string $code, int $mosqueId, ?string $locale = 'ar')
+    public function findByCode(string $code, ?int $mosqueId = null, ?string $locale = null, string $channel = 'inbox'): ?MessageTemplate
     {
-        return $this->model
+        $query = $this->query()
             ->where('code', $code)
-            ->where('mosque_id', $mosqueId)
-            ->where('locale', $locale)
-            ->where('is_active', true)
-            ->first();
+            ->where('channel', $channel)
+            ->where('is_active', true);
+
+        if ($locale) {
+            $query->where('locale', $locale);
+        }
+
+        if ($mosqueId === null) {
+            $query->whereNull('mosque_id');
+        } else {
+            $query->where('mosque_id', $mosqueId);
+        }
+
+        return $query->first();
     }
 
-    /**
-     * 🔹 البحث عن جميع القوالب لمسجد معين.
-     */
-    public function findByMosque(int $mosqueId)
+    public function scopeForMosque(Builder $query, ?int $mosqueId): Builder
     {
-        return $this->model
-            ->where('mosque_id', $mosqueId)
-            ->orderBy('code')
-            ->get();
-    }
+        if ($mosqueId === null) {
+            return $query->whereNull('mosque_id');
+        }
 
-    /**
-     * 🔹 البحث عن القوالب المفعّلة فقط.
-     */
-    public function active()
-    {
-        return $this->model
-            ->where('is_active', true)
-            ->orderBy('id', 'desc')
-            ->get();
+        return $query->where('mosque_id', $mosqueId);
     }
 }

@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Events\StudentAddedToCircle;
 use App\Repositories\CircleRepository;
 use App\Models\Circle;
 use App\Models\Student;
 use App\Models\User;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
 class CircleService
@@ -105,6 +107,10 @@ class CircleService
             'joined_at' => now()->toDateString(),
             'left_at' => null,
         ]);
+
+        $teacher = $this->resolveActiveTeacher($circle);
+
+        event(new StudentAddedToCircle($student, $circle->fresh(), $teacher));
     }
 
     public function detachStudent(int $circleId, int $studentId): void
@@ -140,5 +146,26 @@ class CircleService
                 'circle_id' => __('circles.circleCapacityReached'),
             ]);
         }
+    }
+
+    private function resolveActiveTeacher(Circle $circle): ?User
+    {
+        $circle->loadMissing([
+            'staffAssignments' => fn ($query) => $query
+                ->whereNull('end_at')
+                ->with(['user:id,name', 'role:id,name'])
+                ->orderByDesc('start_at'),
+        ]);
+
+        $assignment = $circle->staffAssignments->first(function ($assignment) {
+            $roleName = $assignment->role?->name;
+            if (! $roleName) {
+                return false;
+            }
+
+            return Str::contains($roleName, ['معلم', 'teacher'], true);
+        }) ?? $circle->staffAssignments->first();
+
+        return $assignment?->user;
     }
 }
