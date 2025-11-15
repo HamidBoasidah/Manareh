@@ -26,8 +26,14 @@ class CircleController extends Controller
 
     public function index(Request $request, CircleService $service)
     {
-        $perPage = $request->input('per_page', 10);
-        $items = $service->paginate($perPage);
+        $perPage = (int) $request->input('per_page', 10);
+        $user = $request->user();
+
+        if ($user && $user->hasAnyRole(['supervisor_tarbawi', 'supervisor_edu'])) {
+            $items = $service->paginateForUser($user, $perPage);
+        } else {
+            $items = $service->paginate($perPage);
+        }
         $items->getCollection()->transform(function ($m) {
             return CircleDTO::fromModel($m)->toIndexArray();
         });
@@ -51,8 +57,9 @@ class CircleController extends Controller
         return redirect()->route('admin.circles.index');
     }
 
-    public function show(Circle $circle, CircleService $service)
+    public function show(Request $request, CircleService $service, Circle $circle)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $dto = \App\DTOs\CircleDTO::fromModel($circle)->toArray();
     
         return \Inertia\Inertia::render('Admin/Circle/Show', [
@@ -64,8 +71,9 @@ class CircleController extends Controller
     }
 
 
-    public function edit(Circle $circle)
+    public function edit(Request $request, Circle $circle, CircleService $service)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $dto = CircleDTO::fromModel($circle)->toArray();
         $mosques = Mosque::all(['id', 'name']);
         $classifications = CircleClassification::all(['id', 'name']);
@@ -79,30 +87,37 @@ class CircleController extends Controller
 
     public function update(UpdateCircleRequest $request, CircleService $service, Circle $circle)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $service->update($circle->id, $request->validated());
         return redirect()->route('admin.circles.index');
     }
 
-    public function destroy(CircleService $service, Circle $circle)
+    public function destroy(Request $request, CircleService $service, Circle $circle)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $service->delete($circle->id);
         return redirect()->route('admin.circles.index');
     }
 
-    public function activate(CircleService $service, $id)
+    public function activate(Request $request, CircleService $service, $id)
     {
+        $circle = $service->find($id);
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $service->activate($id);
         return back()->with('success', 'Circle activated successfully');
     }
 
-    public function deactivate(CircleService $service, $id)
+    public function deactivate(Request $request, CircleService $service, $id)
     {
+        $circle = $service->find($id);
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $service->deactivate($id);
         return back()->with('success', 'Circle deactivated successfully');
     }
 
     public function joinStudent(Request $request, CircleService $service, Circle $circle)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $validated = $request->validate([
             'student_id' => ['required', 'integer', 'exists:students,id'],
         ]);
@@ -112,10 +127,28 @@ class CircleController extends Controller
         return redirect()->route('admin.circles.show', $circle);
     }
 
-    public function leaveStudent(CircleService $service, Circle $circle, Student $student)
+    public function leaveStudent(Request $request, CircleService $service, Circle $circle, Student $student)
     {
+        $this->assertCircleAccess($request->user(), $service, $circle);
         $service->detachStudent($circle->id, $student->id);
 
         return redirect()->route('admin.circles.show', $circle);
+    }
+
+    protected function assertCircleAccess(?\App\Models\User $user, CircleService $service, Circle $circle): void
+    {
+        if (! $user) {
+            abort(403);
+        }
+
+        if ($user->hasRole('super-admin')) {
+            return;
+        }
+
+        if ($user->hasAnyRole(['supervisor_tarbawi', 'supervisor_edu'])) {
+            if (! $service->userCanAccessCircle($user, $circle)) {
+                abort(403, __('messages.notAuthorized'));
+            }
+        }
     }
 }

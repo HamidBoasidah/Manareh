@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Repositories\ExamRepository;
 use Illuminate\Support\Facades\DB;
 use App\Models\ExamItem;
+use App\Models\User;
+use App\Models\Exam;
 
 class ExamService
 {
@@ -25,9 +27,19 @@ class ExamService
         return $this->exams->paginate($perPage, $with);
     }
 
+    public function paginateForUser(User $user, int $perPage = 15, array $with = [])
+    {
+        return $this->exams->paginateForUser($user, $perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->exams->findOrFail($id, $with);
+    }
+
+    public function findForUser(User $user, int $id, array $with = [])
+    {
+        return $this->exams->findForUser($user, $id, $with);
     }
 
     public function create(array $attributes)
@@ -94,5 +106,10 @@ class ExamService
     public function deactivate($id)
     {
         return $this->exams->deactivate($id);
+    }
+
+    public function userCanAccessExam(User $user, Exam $exam): bool
+    {
+        return $this->exams->userCanAccessExam($user, $exam);
     }
 }

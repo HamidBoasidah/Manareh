@@ -32,6 +32,7 @@ class TeacherAttendanceRepository extends BaseRepository
         $search = Arr::get($filters, 'search');
         $sort = Arr::get($filters, 'sort');
         $direction = strtolower(Arr::get($filters, 'direction', 'desc')) === 'asc' ? 'asc' : 'desc';
+        $circleIds = Arr::get($filters, 'circle_ids');
 
         if ($selectedDate) {
             try {
@@ -62,6 +63,14 @@ class TeacherAttendanceRepository extends BaseRepository
                         $circleQuery->where('name', 'like', $searchTerm);
                     });
             });
+        }
+
+        if (is_array($circleIds)) {
+            if (empty($circleIds)) {
+                $query->whereRaw('1 = 0');
+            } else {
+                $query->whereIn('circle_id', $circleIds);
+            }
         }
 
         $sortableColumns = ['date_g', 'status'];

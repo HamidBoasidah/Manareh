@@ -23,12 +23,25 @@ class ExamController extends Controller
 
     public function index(Request $request, ExamService $service)
     {
-        $perPage = $request->input('per_page', 10);
-        $items = $service->paginate($perPage);
+        $perPage = (int) $request->input('per_page', 10);
+        $user = $request->user();
+        if (! $user) {
+            abort(403);
+        }
+        $isSuperAdmin = $user?->hasRole('super-admin') ?? false;
+
+        $items = $isSuperAdmin
+            ? $service->paginate($perPage)
+            : $service->paginateForUser($user, $perPage);
+
         $items->getCollection()->transform(function ($m) {
             return ExamDTO::fromModel($m)->toIndexArray();
         });
-        return Inertia::render('Admin/Exam/Index', ['exams' => $items]);
+
+        return Inertia::render('Admin/Exam/Index', [
+            'exams' => $items,
+            'is_super_admin' => $isSuperAdmin,
+        ]);
     }
 
     public function create()
@@ -42,39 +55,58 @@ class ExamController extends Controller
         return redirect()->route('admin.exams.index');
     }
 
-    public function show(Exam $exam)
+    public function show(Request $request, ExamService $service, Exam $exam)
     {
+        $this->assertExamAccess($request->user(), $service, $exam);
         $dto = ExamDTO::fromModel($exam)->toArray();
         return Inertia::render('Admin/Exam/Show', ['exam' => $dto]);
     }
 
-    public function edit(Exam $exam)
+    public function edit(Request $request, ExamService $service, Exam $exam)
     {
+        $this->assertExamAccess($request->user(), $service, $exam);
         $dto = ExamDTO::fromModel($exam)->toArray();
         return Inertia::render('Admin/Exam/Edit', ['exam' => $dto]);
     }
 
     public function update(UpdateExamRequest $request, ExamService $service, Exam $exam)
     {
+        $this->assertExamAccess($request->user(), $service, $exam);
         $service->update($exam->id, $request->validated());
         return redirect()->route('admin.exams.index');
     }
 
-    public function destroy(ExamService $service, Exam $exam)
+    public function destroy(Request $request, ExamService $service, Exam $exam)
     {
+        $this->assertExamAccess($request->user(), $service, $exam);
         $service->delete($exam->id);
         return redirect()->route('admin.exams.index');
     }
 
-    public function activate(ExamService $service, $id)
+    public function activate(Request $request, ExamService $service, $id)
     {
+        $exam = $service->find($id);
+        $this->assertExamAccess($request->user(), $service, $exam);
         $service->activate($id);
         return back()->with('success', 'Exam activated successfully');
     }
 
-    public function deactivate(ExamService $service, $id)
+    public function deactivate(Request $request, ExamService $service, $id)
     {
+        $exam = $service->find($id);
+        $this->assertExamAccess($request->user(), $service, $exam);
         $service->deactivate($id);
         return back()->with('success', 'Exam deactivated successfully');
+    }
+
+    protected function assertExamAccess($user, ExamService $service, Exam $exam): void
+    {
+        if (! $user) {
+            abort(403);
+        }
+
+        if (! $service->userCanAccessExam($user, $exam)) {
+            abort(403, __('messages.notAuthorized'));
+        }
     }
 }

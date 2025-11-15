@@ -81,59 +81,80 @@ class RolesPermissionsSeeder extends Seeder
             $geoResources   = ['areas', 'districts', 'governorates'];
             $adminEntities  = ['users', 'roles', 'permissions'];
 
-            // 2) الأدوار الافتراضية (6 أدوار) — منح أذونات صريحة فقط
+            // Notifications UI access should be available to everyone so they can
+            // view their own notifications. The repository and model scopes
+            // must enforce that users only see notifications intended for them.
+            $baseAccess = ['dashboard', 'profile', 'notifications'];
 
-            // (أ) Super Admin: كل شيء
+            $teachingCore = [
+                'circles',
+                'students',
+                'enrollments',
+                'student_attendances',
+                'teacher_attendances',
+                'nominations',
+                'exams',
+            ];
+
+            $staffingResources = ['staff_assignments'];
+
+            // precompute teacher permission names so supervisors can reuse them
+            $teacherPerms = collect()
+                ->merge($permNames($baseAccess, ['view']))
+                ->merge($permNames($geoResources, ['view']))
+                ->merge($permNames($teachingCore, ['view', 'update']))
+                ->merge($permNames(['student_attendances', 'teacher_attendances', 'nominations', 'exams'], ['create']))
+                ->unique()
+                ->values();
+
+            // Create roles in the canonical order desired by the product owner
+            // (1) Super Admin
             $super = Role::updateOrCreate(
                 ['name' => 'super-admin', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Super Admin', 'ar' => 'مدير النظام']]
             );
             $super->syncPermissions($allActionPerms->all());
 
-            // (ب) Admin: كل شيء ما عدا الحذف
-            $admin = Role::updateOrCreate(
-                ['name' => 'admin', 'guard_name' => $guard],
-                ['display_name' => ['en' => 'Admin', 'ar' => 'مشرف']]
+            // (2) Tarbawi Supervisor
+            $supervisorTarbawi = Role::updateOrCreate(
+                ['name' => 'supervisor_tarbawi', 'guard_name' => $guard],
+                ['display_name' => ['en' => 'Tarbawi Supervisor', 'ar' => 'مشرف تربوي']]
             );
-            $admin->syncPermissions($allNonDeletePerms->all());
 
-            // (ج) Manager: (view+create+update) للموارد الجغرافية، و(users/roles/permissions) مشاهدة فقط
-            $manager = Role::updateOrCreate(
-                ['name' => 'manager', 'guard_name' => $guard],
-                // عرض الدور: المشرف التعليمي
+            // (3) Educational Supervisor
+            $supervisorEdu = Role::updateOrCreate(
+                ['name' => 'supervisor_edu', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Educational Supervisor', 'ar' => 'مشرف تعليمي']]
             );
-            $managerPerms = collect()
-                ->merge($permNames($geoResources, ['view', 'create', 'update']))
-                ->merge($permNames($adminEntities, ['view']))
-                ->unique()
-                ->values();
-            $manager->syncPermissions($managerPerms->all());
 
-            // (د) Editor: (view+update) للموارد الجغرافية
-            $editor = Role::updateOrCreate(
-                ['name' => 'editor', 'guard_name' => $guard],
-                // عرض الدور: معلم
+            // (4) Teacher
+            $teacher = Role::updateOrCreate(
+                ['name' => 'teacher', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Teacher', 'ar' => 'معلم']]
             );
-            $editorPerms = $permNames($geoResources, ['view', 'update']);
-            $editor->syncPermissions($editorPerms->all());
+            $teacher->syncPermissions($teacherPerms->all());
 
-            // (هـ) Student: (view+create) للموارد الجغرافية
+            // give supervisors teacher capabilities + staffing management
+            $supervisorPerms = collect()
+                ->merge($teacherPerms)
+                ->merge($permNames($staffingResources, ['view', 'update']))
+                ->unique()
+                ->values();
+            $supervisorEdu->syncPermissions($supervisorPerms->all());
+            $supervisorTarbawi->syncPermissions($supervisorPerms->all());
+
+            // (5) Student
             $studentRole = Role::updateOrCreate(
                 ['name' => 'student', 'guard_name' => $guard],
                 ['display_name' => ['en' => 'Student', 'ar' => 'طالب']]
             );
-            $studentPerms = $permNames($geoResources, ['view', 'create']);
+            $studentResources = array_merge($geoResources, $baseAccess, ['circles', 'enrollments', 'student_attendances', 'nominations', 'exams']);
+            $studentPerms = $permNames($studentResources, ['view']);
             $studentRole->syncPermissions($studentPerms->all());
 
-            // (و) Viewer: مشاهدة فقط لكل الموارد التي تدعم "view"
-            $viewer = Role::updateOrCreate(
-                ['name' => 'viewer', 'guard_name' => $guard],
-                // عرض الدور: مشرف تربوي
-                ['display_name' => ['en' => 'Tarbawi Supervisor', 'ar' => 'مشرف تربوي']]
-            );
-            $viewer->syncPermissions($allViewPerms->all());
+            // Note: 'viewer', 'manager' and 'admin' roles are intentionally omitted
+            // so the system uses a minimal canonical role set: super-admin, supervisors,
+            // teacher and student. This prevents duplicate role definitions.
         });
 
         app(\Spatie\Permission\PermissionRegistrar::class)->forgetCachedPermissions();

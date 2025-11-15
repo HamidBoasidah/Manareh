@@ -25,7 +25,7 @@ class StoreStudentRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'user.password' => ['required_without:user_id', 'string', 'min:8', 'confirmed'],
+            'user.password' => ['required_without:user_id', 'string', 'min:8'],
             'user.address' => ['nullable', 'string', 'max:255'],
             'user.phone_number' => ['nullable', 'regex:/^\d{9}$/'],
             'user.whatsapp_number' => ['nullable', 'regex:/^\d{9}$/'],

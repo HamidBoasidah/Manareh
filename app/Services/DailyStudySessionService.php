@@ -5,6 +5,8 @@ namespace App\Services;
 use App\Repositories\DailyStudySessionRepository;
 use App\Repositories\DailyStudyRepository;
 use App\Models\Enrollment;
+use App\Models\DailyStudySession;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class DailyStudySessionService
@@ -28,9 +30,19 @@ class DailyStudySessionService
         return $this->sessions->paginate($perPage, $with);
     }
 
+    public function paginateForUser(User $user, int $perPage = 15, array $with = [])
+    {
+        return $this->sessions->paginateForUser($user, $perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->sessions->findOrFail($id, $with);
+    }
+
+    public function findForUser(User $user, int|string $id, array $with = [])
+    {
+        return $this->sessions->findForUser($user, $id, $with);
     }
 
     public function create(array $attributes)
@@ -80,5 +92,10 @@ class DailyStudySessionService
     public function deactivate($id)
     {
         return $this->sessions->deactivate($id);
+    }
+
+    public function userCanAccessSession(User $user, DailyStudySession $session): bool
+    {
+        return $this->sessions->userCanAccessSession($user, $session);
     }
 }

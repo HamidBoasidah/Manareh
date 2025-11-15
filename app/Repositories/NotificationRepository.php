@@ -26,22 +26,61 @@ class NotificationRepository extends BaseRepository
 
     public function paginateForUser(int $userId, int $perPage = 15, array $with = []): LengthAwarePaginator
     {
-        return $this->builder($with)
-            ->where('user_id', $userId)
-            ->paginate($perPage);
+        $user = \App\Models\User::find($userId);
+        if (! $user) {
+            return $this->model->newQuery()->whereRaw('1 = 0')->paginate(0);
+        }
+        $query = $this->builder($with)->where(function (Builder $q) use ($user) {
+            $q->where('user_id', $user->getKey())
+                ->orWhere(function (Builder $q2) use ($user) {
+                    $q2->where('recipient_type', 'user')
+                        ->where('recipient_id', $user->getKey());
+                });
+
+            // include global broadcasts only for full-access users
+            if ($user->hasAnyRole(['super-admin', 'admin', 'manager'])) {
+                $q->orWhere(function (Builder $q3) {
+                    $q3->whereNull('recipient_type')->orWhere('recipient_type', 'all');
+                });
+            }
+        });
+
+        return $query->paginate($perPage);
     }
 
     public function findForUser(int $userId, int $notificationId, array $with = []): Notification
     {
-        return $this->builder($with)
-            ->where('user_id', $userId)
-            ->findOrFail($notificationId);
+        $user = \App\Models\User::find($userId);
+        if (! $user) {
+            abort(404);
+        }
+        $query = $this->builder($with)->where(function (Builder $q) use ($user) {
+            $q->where('user_id', $user->getKey())
+                ->orWhere(function (Builder $q2) use ($user) {
+                    $q2->where('recipient_type', 'user')
+                        ->where('recipient_id', $user->getKey());
+                });
+
+            if ($user->hasAnyRole(['super-admin', 'admin', 'manager'])) {
+                $q->orWhere(function (Builder $q3) {
+                    $q3->whereNull('recipient_type')->orWhere('recipient_type', 'all');
+                });
+            }
+        });
+
+        return $query->findOrFail($notificationId);
     }
 
     public function markAsRead(int $userId, array $notificationIds): int
     {
         return $this->model->newQuery()
-            ->where('user_id', $userId)
+            ->where(function (Builder $q) use ($userId) {
+                $q->where('user_id', $userId)
+                    ->orWhere(function (Builder $q2) use ($userId) {
+                        $q2->where('recipient_type', 'user')
+                            ->where('recipient_id', $userId);
+                    });
+            })
             ->whereIn('id', $notificationIds)
             ->update(['read_at' => now()]);
     }
@@ -49,7 +88,13 @@ class NotificationRepository extends BaseRepository
     public function markAsUnread(int $userId, array $notificationIds): int
     {
         return $this->model->newQuery()
-            ->where('user_id', $userId)
+            ->where(function (Builder $q) use ($userId) {
+                $q->where('user_id', $userId)
+                    ->orWhere(function (Builder $q2) use ($userId) {
+                        $q2->where('recipient_type', 'user')
+                            ->where('recipient_id', $userId);
+                    });
+            })
             ->whereIn('id', $notificationIds)
             ->update(['read_at' => null]);
     }
@@ -57,7 +102,13 @@ class NotificationRepository extends BaseRepository
     public function markAllAsRead(int $userId): int
     {
         return $this->model->newQuery()
-            ->where('user_id', $userId)
+            ->where(function (Builder $q) use ($userId) {
+                $q->where('user_id', $userId)
+                    ->orWhere(function (Builder $q2) use ($userId) {
+                        $q2->where('recipient_type', 'user')
+                            ->where('recipient_id', $userId);
+                    });
+            })
             ->whereNull('read_at')
             ->update(['read_at' => now()]);
     }
@@ -65,7 +116,13 @@ class NotificationRepository extends BaseRepository
     public function markAllAsUnread(int $userId): int
     {
         return $this->model->newQuery()
-            ->where('user_id', $userId)
+            ->where(function (Builder $q) use ($userId) {
+                $q->where('user_id', $userId)
+                    ->orWhere(function (Builder $q2) use ($userId) {
+                        $q2->where('recipient_type', 'user')
+                            ->where('recipient_id', $userId);
+                    });
+            })
             ->update(['read_at' => null]);
     }
 

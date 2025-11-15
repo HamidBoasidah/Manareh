@@ -26,7 +26,7 @@ class UpdateStudentRequest extends FormRequest
                 'email',
                 Rule::unique('users', 'email')->ignore($userId),
             ],
-            'user.password' => ['sometimes', 'nullable', 'string', 'min:8', 'confirmed'],
+            'user.password' => ['sometimes', 'nullable', 'string', 'min:8'],
             'user.address' => ['sometimes', 'nullable', 'string', 'max:255'],
             'user.phone_number' => ['sometimes', 'nullable', 'regex:/^\d{9}$/'],
             'user.whatsapp_number' => ['sometimes', 'nullable', 'regex:/^\d{9}$/'],

@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             MosqueSeeder::class,
             CircleClassificationSeeder::class,
             CircleSeeder::class,
-            StaffRolesSeeder::class,
+            // StaffRolesSeeder removed - roles are created in RolesPermissionsSeeder
             ProgramSeeder::class,
             PlanSeeder::class,
             AcademicYearSeeder::class,

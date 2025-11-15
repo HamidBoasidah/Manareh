@@ -20,16 +20,35 @@ class NotificationController extends Controller
 
     public function index(Request $request): Response
     {
+        $perPage = (int) $request->integer('per_page', 20);
+        $user = $request->user();
+        $isSuperAdmin = $user?->hasRole('super-admin');
+
         $filters = $request->only(['user_id', 'channel', 'status']);
         $filters['unread_only'] = $request->boolean('unread_only');
-        $perPage = (int) $request->integer('per_page', 20);
 
-        $notifications = $this->notifications->paginateForAdmin($perPage, $filters);
+        if ($isSuperAdmin) {
+            $notifications = $this->notifications->paginateForAdmin($perPage, $filters);
+            $routeConfig = [
+                'show' => 'admin.notifications.show',
+                'markRead' => 'admin.notifications.mark-read',
+            ];
+        } else {
+            $notifications = $this->notifications->paginateForUser((int) $user->id, $perPage);
+            $routeConfig = [
+                'show' => 'notifications.show',
+                'markRead' => 'notifications.read',
+            ];
+            // filters are only relevant for the global admin view
+            $filters = null;
+        }
 
         return Inertia::render('Admin/Notification/Index', [
             'notifications' => $notifications,
             'filters' => $filters,
             'per_page' => $perPage,
+            'routeConfig' => $routeConfig,
+            'is_super_admin' => $isSuperAdmin,
         ]);
     }
 

@@ -29,9 +29,19 @@ class CircleService
         return $this->circles->paginate($perPage, $with);
     }
 
+    public function paginateForUser(User $user, int $perPage = 15, array $with = [])
+    {
+        return $this->circles->paginateForUser($user, $perPage, $with);
+    }
+
     public function find($id, array $with = [])
     {
         return $this->circles->findOrFail($id, $with);
+    }
+
+    public function findForUser(User $user, int|string $id, array $with = [])
+    {
+        return $this->circles->findForUser($user, $id, $with);
     }
 
     public function create(array $attributes)
@@ -57,6 +67,11 @@ class CircleService
     public function deactivate($id)
     {
         return $this->circles->deactivate($id);
+    }
+
+    public function userCanAccessCircle(User $user, Circle $circle): bool
+    {
+        return $this->circles->userCanAccessCircle($user, $circle);
     }
 
     public function getJoinedStudents(int $circleId)
